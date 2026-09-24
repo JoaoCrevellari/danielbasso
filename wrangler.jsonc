@@ -1,14 +1,19 @@
 // Configuração do Worker na Cloudflare. O Nitro (preset cloudflare-module) completa
 // main/assets no build e gera .output/server/wrangler.json, que é o usado pelo deploy.
 //
-// Variáveis e segredos NÃO ficam aqui: são cadastrados no painel do Worker.
-// `keep_vars` impede que um deploy apague o que está no painel.
+// Aqui ficam só as variáveis PÚBLICAS do servidor. Segredos (SUPABASE_SERVICE_ROLE_KEY,
+// RESEND_API_KEY) ficam em Secrets do Worker; `keep_vars` preserva o que está no painel.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "danielbasso",
   "compatibility_date": "2026-09-20",
   "compatibility_flags": ["nodejs_compat"],
   "keep_vars": true,
+  "vars": {
+    "SUPABASE_URL": "https://volnctioztyylqsyiham.supabase.co",
+    "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_jkCCNHzDA3mPbNOkrLcBlw_koacdn6n",
+    "SUPABASE_PROJECT_ID": "volnctioztyylqsyiham",
+  },
   "observability": { "enabled": true },
   "workers_dev": true,
   // Formulários: 6 envios por minuto por IP. Analytics: 120 lotes por minuto por IP.
