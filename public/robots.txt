@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /entrar
+Disallow: /redefinir-senha
+Disallow: /api/
+
+Sitemap: https://danielbasso.com.br/sitemap.xml

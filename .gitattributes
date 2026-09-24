@@ -1,0 +1,14 @@
+# Normaliza tudo para LF — sem isso, o Windows converte para CRLF e o
+# prettier acusa milhares de erros falsos no lint.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary

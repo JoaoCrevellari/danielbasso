@@ -1,0 +1,518 @@
+@import "tailwindcss";
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
+@import "@fontsource-variable/geist/wght.css";
+
+/*
+ * Design system — Daniel Basso · Desenvolvimento Humano
+ *
+ * Cores: paleta oficial do briefing. Petróleo é a cor da marca; dourado é acento raro
+ * (fios, numerais, uma palavra em destaque), nunca fundo de bloco grande. Sálvia e
+ * terracota servem para categorizar (tipos de conteúdo, estados), não para decorar.
+ * Proibidos pelo briefing: vermelho puro, roxo, rosa, fluorescentes.
+ *
+ * Forma: superfícies (imagens, cartões, campos) com raio mínimo (2px); elementos de ação
+ * (botões, chips, filtros) em pílula. Essa regra vale para o site inteiro.
+ *
+ * Movimento: uma curva só (--ease-out) e três durações. Tudo respeita reduced-motion.
+ */
+
+@theme {
+  /* Marca */
+  --color-petroleo: #003f5c;
+  --color-petroleo-950: #00141e;
+  --color-petroleo-900: #001f2e;
+  --color-petroleo-800: #002c41;
+  --color-petroleo-700: #0a4f70;
+  --color-petroleo-600: #1f6385;
+  --color-petroleo-100: #dbe6eb;
+  --color-petroleo-50: #eef3f5;
+
+  --color-ouro: #d4a72c;
+  --color-ouro-claro: #e6c36a;
+  --color-ouro-texto: #8a6a12; /* dourado legível sobre fundo claro (AA) */
+
+  --color-gelo: #f5f5f2;
+  --color-gelo-2: #ecece6;
+  --color-papel: #fbfbf9;
+
+  --color-salvia: #5f8f7a;
+  --color-salvia-texto: #3f6b58;
+  --color-terracota: #c97b49;
+  --color-terracota-texto: #9a5427;
+  --color-grafite: #333333;
+  --color-cinza: #5b6166;
+  --color-cinza-claro: #8b9196;
+
+  --color-linha: rgb(0 63 92 / 0.14);
+  --color-linha-forte: rgb(0 63 92 / 0.28);
+  --color-linha-escura: rgb(245 245 242 / 0.14);
+
+  /* Tipografia */
+  --font-serif: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --radius-sm: 2px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --breakpoint-xs: 26rem;
+}
+
+/* Camadas (z-index) — escala única do projeto */
+:root {
+  --z-header: 40;
+  --z-fab: 45;
+  --z-overlay: 60;
+  --z-toast: 70;
+  --header-h: 4.25rem;
+  --aviso-h: 0px;
+  --gutter: 1.25rem;
+  color-scheme: light;
+}
+@media (min-width: 768px) {
+  :root {
+    --gutter: 2.5rem;
+    --header-h: 4.75rem;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+  }
+  body {
+    @apply bg-gelo font-sans text-grafite;
+    font-size: 1rem;
+    line-height: 1.65;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--color-ouro);
+    color: var(--color-petroleo-950);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ouro);
+    outline-offset: 3px;
+  }
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* ── Tipografia ─────────────────────────────────────────────────────────────── */
+/*
+ * Escala única de títulos (não usar tamanhos soltos em títulos):
+ *   type-display → título de abertura de página (h1)       máx. 2 linhas no desktop
+ *   type-h1      → título de seção (h2)                     máx. 2 linhas no desktop
+ *   type-h2      → título de bloco/cartão grande (h3)
+ *   type-h3      → título de item/cartão (h3/h4)
+ * A largura máxima vem junto (em ch) para o título não ficar espremido em muitas linhas.
+ */
+@utility type-display {
+  font-family: var(--font-serif);
+  font-weight: 380;
+  font-size: clamp(2.2rem, 1.55rem + 2.5vw, 3.6rem);
+  line-height: 1.06;
+  letter-spacing: -0.022em;
+  font-optical-sizing: auto;
+  max-width: 24ch;
+}
+@utility type-h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 1.4rem + 1.35vw, 2.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.018em;
+  max-width: 32ch;
+}
+@utility type-h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.45rem, 1.25rem + 0.75vw, 1.85rem);
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+}
+@utility type-h3 {
+  font-family: var(--font-serif);
+  font-weight: 450;
+  font-size: clamp(1.2rem, 1.1rem + 0.35vw, 1.4rem);
+  line-height: 1.25;
+  letter-spacing: -0.006em;
+}
+@utility type-lead {
+  font-size: clamp(1.05rem, 1rem + 0.25vw, 1.2rem);
+  line-height: 1.6;
+}
+@utility type-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 560;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+@utility type-meta {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+/* Numerais editoriais (serifa, algarismos elegantes) */
+@utility type-numeral {
+  font-family: var(--font-serif);
+  font-feature-settings: "onum", "pnum";
+  font-weight: 350;
+}
+
+/* Palavra de destaque dentro de um título: itálico da mesma família, em dourado.
+   padding-bottom reserva o descendente (g, j, p, q, y) do itálico. */
+@utility destaque {
+  font-style: italic;
+  font-weight: 350;
+  color: var(--color-ouro-texto);
+  padding-bottom: 0.06em;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────────── */
+/* Espaço do cabeçalho fixo (e da faixa de aviso, quando ligada) no topo das páginas */
+@utility pt-cabecalho {
+  padding-top: calc(var(--header-h) + var(--aviso-h));
+}
+[data-aviso="1"] {
+  --aviso-h: 2rem;
+}
+@utility container-site {
+  width: 100%;
+  max-width: 84rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+@utility container-texto {
+  width: 100%;
+  max-width: 44rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+/* Ritmo vertical único: toda seção usa section-y; faixas curtas (ficha, CTA) usam section-y-sm.
+   Cabeçalho da seção → conteúdo: sempre gap-conteudo. */
+@utility section-y {
+  padding-block: clamp(3.5rem, 2.6rem + 3vw, 5.5rem);
+}
+@utility section-y-sm {
+  padding-block: clamp(2.25rem, 1.8rem + 1.6vw, 3.25rem);
+}
+@utility mt-conteudo {
+  margin-top: clamp(2rem, 1.6rem + 1.4vw, 3rem);
+}
+/* Grade padrão: 12 colunas com o mesmo espaço entre colunas no site todo */
+@utility grade {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+  row-gap: 2rem;
+}
+/* Rótulo de seção: nome curto da seção em caixa-alta dourada, acima do título. */
+@utility rotulo-secao {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 560;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ouro-texto);
+}
+/* Trilho: no celular, listas viram rolagem horizontal (seção cabe numa tela);
+   do tablet em diante, a grade definida em cada uso. */
+@utility trilho {
+  @media (max-width: 767px) {
+    display: flex;
+    gap: 0.875rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    & > * {
+      flex: 0 0 82%;
+      scroll-snap-align: start;
+    }
+  }
+}
+
+/* Fundo escuro da marca: define cores de texto coerentes para os filhos */
+@utility superficie-escura {
+  background-color: var(--color-petroleo-900);
+  color: var(--color-gelo);
+  --color-linha: var(--color-linha-escura);
+  & .destaque {
+    color: var(--color-ouro);
+  }
+  & .rotulo-secao {
+    color: var(--color-ouro);
+  }
+}
+
+/* Grão sutil sobre blocos escuros (pseudo-elemento fixo ao bloco, sem repaint no scroll) */
+@utility grao {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Links de texto corrido: sublinhado que cresce */
+@utility link-texto {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition:
+    background-size 0.35s var(--ease-out),
+    color 0.2s;
+  &:hover {
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+  }
+}
+
+/* Conteúdo em markdown (posts, descrições longas) */
+@utility prosa {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-grafite);
+  & > * + * {
+    margin-top: 1.25em;
+  }
+  & h2 {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-top: 2.2em;
+    color: var(--color-petroleo);
+    letter-spacing: -0.01em;
+  }
+  & h3 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    margin-top: 1.8em;
+    color: var(--color-petroleo);
+  }
+  & a {
+    color: var(--color-petroleo);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-ouro);
+  }
+  & ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  & ul > li {
+    position: relative;
+    padding-left: 1.4em;
+  }
+  & ul > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    width: 0.6em;
+    height: 1px;
+    background: var(--color-ouro);
+  }
+  & ol {
+    list-style: decimal;
+    padding-left: 1.3em;
+  }
+  & ol > li::marker {
+    font-family: var(--font-serif);
+    color: var(--color-ouro-texto);
+  }
+  & li + li {
+    margin-top: 0.5em;
+  }
+  & blockquote {
+    border-left: 2px solid var(--color-ouro);
+    padding-left: 1.25em;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--color-petroleo);
+  }
+  & strong {
+    font-weight: 600;
+    color: var(--color-petroleo-900);
+  }
+  & hr {
+    border: 0;
+    height: 1px;
+    background: var(--color-linha);
+    margin-block: 2.5em;
+  }
+}
+
+/* Barra de rolagem fina em áreas roláveis horizontais */
+@utility rolagem-fina {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-linha-forte) transparent;
+}
+@utility sem-barra {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Entradas de página (CSS puro, para funcionar antes da hidratação) ──────── */
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes surgir {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes revelar-imagem {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: scale(1.08);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+@utility anima-subir {
+  animation: subir 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 60ms);
+}
+@utility anima-surgir {
+  animation: surgir 1.1s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 60ms);
+}
+@utility anima-imagem {
+  animation: revelar-imagem 1.3s var(--ease-out) both;
+  animation-delay: 0.15s;
+}
+
+/* Revelação no scroll: o JS (useRevelar) adiciona .visivel quando o elemento entra na tela.
+   Sem JS, o conteúdo aparece normalmente (a classe .js vem do script inline no <head>).
+   Variantes: padrão (sobe), "fade", "imagem" (cortina de baixo para cima) e "escala".
+   [data-revelar-grupo]: os filhos entram em cascata (o JS numera --i). */
+/* Importante: o recorte (clip-path) nunca vai no elemento observado. Um elemento
+   totalmente recortado conta como fora da tela para o IntersectionObserver e nunca seria
+   revelado; e um recorte que sobra no estado final corta sombras e o hover dos cartões. */
+.js [data-revelar],
+.js [data-revelar-grupo] > * {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.85s var(--ease-out),
+    transform 0.85s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 85ms);
+}
+.js [data-revelar="fade"] {
+  transform: none;
+}
+.js [data-revelar="escala"] {
+  transform: scale(0.96);
+}
+.js [data-revelar].visivel,
+.js [data-revelar-grupo].visivel > * {
+  opacity: 1;
+  transform: none;
+}
+/* Imagem: o contêiner fica visível; a cortina corre no filho. */
+.js [data-revelar="imagem"] {
+  opacity: 1;
+  transform: none;
+}
+.js [data-revelar="imagem"] > * {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.1s var(--ease-out);
+}
+.js [data-revelar="imagem"] img {
+  transform: scale(1.12);
+  transition: transform 1.4s var(--ease-out);
+}
+.js [data-revelar="imagem"].visivel > * {
+  clip-path: inset(0 0 0 0);
+}
+.js [data-revelar="imagem"].visivel img {
+  transform: none;
+}
+
+/* Faixa de palavras em movimento (uma por página, no máximo) */
+@keyframes deslizar {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@utility faixa-movimento {
+  animation: deslizar 38s linear infinite;
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-revelar],
+  .js [data-revelar-grupo] > *,
+  .js [data-revelar="imagem"] > * {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+  .faixa-movimento {
+    animation: none;
+  }
+}

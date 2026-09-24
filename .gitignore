@@ -1,0 +1,51 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependências e build
+node_modules
+dist
+dist-ssr
+.output
+.vinxi
+.tanstack/**
+.nitro
+*.local
+
+# Variáveis de ambiente — nunca versionar valores.
+# A regra ampla evita que .env.staging / .env.production escapem.
+.env
+.env.*
+!.env.example
+
+# Wrangler / Cloudflare
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# Supabase CLI
+supabase/.temp/
+supabase/.branches/
+
+# Relatórios locais (Lighthouse etc.) e pendências de trabalho
+.baseline/
+PENDENCIAS.md
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporários
+.seed-tmp/
