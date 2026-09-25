@@ -10,7 +10,7 @@ export function absoluta(pathOuUrl: string): string {
 
 /**
  * Builder unificado de metadados (title, description, Open Graph, Twitter).
- * Sem ogImage, vale a imagem padrão do root (public/compartilhamento.jpg, 1200×630).
+ * Sem ogImage, vale a imagem padrão do root (public/compartilhamento-v2.jpg, 1200×630).
  */
 export function buildMeta(opts: {
   title: string;
@@ -24,7 +24,7 @@ export function buildMeta(opts: {
   const fullTitle = opts.title.includes(SITE.shortName)
     ? opts.title
     : `${opts.title} | ${SITE.name}`;
-  const imagem = absoluta(opts.ogImage ?? "/compartilhamento.jpg");
+  const imagem = absoluta(opts.ogImage ?? "/compartilhamento-v2.jpg");
 
   const tags: MetaTag[] = [
     { title: fullTitle },
@@ -74,7 +74,7 @@ export function artigoJsonLd(opts: {
       mainEntityOfPage: absoluta(opts.path),
       datePublished: opts.data,
       inLanguage: "pt-BR",
-      image: absoluta(opts.imagem ?? "/compartilhamento.jpg"),
+      image: absoluta(opts.imagem ?? "/compartilhamento-v2.jpg"),
       author: { "@type": "Person", name: opts.autor ?? SITE.name, url: SITE.url },
       publisher: { "@type": "Person", name: SITE.name, url: SITE.url },
     }),
