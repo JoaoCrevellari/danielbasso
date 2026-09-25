@@ -20,6 +20,7 @@ import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as QuemSouRouteImport } from './routes/quem-sou'
 import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TermosRouteImport } from './routes/termos'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminDiagnosticoRouteImport } from './routes/admin.diagnostico'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
@@ -95,6 +96,11 @@ const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermosRoute = TermosRouteImport.update({
+  id: '/termos',
+  path: '/termos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -216,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/quem-sou': typeof QuemSouRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/termos': typeof TermosRoute
   '/admin/diagnostico': typeof AdminDiagnosticoRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/midia': typeof AdminMidiaRoute
@@ -249,6 +256,7 @@ export interface FileRoutesByTo {
   '/quem-sou': typeof QuemSouRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/termos': typeof TermosRoute
   '/admin/diagnostico': typeof AdminDiagnosticoRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/midia': typeof AdminMidiaRoute
@@ -284,6 +292,7 @@ export interface FileRoutesById {
   '/quem-sou': typeof QuemSouRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/termos': typeof TermosRoute
   '/admin/diagnostico': typeof AdminDiagnosticoRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/midia': typeof AdminMidiaRoute
@@ -320,6 +329,7 @@ export interface FileRouteTypes {
     | '/quem-sou'
     | '/redefinir-senha'
     | '/sitemap.xml'
+    | '/termos'
     | '/admin/diagnostico'
     | '/admin/leads'
     | '/admin/midia'
@@ -353,6 +363,7 @@ export interface FileRouteTypes {
     | '/quem-sou'
     | '/redefinir-senha'
     | '/sitemap.xml'
+    | '/termos'
     | '/admin/diagnostico'
     | '/admin/leads'
     | '/admin/midia'
@@ -387,6 +398,7 @@ export interface FileRouteTypes {
     | '/quem-sou'
     | '/redefinir-senha'
     | '/sitemap.xml'
+    | '/termos'
     | '/admin/diagnostico'
     | '/admin/leads'
     | '/admin/midia'
@@ -422,6 +434,7 @@ export interface RootRouteChildren {
   QuemSouRoute: typeof QuemSouRoute
   RedefinirSenhaRoute: typeof RedefinirSenhaRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermosRoute: typeof TermosRoute
   ApiEventoRoute: typeof ApiEventoRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CursosSlugRoute: typeof CursosSlugRoute
@@ -512,6 +525,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termos': {
+      id: '/termos'
+      path: '/termos'
+      fullPath: '/termos'
+      preLoaderRoute: typeof TermosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -704,6 +724,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuemSouRoute: QuemSouRoute,
   RedefinirSenhaRoute: RedefinirSenhaRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermosRoute: TermosRoute,
   ApiEventoRoute: ApiEventoRoute,
   BlogSlugRoute: BlogSlugRoute,
   CursosSlugRoute: CursosSlugRoute,

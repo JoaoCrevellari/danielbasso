@@ -18,6 +18,7 @@ const PAGINAS: Array<[string, string]> = [
   ["/depoimentos", "0.6"],
   ["/contato", "0.6"],
   ["/privacidade", "0.2"],
+  ["/termos", "0.2"],
 ];
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");

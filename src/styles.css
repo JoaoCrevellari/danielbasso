@@ -483,6 +483,25 @@
   transform: none;
 }
 
+/* Etapas do método na Home: cada linha acende ao passar da faixa inferior da tela
+   (a classe .acesa vem de MetodoEtapas.tsx). */
+.js [data-etapa] > .etapa-conteudo {
+  opacity: 0.22;
+  transform: translateX(-14px);
+  transition:
+    opacity 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out);
+}
+.js [data-etapa] > .etapa-linha {
+  transform: scaleX(0);
+  transition: transform 0.9s var(--ease-out);
+}
+.js [data-etapa].acesa > .etapa-conteudo,
+.js [data-etapa].acesa > .etapa-linha {
+  opacity: 1;
+  transform: none;
+}
+
 /* Faixa de palavras em movimento (uma por página, no máximo) */
 @keyframes deslizar {
   to {
@@ -511,6 +530,11 @@
     opacity: 1;
     transform: none;
     clip-path: none;
+  }
+  .js [data-etapa] > .etapa-conteudo,
+  .js [data-etapa] > .etapa-linha {
+    opacity: 1;
+    transform: none;
   }
   .faixa-movimento {
     animation: none;

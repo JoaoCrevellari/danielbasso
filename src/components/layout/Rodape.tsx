@@ -5,6 +5,8 @@ import { useConfig } from "./ConfigContext";
 import { Logo } from "./Logo";
 import { RedesSociais } from "./RedesSociais";
 
+const COLUNAS = [NAV_PRINCIPAL.slice(0, 3), NAV_PRINCIPAL.slice(3), NAV_SECUNDARIA];
+
 export function Rodape() {
   const config = useConfig();
   const ano = new Date().getFullYear();
@@ -19,7 +21,7 @@ export function Rodape() {
           {config.rodape.frase}
         </p>
 
-        <div className="mt-8 grid gap-8 border-t border-linha pt-8 md:mt-14 md:grid-cols-[1.4fr_1fr_1fr] md:gap-10 md:pt-12">
+        <div className="mt-8 grid gap-8 border-t border-linha pt-8 md:mt-14 md:grid-cols-[1fr_1.6fr] md:gap-10 md:pt-12">
           <div className="flex flex-col gap-6">
             <Logo claro />
             <p className="max-w-sm text-sm leading-relaxed text-gelo/60 max-md:hidden">
@@ -29,63 +31,47 @@ export function Rodape() {
             <RedesSociais claro className="-ml-3" />
           </div>
 
-          <nav aria-label="Rodapé">
-            <ul className="grid grid-cols-2 gap-x-6 gap-y-1 md:grid-cols-1">
-              {NAV_PRINCIPAL.map((item) => (
-                <li key={item.to}>
-                  <Link
-                    to={item.to}
-                    className="inline-flex min-h-10 items-center text-[0.9375rem] text-gelo/70 transition-colors hover:text-ouro"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="flex flex-col gap-1">
-            {NAV_SECUNDARIA.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className="inline-flex min-h-10 items-center text-[0.9375rem] text-gelo/70 transition-colors hover:text-ouro"
-              >
-                {item.label}
-              </Link>
+          {/* Três colunas (3 · 4 · 3 links) em qualquer largura */}
+          <nav aria-label="Rodapé" className="grid grid-cols-3 gap-x-4 md:gap-x-8">
+            {COLUNAS.map((coluna, n) => (
+              <ul key={n} className="flex flex-col">
+                {coluna.map((item) => (
+                  <li key={item.to}>
+                    <Link
+                      to={item.to}
+                      className="inline-flex min-h-10 items-center text-[0.875rem] text-gelo/70 transition-colors hover:text-ouro md:text-[0.9375rem]"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             ))}
-            {config.contato.email && (
-              <a
-                href={`mailto:${config.contato.email}`}
-                className="mt-4 text-[0.9375rem] break-all text-gelo/90 transition-colors hover:text-ouro"
-              >
-                {config.contato.email}
-              </a>
-            )}
-            {config.contato.cidade && (
-              <p className="text-sm text-gelo/50">{config.contato.cidade}</p>
-            )}
-          </div>
+          </nav>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-linha pt-6 md:mt-14 text-xs text-gelo/45 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {ano} Daniel Basso. Todos os direitos reservados.</p>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <div className="mt-8 flex flex-col items-center gap-4 border-t border-linha pt-6 text-center text-xs text-gelo/45 md:mt-14">
+          <p className="leading-relaxed">
+            © {ano} Daniel Basso.
+            <br />
+            Todos os direitos reservados.
+          </p>
+          <div className="flex items-center gap-6">
             <Link to="/privacidade" className="transition-colors hover:text-gelo">
               Privacidade
             </Link>
-            <Link to="/entrar" className="transition-colors hover:text-gelo">
-              Área restrita
+            <Link to="/termos" className="transition-colors hover:text-gelo">
+              Termos de Uso
             </Link>
-            <a
-              href="https://ylink.com.br"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-gelo"
-            >
-              Desenvolvido pela <span className="font-medium text-gelo/70">Ylink</span>
-            </a>
           </div>
+          <a
+            href="https://ylink.com.br"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-gelo"
+          >
+            Desenvolvido pela <span className="font-medium text-gelo/70">Ylink</span>
+          </a>
         </div>
       </div>
     </footer>
