@@ -60,13 +60,13 @@ export function MenuMovel({ aberto, onFechar }: { aberto: boolean; onFechar: () 
                         <Link
                           to={item.to}
                           onClick={onFechar}
-                          className="group flex items-baseline justify-between py-3.5 font-serif text-[1.9rem] leading-tight text-gelo/90 transition-colors hover:text-gelo data-[status=active]:text-ouro"
+                          className="group flex items-baseline justify-between py-3 font-serif text-[1.35rem] leading-tight text-gelo/90 transition-colors hover:text-gelo data-[status=active]:text-ouro"
                         >
                           {item.label}
                           <ArrowRight
                             aria-hidden
                             weight="light"
-                            className="size-5 -translate-x-2 text-ouro opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-data-[status=active]:translate-x-0 group-data-[status=active]:opacity-100"
+                            className="size-4 -translate-x-2 text-ouro opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-data-[status=active]:translate-x-0 group-data-[status=active]:opacity-100"
                           />
                         </Link>
                       </motion.li>
@@ -87,7 +87,7 @@ export function MenuMovel({ aberto, onFechar }: { aberto: boolean; onFechar: () 
                     >
                       Fazer o diagnóstico
                     </Botao>
-                    <RedesSociais claro />
+                    <RedesSociais claro className="justify-center" />
                   </motion.div>
                 </nav>
               </motion.div>
