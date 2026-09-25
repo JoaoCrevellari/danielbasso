@@ -10,6 +10,11 @@ const CORES: Record<string, { fundo: string; texto: string; acento: string }> = 
   gelo: { fundo: "#ECECE6", texto: "#003F5C", acento: "#8A6A12" },
 };
 
+/** Cores da capa tipográfica (fundo, texto, acento) pelo valor escolhido no painel. */
+export function coresDaCapa(cor?: string | null) {
+  return CORES[cor ?? ""] ?? CORES.petroleo;
+}
+
 /**
  * Capa de livro. Com imagem, mostra a capa real; sem ela, compõe uma capa tipográfica
  * com a cor escolhida no painel. Lombada e sombra dão volume ao objeto.

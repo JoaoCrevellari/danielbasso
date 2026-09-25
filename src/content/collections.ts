@@ -325,6 +325,20 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
       ETAPA,
       { key: "trecho", label: "Trecho em destaque", type: "textarea", rows: 3 },
       {
+        key: "sumario",
+        label: "Sumário",
+        type: "textarea",
+        rows: 5,
+        help: "Um capítulo por linha. Aparece nas páginas do livro que se abre na Home.",
+      },
+      {
+        key: "abertura",
+        label: "Primeiras linhas do livro",
+        type: "textarea",
+        rows: 4,
+        help: "Início do capítulo 1, mostrado na última página do livro aberto na Home.",
+      },
+      {
         key: "lojas",
         label: "Onde comprar",
         type: "repeater",

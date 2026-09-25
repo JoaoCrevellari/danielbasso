@@ -4,7 +4,7 @@ import { ArrowUpRight, BookOpenText, Footprints, HandHeart } from "@phosphor-ico
 import { FaixaPalavras } from "@/components/home/FaixaPalavras";
 import { MetodoEtapas } from "@/components/home/MetodoEtapas";
 import { Botao } from "@/components/site/Botao";
-import { CapaLivro } from "@/components/site/CapaLivro";
+import { LivroAberto } from "@/components/home/LivroAberto";
 import { PostDestaque, PostLinha } from "@/components/site/CartaoPost";
 import { ChamadaFinal } from "@/components/site/ChamadaFinal";
 import { CarrosselDepoimentos } from "@/components/site/Depoimentos";
@@ -274,26 +274,32 @@ function Home() {
       {/* ── Livro em destaque ──────────────────────────────────────────────── */}
       {livro && (
         <Secao tom="branco">
-          <div className="grade items-center">
-            <div className="col-span-12 md:col-span-4 md:col-start-2" data-revelar="escala">
+          <div className="grade items-center gap-y-8">
+            {/* O livro se abre com a rolagem e para no capítulo 1 */}
+            <div className="col-span-12 md:col-span-7 lg:col-span-6" data-revelar="fade">
               <Link
                 to="/livros/$slug"
                 params={{ slug: livro.slug }}
-                className="group mx-auto block w-[34%] max-w-[9rem] [perspective:1200px] md:w-[72%] md:max-w-[15rem]"
+                className="block"
                 aria-label={`Ver o livro ${livro.title}`}
               >
-                <div className="transition-transform duration-700 ease-[var(--ease-out)] [transform:rotateY(-14deg)_rotateX(3deg)] group-hover:[transform:rotateY(-4deg)_rotateX(0deg)]">
-                  <CapaLivro
-                    titulo={livro.title}
-                    subtitulo={livro.subtitle}
-                    imagem={livro.cover_url}
-                    cor={txt(livro, "cor")}
-                    tamanho="lg"
-                  />
-                </div>
+                <LivroAberto
+                  titulo={livro.title}
+                  subtitulo={livro.subtitle}
+                  capa={livro.cover_url}
+                  cor={txt(livro, "cor")}
+                  trecho={txt(livro, "trecho")}
+                  sumario={txt(livro, "sumario")}
+                  abertura={txt(livro, "abertura")}
+                  corpo={livro.body}
+                  resumo={livro.excerpt}
+                />
               </Link>
             </div>
-            <div className="col-span-12 md:col-span-6 md:col-start-7" data-revelar-grupo>
+            <div
+              className="col-span-12 md:col-span-5 lg:col-span-5 lg:col-start-8"
+              data-revelar-grupo
+            >
               <p className="rotulo-secao mb-4">{home.livro.rotulo}</p>
               <h2 className="type-h1 text-petroleo">{livro.title}</h2>
               {livro.subtitle && (

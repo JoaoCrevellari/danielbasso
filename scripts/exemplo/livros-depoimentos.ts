@@ -30,6 +30,10 @@ Cada capítulo parte de uma situação real, dialoga com autores clássicos e te
       etapa: "autogoverno",
       trecho:
         "Autogoverno não é rigidez. É a liberdade de escolher quem você será antes que as circunstâncias escolham por você.",
+      sumario:
+        "A vontade não basta\nRigidez não é disciplina\nO preço da atenção\nDecidir antes da tentação\nA revisão de dez minutos\nLiberdade com responsabilidade",
+      abertura:
+        "Toda pessoa que já prometeu a si mesma começar na segunda-feira conhece o problema: a decisão é tomada num dia calmo e cobrada num dia difícil. Este livro começa exatamente aí, no intervalo entre o que decidimos e o que de fato fazemos.",
       lojas: [],
     },
   },
