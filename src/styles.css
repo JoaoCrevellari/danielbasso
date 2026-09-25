@@ -14,7 +14,8 @@
  * Forma: superfícies (imagens, cartões, campos) com raio mínimo (2px); elementos de ação
  * (botões, chips, filtros) em pílula. Essa regra vale para o site inteiro.
  *
- * Movimento: uma curva só (--ease-out) e três durações. Tudo respeita reduced-motion.
+ * Movimento: uma curva só (--ease-out) e três durações. Com reduced-motion, as entradas
+ * viram esmaecimento (sem deslocamento); faixa de palavras e depoimentos seguem rolando.
  */
 
 @theme {
@@ -508,35 +509,39 @@
     transform: translateX(-50%);
   }
 }
+/* A faixa corre sempre (pedido do cliente, inclusive com "Reduzir movimento"): é lenta,
+   linear e sem saltos. Pausa com o mouse em cima só onde existe hover de verdade. */
 @utility faixa-movimento {
   animation: deslizar 38s linear infinite;
-  &:hover {
-    animation-play-state: paused;
+  @media (hover: hover) {
+    &:hover {
+      animation-play-state: paused;
+    }
   }
 }
 
+/* "Reduzir movimento" (iPhone: Acessibilidade → Movimento; Windows: Efeitos de animação):
+   nada de deslocamento, zoom ou cortina; as entradas viram só um esmaecimento suave.
+   Ficam de fora a faixa de palavras e a esteira de depoimentos, que são obrigatórias. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0s !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
   .js [data-revelar],
   .js [data-revelar-grupo] > *,
+  .js [data-etapa] > .etapa-conteudo {
+    transform: none;
+  }
   .js [data-revelar="imagem"] > * {
-    opacity: 1;
-    transform: none;
     clip-path: none;
+    opacity: 0;
+    transition: opacity 0.85s var(--ease-out);
   }
-  .js [data-etapa] > .etapa-conteudo,
-  .js [data-etapa] > .etapa-linha {
+  .js [data-revelar="imagem"].visivel > * {
     opacity: 1;
+  }
+  .js [data-revelar="imagem"] img {
     transform: none;
   }
-  .faixa-movimento {
-    animation: none;
+  .anima-subir,
+  .anima-imagem {
+    animation-name: surgir;
   }
 }

@@ -68,7 +68,7 @@ const PAUSA_APOS_TOQUE_MS = 4000;
  * Esteira contínua de depoimentos: rola devagar e sem parar (inclusive com o mouse em
  * cima); só pausa quando a pessoa toca, clica ou arrasta, e retoma 4 s depois de soltar.
  * A lista é renderizada duas vezes para o laço não ter emenda. A rolagem é nativa, então
- * dá para arrastar no celular. Com movimento reduzido fica parada, como lista comum.
+ * dá para arrastar no celular. Roda mesmo com "Reduzir movimento" (pedido do cliente).
  */
 export function CarrosselDepoimentos({ itens }: { itens: ItemConteudo[] }) {
   const trilho = useRef<HTMLUListElement>(null);
@@ -104,10 +104,9 @@ export function CarrosselDepoimentos({ itens }: { itens: ItemConteudo[] }) {
     el.scrollBy({ left: dir * passo, behavior: "smooth" });
   };
 
+  // Liga sempre, inclusive com "Reduzir movimento" (pedido do cliente): é lenta e linear.
   useEffect(() => {
-    if (itens.length < 2) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setContinuo(true);
+    if (itens.length >= 2) setContinuo(true);
   }, [itens.length]);
 
   useEffect(() => {
