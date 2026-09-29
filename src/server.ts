@@ -116,7 +116,9 @@ function chaveDeCache(request: Request, url: URL): Request | null {
   for (const k of [...limpa.searchParams.keys()]) {
     if (PARAMS_DE_CAMPANHA.test(k)) limpa.searchParams.delete(k);
   }
-  return new Request(`https://cache.interno${limpa.pathname}${limpa.search}`);
+  // O build entra na chave: depois de um deploy, o cache recomeça do zero.
+  const build = (import.meta.env as { BUILD_ID?: string }).BUILD_ID ?? "dev";
+  return new Request(`https://cache.interno/${build}${limpa.pathname}${limpa.search}`);
 }
 
 async function comCache(

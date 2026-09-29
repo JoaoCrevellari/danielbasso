@@ -15,6 +15,10 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     define[`import.meta.env.${key}`] = JSON.stringify(value);
   }
 
+  // Identificador do build: entra na chave do cache de páginas (src/server.ts), para que
+  // um deploy novo nunca entregue HTML guardado que aponta para arquivos antigos.
+  define["import.meta.env.BUILD_ID"] = JSON.stringify(Date.now().toString(36));
+
   return {
     define,
     css: { transformer: "lightningcss" },
