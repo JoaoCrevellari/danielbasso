@@ -18,7 +18,7 @@ import {
   acao,
 } from "@/components/admin/ui";
 import { baixarArquivo, dataHora, gerarCsv, mensagemErro, whatsappDe } from "@/lib/admin/formato";
-import { respostasLpFn } from "@/lib/admin/lps.functions";
+import { respostasLpFn, type RespostaLp } from "@/lib/admin/lps.functions";
 import { rotuloStatus } from "@/lib/admin/rotulos";
 import { cn } from "@/lib/utils";
 
@@ -32,10 +32,20 @@ function rotuloCampo(k: string) {
 export function RespostasLp({ lpId, slug }: { lpId: string; slug: string }) {
   const q = useQuery({
     queryKey: [...QK.lp(lpId), "respostas"],
-    queryFn: () => respostasLpFn({ data: { id: lpId } }),
+    // Busca em blocos de 1.000 (até 20.000); a tela desenha 100 por vez.
+    queryFn: async () => {
+      let todas: RespostaLp[] = [];
+      for (let pagina = 0; pagina < 20; pagina++) {
+        const r = await respostasLpFn({ data: { id: lpId, pagina } });
+        todas = todas.concat(r.respostas);
+        if (todas.length >= r.total || !r.respostas.length) break;
+      }
+      return todas;
+    },
   });
   const [form, setForm] = useState("todos");
   const [busca, setBusca] = useState("");
+  const [limite, setLimite] = useState(100);
 
   const todas = useMemo(() => q.data ?? [], [q.data]);
   const formularios = useMemo(() => [...new Set(todas.map((r) => r.formulario))], [todas]);
@@ -50,6 +60,7 @@ export function RespostasLp({ lpId, slug }: { lpId: string; slug: string }) {
           )),
     );
   }, [todas, form, busca]);
+  const visiveis = useMemo(() => lista.slice(0, limite), [lista, limite]);
   const colunas = useMemo(() => {
     const s = new Set<string>();
     for (const r of lista) for (const k of Object.keys(r.campos)) if (!OCULTOS.has(k)) s.add(k);
@@ -115,7 +126,10 @@ export function RespostasLp({ lpId, slug }: { lpId: string; slug: string }) {
       <div className="flex flex-col gap-2 md:flex-row md:items-center">
         <CampoBusca
           valor={busca}
-          onChange={setBusca}
+          onChange={(v) => {
+            setBusca(v);
+            setLimite(100);
+          }}
           rotulo="Buscar nas respostas"
           className="md:max-w-sm md:flex-1"
         />
@@ -125,7 +139,10 @@ export function RespostasLp({ lpId, slug }: { lpId: string; slug: string }) {
               <button
                 key={f}
                 type="button"
-                onClick={() => setForm(f)}
+                onClick={() => {
+                  setForm(f);
+                  setLimite(100);
+                }}
                 aria-pressed={form === f}
                 className={cn(
                   "min-h-9 rounded-full border px-3 text-sm transition-colors",
@@ -158,7 +175,7 @@ export function RespostasLp({ lpId, slug }: { lpId: string; slug: string }) {
       <Cartao>
         {/* Celular: cartões */}
         <ul className="divide-y divide-linha md:hidden">
-          {lista.map((r) => {
+          {visiveis.map((r) => {
             const whats = whatsappDe(r.telefone);
             return (
               <li key={r.id} className="px-4 py-3.5">
@@ -221,7 +238,7 @@ export function RespostasLp({ lpId, slug }: { lpId: string; slug: string }) {
               </tr>
             </thead>
             <tbody>
-              {lista.map((r) => {
+              {visiveis.map((r) => {
                 const whats = whatsappDe(r.telefone);
                 return (
                   <tr key={r.id} className="border-b border-linha align-top last:border-0">
@@ -281,6 +298,17 @@ export function RespostasLp({ lpId, slug }: { lpId: string; slug: string }) {
           </table>
         </div>
       </Cartao>
+      {lista.length > visiveis.length && (
+        <div className="flex justify-center">
+          <button
+            type="button"
+            className={acao("secundario")}
+            onClick={() => setLimite((l) => l + 100)}
+          >
+            Mostrar mais ({(lista.length - visiveis.length).toLocaleString("pt-BR")} restantes)
+          </button>
+        </div>
+      )}
     </div>
   );
 }

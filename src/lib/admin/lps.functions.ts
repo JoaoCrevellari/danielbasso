@@ -425,16 +425,22 @@ export type RespostaLp = {
 
 export const respostasLpFn = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator(z.object({ id: z.string().uuid() }))
-  .handler(async ({ data, context }): Promise<RespostaLp[]> => {
-    const { data: linhas, error } = await context.supabase
+  .validator(z.object({ id: z.string().uuid(), pagina: z.number().int().min(0).default(0) }))
+  .handler(async ({ data, context }): Promise<{ respostas: RespostaLp[]; total: number }> => {
+    const inicio = data.pagina * 1000;
+    const {
+      data: linhas,
+      error,
+      count,
+    } = await context.supabase
       .from("leads")
-      .select("id, created_at, subject, name, email, phone, status, data, utm")
+      .select("id, created_at, subject, name, email, phone, status, data, utm", { count: "exact" })
       .eq("lp_id", data.id)
       .order("created_at", { ascending: false })
-      .limit(5000);
+      .order("id", { ascending: true })
+      .range(inicio, inicio + 999);
     checar(error, "respostas da LP");
-    return (linhas ?? []).map((l) => ({
+    const respostas = (linhas ?? []).map((l) => ({
       id: l.id,
       criadaEm: l.created_at,
       formulario: l.subject ?? "formulario",
@@ -450,4 +456,5 @@ export const respostasLpFn = createServerFn({ method: "GET" })
         string
       >,
     }));
+    return { respostas, total: count ?? respostas.length };
   });

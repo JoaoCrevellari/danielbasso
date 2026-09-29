@@ -246,6 +246,7 @@ export type Database = {
     Views: { [_ in never]: never };
     Functions: {
       analytics_overview: { Args: { p_from: string; p_to: string }; Returns: Json };
+      diagnostico_resumo: { Args: never; Returns: Json };
       eh_admin: { Args: never; Returns: boolean };
       has_role: { Args: { _role: "admin" | "editor"; _user_id: string }; Returns: boolean };
       is_staff: { Args: never; Returns: boolean };
@@ -254,6 +255,7 @@ export type Database = {
         Args: { p_from: string; p_to: string };
         Returns: { cliques: number; lp_id: string; respostas: number; visitantes: number }[];
       };
+      midia_em_uso: { Args: { p_caminho: string }; Returns: Json };
       pode: { Args: { _acao: string; _modulo: string }; Returns: boolean };
       submit_lead: { Args: { p: Json }; Returns: string };
       submit_lp_lead: { Args: { p: Json }; Returns: string };

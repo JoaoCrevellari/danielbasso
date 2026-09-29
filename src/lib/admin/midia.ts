@@ -197,3 +197,14 @@ export async function excluirMidia(caminho: string): Promise<void> {
   if (error) throw new Error("Não foi possível excluir o arquivo.");
   if (!data?.length) throw new Error("Arquivo não encontrado ou sem permissão para excluir.");
 }
+
+export type UsoMidia =
+  | { tipo: "conteudo"; colecao: string; id: string; titulo: string }
+  | { tipo: "pagina"; chave: string; titulo: string };
+
+/** Onde o arquivo aparece no site (itens de conteúdo e textos das páginas). */
+export async function usoDaMidia(caminho: string): Promise<UsoMidia[]> {
+  const { data, error } = await supabase.rpc("midia_em_uso", { p_caminho: caminho });
+  if (error) throw new Error("Não foi possível conferir onde o arquivo é usado.");
+  return Array.isArray(data) ? (data as UsoMidia[]) : [];
+}

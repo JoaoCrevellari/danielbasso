@@ -34,7 +34,16 @@ import {
   acaoIcone,
 } from "@/components/admin/ui";
 import { dataCurta, mensagemErro, tamanhoArquivo } from "@/lib/admin/formato";
-import { enviarArquivo, excluirMidia, TIPOS_ACEITOS, type ArquivoMidia } from "@/lib/admin/midia";
+import {
+  enviarArquivo,
+  excluirMidia,
+  TIPOS_ACEITOS,
+  usoDaMidia,
+  type ArquivoMidia,
+  type UsoMidia,
+} from "@/lib/admin/midia";
+import { getCollection } from "@/content/collections";
+import { getPagina } from "@/content/paginas";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/admin/midia")({
@@ -50,6 +59,13 @@ export const Route = createFileRoute("/admin/midia")({
 
 type Envio = { id: number; nome: string; estado: "enviando" | "ok" | "erro"; erro?: string };
 
+/** Nome legível de onde a mídia está em uso. */
+function rotuloUso(u: UsoMidia) {
+  if (u.tipo === "conteudo") return `${getCollection(u.colecao)?.singular ?? "Item"}: ${u.titulo}`;
+  if (u.chave === "settings") return "Configurações do site";
+  return `Página: ${getPagina(u.chave)?.titulo ?? u.chave}`;
+}
+
 function MidiaPagina() {
   const q = useMidia();
   const qc = useQueryClient();
@@ -62,6 +78,7 @@ function MidiaPagina() {
   const [busca, setBusca] = useState("");
   const [envios, setEnvios] = useState<Envio[]>([]);
   const [arrastando, setArrastando] = useState(false);
+  const [conferindo, setConferindo] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
   const seq = useRef(0);
   const contadorArraste = useRef(0);
@@ -125,15 +142,40 @@ function MidiaPagina() {
   }
 
   async function excluir(a: ArquivoMidia) {
+    // Confere antes onde o arquivo aparece no site.
+    let usos: UsoMidia[] | null = null;
+    setConferindo(a.caminho);
+    try {
+      usos = await usoDaMidia(a.caminho);
+    } catch {
+      usos = null;
+    } finally {
+      setConferindo(null);
+    }
+    const emUso = !!usos?.length;
     const ok = await confirmar({
-      titulo: "Excluir este arquivo?",
-      descricao: (
+      titulo: emUso ? "Este arquivo está em uso" : "Excluir este arquivo?",
+      descricao: emUso ? (
         <>
-          <strong className="break-all">{a.nome}</strong> será apagado de vez. Se ele estiver em uso
-          em alguma página ou item, a imagem deixa de aparecer no site.
+          <strong className="break-all">{a.nome}</strong> aparece em:
+          <ul className="mt-2 mb-3 list-disc space-y-1 pl-5">
+            {usos!.slice(0, 8).map((u, i) => (
+              <li key={i}>{rotuloUso(u)}</li>
+            ))}
+            {usos!.length > 8 && <li>e mais {usos!.length - 8} lugar(es)</li>}
+          </ul>
+          Se excluir, a imagem some desses lugares no site. Troque a imagem neles antes, ou exclua
+          mesmo assim.
+        </>
+      ) : (
+        <>
+          <strong className="break-all">{a.nome}</strong> será apagado de vez.
+          {usos
+            ? " Ele não está em uso em nenhuma página ou item do site."
+            : " Não foi possível conferir se ele está em uso: se estiver, a imagem deixa de aparecer no site."}
         </>
       ),
-      confirmar: "Excluir",
+      confirmar: emUso ? "Excluir mesmo assim" : "Excluir",
       perigo: true,
     });
     if (!ok) return;
@@ -385,9 +427,14 @@ function MidiaPagina() {
                       className={acaoIcone(true, "text-terracota-texto hover:bg-terracota/10")}
                       aria-label={`Excluir ${a.nome}`}
                       title="Excluir"
+                      disabled={conferindo === a.caminho}
                       onClick={() => excluir(a)}
                     >
-                      <Trash aria-hidden className="size-[1.1rem]" />
+                      {conferindo === a.caminho ? (
+                        <Girando className="size-[1.1rem]" />
+                      ) : (
+                        <Trash aria-hidden className="size-[1.1rem]" />
+                      )}
                     </button>
                   )}
                 </div>

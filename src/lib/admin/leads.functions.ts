@@ -1,6 +1,6 @@
 /**
- * Leads no painel: listar com filtros, atualizar status/anotações, excluir (só admin,
- * garantido pela RLS) e resumo do diagnóstico.
+ * Leads no painel: listar com filtros (paginado), abrir um lead, atualizar status/anotações,
+ * excluir (conforme as permissões, garantido pela RLS) e resumo do diagnóstico.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -56,14 +56,18 @@ export const listarLeadsFn = createServerFn({ method: "GET" })
       status: z.enum(STATUS).optional(),
       busca: z.string().max(120).optional(),
       ordem: z.enum(["recentes", "antigos"]).default("recentes"),
+      pagina: z.number().int().min(0).default(0),
+      porPagina: z.number().int().min(1).max(1000).default(100),
     }),
   )
-  .handler(async ({ data, context }): Promise<Lead[]> => {
+  .handler(async ({ data, context }): Promise<{ leads: Lead[]; total: number }> => {
+    const inicio = data.pagina * data.porPagina;
     let q = context.supabase
       .from("leads")
-      .select("*, item:content_items(title, collection, slug)")
+      .select("*, item:content_items(title, collection, slug)", { count: "exact" })
       .order("created_at", { ascending: data.ordem === "antigos" })
-      .limit(1000);
+      .order("id", { ascending: true })
+      .range(inicio, inicio + data.porPagina - 1);
     if (data.tipo) q = q.eq("kind", data.tipo);
     if (data.status) q = q.eq("status", data.status);
     const termo = data.busca ? termoSeguro(data.busca) : "";
@@ -71,9 +75,26 @@ export const listarLeadsFn = createServerFn({ method: "GET" })
       const t = `%${termo}%`;
       q = q.or(`name.ilike.${t},email.ilike.${t},company.ilike.${t}`);
     }
-    const { data: rows, error } = await q;
+    const { data: rows, error, count } = await q;
     checar(error, "listar leads");
-    return (rows ?? []).map((r) => normalizar(r as unknown as Record<string, unknown>));
+    return {
+      leads: (rows ?? []).map((r) => normalizar(r as unknown as Record<string, unknown>)),
+      total: count ?? 0,
+    };
+  });
+
+/** Um lead só (para abrir pelo link quando ele não está na página carregada). */
+export const obterLeadFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .validator(z.object({ id: z.string().uuid() }))
+  .handler(async ({ data, context }): Promise<Lead | null> => {
+    const { data: row, error } = await context.supabase
+      .from("leads")
+      .select("*, item:content_items(title, collection, slug)")
+      .eq("id", data.id)
+      .maybeSingle();
+    checar(error, "abrir lead");
+    return row ? normalizar(row as unknown as Record<string, unknown>) : null;
   });
 
 export const atualizarLeadFn = createServerFn({ method: "POST" })
@@ -109,7 +130,7 @@ export const excluirLeadFn = createServerFn({ method: "POST" })
       .eq("id", data.id);
     checar(error, "excluir lead");
     // A RLS não gera erro quando nega: a exclusão simplesmente não acontece.
-    if (!count) throw new Error("Só administradores podem excluir leads.");
+    if (!count) throw new Error("Você não tem permissão para excluir este lead.");
     return { ok: true };
   });
 
@@ -131,47 +152,29 @@ export type ResumoDiagnostico = {
 export const resumoDiagnosticoFn = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<ResumoDiagnostico> => {
-    const { data: rows, error } = await context.supabase
-      .from("leads")
-      .select("id, name, email, status, created_at, data")
-      .eq("kind", "diagnostico")
-      .order("created_at", { ascending: false })
-      .limit(2000);
+    // Calculado no banco sobre todas as respostas (função diagnostico_resumo).
+    const { data, error } = await context.supabase.rpc("diagnostico_resumo");
     checar(error, "resumo diagnóstico");
-
-    const focos: Record<string, number> = {};
-    const somas: Record<string, { s: number; n: number }> = {};
-    const recentes: ResumoDiagnostico["recentes"] = [];
-
-    for (const r of rows ?? []) {
-      const d = objeto(r.data);
-      const foco = typeof d.foco === "string" ? d.foco : null;
-      const pont = objeto(d.pontuacao);
-      const pontuacao: Record<string, number> = {};
-      for (const [etapa, v] of Object.entries(pont)) {
-        const n = typeof v === "number" ? v : Number(v);
-        if (!Number.isFinite(n)) continue;
-        pontuacao[etapa] = n;
-        somas[etapa] ??= { s: 0, n: 0 };
-        somas[etapa].s += n;
-        somas[etapa].n += 1;
-      }
-      if (foco) focos[foco] = (focos[foco] ?? 0) + 1;
-      if (recentes.length < 12) {
-        recentes.push({
-          id: r.id,
-          name: r.name,
-          email: r.email,
-          status: r.status,
-          created_at: r.created_at,
-          foco,
-          pontuacao,
-        });
-      }
-    }
-
-    const medias = Object.fromEntries(
-      Object.entries(somas).map(([k, { s, n }]) => [k, n ? Math.round((s / n) * 100) / 100 : null]),
-    );
-    return { total: rows?.length ?? 0, focos, medias, recentes };
+    const r = objeto(data);
+    const numeros = (v: unknown) =>
+      Object.fromEntries(
+        Object.entries(objeto(v)).map(([k, n]) => [k, n === null ? null : Number(n)]),
+      );
+    return {
+      total: Number(r.total ?? 0),
+      focos: numeros(r.focos) as Record<string, number>,
+      medias: numeros(r.medias),
+      recentes: (Array.isArray(r.recentes) ? r.recentes : []).map((x) => {
+        const o = objeto(x);
+        return {
+          id: String(o.id),
+          name: String(o.name ?? ""),
+          email: (o.email as string | null) ?? null,
+          status: String(o.status ?? "novo"),
+          created_at: String(o.created_at),
+          foco: (o.foco as string | null) ?? null,
+          pontuacao: numeros(o.pontuacao) as Record<string, number>,
+        };
+      }),
+    };
   });

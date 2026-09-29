@@ -12,7 +12,14 @@ import {
   Tray,
   WhatsappLogo,
 } from "@phosphor-icons/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type InfiniteData,
+} from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 
 import { QK, useAdmin, ExigePermissao } from "@/components/admin/contexto";
@@ -38,6 +45,7 @@ import {
   atualizarLeadFn,
   excluirLeadFn,
   listarLeadsFn,
+  obterLeadFn,
   type Lead,
 } from "@/lib/admin/leads.functions";
 import {
@@ -86,6 +94,9 @@ export const Route = createFileRoute("/admin/leads")({
   ),
 });
 
+const POR_PAGINA = 100;
+type PaginaLeads = { leads: Lead[]; total: number };
+
 function LeadsPagina() {
   const busca = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/leads" });
@@ -106,20 +117,45 @@ function LeadsPagina() {
     busca: busca.q,
     ordem: busca.ordem ?? "recentes",
   } as const;
-  const q = useQuery({
+  const q = useInfiniteQuery({
     queryKey: [...QK.leads, filtros],
-    queryFn: () => listarLeadsFn({ data: filtros }),
-    placeholderData: (anterior) => anterior,
+    queryFn: ({ pageParam }) =>
+      listarLeadsFn({ data: { ...filtros, pagina: pageParam, porPagina: POR_PAGINA } }),
+    initialPageParam: 0,
+    getNextPageParam: (ultima, todas) =>
+      todas.reduce((s, p) => s + p.leads.length, 0) < ultima.total ? todas.length : undefined,
+    placeholderData: keepPreviousData,
   });
 
-  const leads = q.data ?? [];
-  const aberto = busca.lead ? leads.find((l) => l.id === busca.lead) : undefined;
+  const leads = useMemo(() => q.data?.pages.flatMap((p) => p.leads) ?? [], [q.data]);
+  const total = q.data?.pages[0]?.total ?? 0;
+  const naLista = busca.lead ? leads.find((l) => l.id === busca.lead) : undefined;
+  // Lead aberto por link que não está nas páginas carregadas: busca só ele.
+  const avulso = useQuery({
+    queryKey: [...QK.leads, "avulso", busca.lead],
+    queryFn: () => obterLeadFn({ data: { id: busca.lead! } }),
+    enabled: !!busca.lead && !naLista && !q.isPending,
+  });
+  const aberto = naLista ?? avulso.data ?? undefined;
+  const [exportando, setExportando] = useState(false);
   const filtrando = !!(busca.tipo || busca.status || busca.q);
 
   const abrir = (id?: string) => navigate({ search: (s) => ({ ...s, lead: id }) });
 
-  function exportar() {
-    const linhas = leads.map((l) => [
+  async function exportar() {
+    // Exporta tudo o que bate com os filtros, não só as páginas já carregadas.
+    setExportando(true);
+    let todos: Lead[] = [];
+    try {
+      for (let pagina = 0; pagina < 20; pagina++) {
+        const r = await listarLeadsFn({ data: { ...filtros, pagina, porPagina: 1000 } });
+        todos = todos.concat(r.leads);
+        if (todos.length >= r.total || !r.leads.length) break;
+      }
+    } finally {
+      setExportando(false);
+    }
+    const linhas = todos.map((l) => [
       dataHora(l.created_at),
       rotuloTipo(l.kind),
       rotuloStatus(l.status),
@@ -177,10 +213,12 @@ function LeadsPagina() {
           type="button"
           className={acao("secundario")}
           onClick={exportar}
-          disabled={!leads.length}
+          disabled={!leads.length || exportando}
         >
-          <DownloadSimple aria-hidden className="size-4" />
-          Exportar CSV
+          {exportando ? <Girando /> : <DownloadSimple aria-hidden className="size-4" />}
+          {exportando
+            ? "Preparando…"
+            : `Exportar CSV${total ? ` (${total.toLocaleString("pt-BR")})` : ""}`}
         </button>
       </header>
 
@@ -228,7 +266,7 @@ function LeadsPagina() {
         <span>
           {q.isPending
             ? "Carregando…"
-            : `${leads.length.toLocaleString("pt-BR")} ${leads.length === 1 ? "lead" : "leads"}${filtrando ? " com estes filtros" : ""}`}
+            : `${total.toLocaleString("pt-BR")} ${total === 1 ? "lead" : "leads"}${filtrando ? " com estes filtros" : ""}${leads.length < total ? ` · mostrando ${leads.length.toLocaleString("pt-BR")}` : ""}`}
           {q.isFetching && !q.isPending && <Girando className="ml-2 inline size-3.5" />}
         </span>
         {filtrando && (
@@ -364,10 +402,18 @@ function LeadsPagina() {
               </tbody>
             </table>
           </Cartao>
-          {leads.length >= 1000 && (
-            <p className="mt-3 text-sm text-cinza">
-              Mostrando os 1.000 mais recentes. Use os filtros para refinar.
-            </p>
+          {q.hasNextPage && (
+            <div className="mt-4 flex justify-center">
+              <button
+                type="button"
+                className={acao("secundario")}
+                onClick={() => q.fetchNextPage()}
+                disabled={q.isFetchingNextPage}
+              >
+                {q.isFetchingNextPage && <Girando />}
+                Carregar mais ({(total - leads.length).toLocaleString("pt-BR")} restantes)
+              </button>
+            </div>
           )}
         </div>
       )}
@@ -442,9 +488,18 @@ function DetalheLead({ lead, onFechar }: { lead: Lead; onFechar: () => void }) {
   useEffect(() => setNotas(lead.notes ?? ""), [lead.id, lead.notes]);
 
   const substituir = (novo: Lead) => {
-    qc.setQueriesData<Lead[]>({ queryKey: QK.leads }, (lista) =>
-      lista?.map((l) => (l.id === novo.id ? novo : l)),
+    qc.setQueriesData<InfiniteData<PaginaLeads>>({ queryKey: QK.leads }, (d) =>
+      d?.pages
+        ? {
+            ...d,
+            pages: d.pages.map((p) => ({
+              ...p,
+              leads: p.leads.map((l) => (l.id === novo.id ? novo : l)),
+            })),
+          }
+        : d,
     );
+    qc.setQueryData([...QK.leads, "avulso", novo.id], novo);
     qc.invalidateQueries({ queryKey: QK.leadsNovos });
   };
 
@@ -469,8 +524,16 @@ function DetalheLead({ lead, onFechar }: { lead: Lead; onFechar: () => void }) {
   const excluir = useMutation({
     mutationFn: () => excluirLeadFn({ data: { id: lead.id } }),
     onSuccess: () => {
-      qc.setQueriesData<Lead[]>({ queryKey: QK.leads }, (lista) =>
-        lista?.filter((l) => l.id !== lead.id),
+      qc.setQueriesData<InfiniteData<PaginaLeads>>({ queryKey: QK.leads }, (d) =>
+        d?.pages
+          ? {
+              ...d,
+              pages: d.pages.map((p) => ({
+                leads: p.leads.filter((l) => l.id !== lead.id),
+                total: Math.max(0, p.total - 1),
+              })),
+            }
+          : d,
       );
       qc.invalidateQueries({ queryKey: QK.leadsNovos });
       qc.invalidateQueries({ queryKey: QK.visaoGeral });
