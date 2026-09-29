@@ -1,32 +1,51 @@
 /**
- * Usuários do painel (só administradores).
+ * Equipe do painel (só administradores): listar, convidar com link de uso único,
+ * editar nome/cargo/permissões e remover acesso.
  *
- * Listar e convidar pessoas exige a API admin do Supabase Auth, que só funciona com a
- * service role (SUPABASE_SERVICE_ROLE_KEY, segredo do Worker). O cliente admin é
- * importado dinamicamente e SÓ depois de confirmar que quem chama é administrador.
- * Sem a chave, o módulo continua listando os papéis visíveis pela RLS (admin vê todos).
- * Os papéis (user_roles) são gravados com o token de quem chama: a RLS confere de novo.
+ * Convite: gera um token aleatório de 256 bits; o banco guarda só o sha256. O link
+ * (/convite/<token>) aparece uma única vez para o administrador copiar e enviar; vale por
+ * 7 dias e para um cadastro só. Quem abre o link cria a própria senha (convite.functions).
+ *
+ * Listar e-mails e último acesso exige a API admin do Supabase Auth (service role, segredo
+ * do Worker), importada dinamicamente e SÓ depois de confirmar que quem chama é admin.
+ * Perfis, papéis e convites são gravados com o token de quem chama: a RLS confere de novo.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { novoToken } from "@/lib/token";
 import { checar } from "./erros";
-import type { Papel } from "./perfil.functions";
+import { normalizarPermissoes, type Permissoes } from "./permissoes";
 
-export type UsuarioPainel = {
+export type MembroEquipe = {
   id: string;
   email: string | null;
-  papel: Papel | null;
-  convidadoEm: string | null;
+  nome: string | null;
+  cargo: string | null;
+  admin: boolean;
+  permissoes: Permissoes;
+  desde: string | null;
   ultimoAcesso: string | null;
-  confirmado: boolean;
   voce: boolean;
 };
 
-export type ListaUsuarios = {
+export type ConvitePendente = {
+  id: string;
+  email: string;
+  nome: string;
+  cargo: string | null;
+  admin: boolean;
+  permissoes: Permissoes;
+  criadoEm: string;
+  expiraEm: string;
+  expirado: boolean;
+};
+
+export type ListaEquipe = {
   semChave: boolean;
-  usuarios: UsuarioPainel[];
+  membros: MembroEquipe[];
+  convites: ConvitePendente[];
 };
 
 type Ctx = {
@@ -35,6 +54,8 @@ type Ctx = {
   >;
   userId: string;
 };
+
+const DIAS_CONVITE = 7;
 
 async function exigirAdmin(ctx: Ctx) {
   const { data, error } = await ctx.supabase
@@ -56,153 +77,238 @@ async function clienteAdmin() {
   return supabaseAdmin;
 }
 
-/** Papel principal (admin prevalece sobre editor). */
-function papelDe(papeis: string[]): Papel | null {
-  if (papeis.includes("admin")) return "admin";
-  if (papeis.includes("editor")) return "editor";
-  return null;
+async function origemDoSite() {
+  const { getRequest } = await import("@tanstack/react-start/server");
+  const req = getRequest();
+  return req?.url
+    ? new URL(req.url).origin
+    : (process.env.SITE_URL ?? "https://danielbasso.com.br");
 }
 
-export const listarUsuariosFn = createServerFn({ method: "GET" })
+const esquemaPermissoes = z
+  .record(z.string(), z.array(z.string()))
+  .transform((p) => normalizarPermissoes(p));
+
+const esquemaPessoa = z.object({
+  nome: z.string().trim().min(2, "Informe o nome.").max(120),
+  cargo: z
+    .string()
+    .trim()
+    .max(120)
+    .transform((c) => c || null),
+  admin: z.boolean(),
+  permissoes: esquemaPermissoes,
+});
+
+export const listarEquipeFn = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<ListaUsuarios> => {
+  .handler(async ({ context }): Promise<ListaEquipe> => {
     await exigirAdmin(context);
     const email = typeof context.claims.email === "string" ? context.claims.email : null;
 
-    const { data: roles, error } = await context.supabase
-      .from("user_roles")
-      .select("user_id, role, created_at");
-    checar(error, "listar papéis");
-    const papeisPorUsuario = new Map<string, { papeis: string[]; desde: string }>();
-    for (const r of roles ?? []) {
-      const atual = papeisPorUsuario.get(r.user_id) ?? { papeis: [], desde: r.created_at };
-      atual.papeis.push(r.role);
+    const [roles, perfis, convites] = await Promise.all([
+      context.supabase.from("user_roles").select("user_id, role, created_at"),
+      context.supabase.from("staff_profiles").select("user_id, nome, cargo, permissoes"),
+      context.supabase
+        .from("staff_invites")
+        .select("id, email, nome, cargo, admin, permissoes, created_at, expires_at")
+        .is("used_at", null)
+        .order("created_at", { ascending: false }),
+    ]);
+    checar(roles.error, "listar papéis");
+    checar(perfis.error, "listar perfis");
+    checar(convites.error, "listar convites");
+
+    const papeis = new Map<string, { admin: boolean; desde: string }>();
+    for (const r of roles.data ?? []) {
+      const atual = papeis.get(r.user_id) ?? { admin: false, desde: r.created_at };
+      if (r.role === "admin") atual.admin = true;
       if (r.created_at < atual.desde) atual.desde = r.created_at;
-      papeisPorUsuario.set(r.user_id, atual);
+      papeis.set(r.user_id, atual);
     }
+    const perfilDe = new Map((perfis.data ?? []).map((p) => [p.user_id, p]));
 
-    if (!temChaveServico()) {
-      const usuarios: UsuarioPainel[] = [...papeisPorUsuario.entries()].map(([id, p]) => ({
-        id,
-        email: id === context.userId ? email : null,
-        papel: papelDe(p.papeis),
-        convidadoEm: p.desde,
-        ultimoAcesso: null,
-        confirmado: true,
-        voce: id === context.userId,
-      }));
-      if (!usuarios.some((u) => u.voce)) {
-        usuarios.unshift({
-          id: context.userId,
-          email,
-          papel: "admin",
-          convidadoEm: null,
-          ultimoAcesso: null,
-          confirmado: true,
-          voce: true,
-        });
+    let contas = new Map<string, { email: string | null; ultimo: string | null }>();
+    if (temChaveServico()) {
+      const admin = await clienteAdmin();
+      const { data: lista, error } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+      if (error) {
+        console.error("[usuarios] listUsers:", error);
+        throw new Error(
+          "Não foi possível listar os usuários do login. Confira a chave de serviço.",
+        );
       }
-      return { semChave: true, usuarios: usuarios.sort((a, b) => Number(b.voce) - Number(a.voce)) };
+      contas = new Map(
+        lista.users.map((u) => [
+          u.id,
+          { email: u.email ?? null, ultimo: u.last_sign_in_at ?? null },
+        ]),
+      );
     }
 
-    const admin = await clienteAdmin();
-    const { data: lista, error: e2 } = await admin.auth.admin.listUsers({ page: 1, perPage: 500 });
-    if (e2) {
-      console.error("[usuarios] listUsers:", e2);
-      throw new Error("Não foi possível listar os usuários do login. Confira a chave de serviço.");
-    }
-    const usuarios: UsuarioPainel[] = lista.users.map((u) => ({
-      id: u.id,
-      email: u.email ?? null,
-      papel: papelDe(papeisPorUsuario.get(u.id)?.papeis ?? []),
-      convidadoEm: u.invited_at ?? u.created_at ?? null,
-      ultimoAcesso: u.last_sign_in_at ?? null,
-      confirmado: !!(u.email_confirmed_at || u.last_sign_in_at),
-      voce: u.id === context.userId,
-    }));
-    // Quem tem acesso primeiro; depois por e-mail.
-    usuarios.sort(
+    const membros: MembroEquipe[] = [...papeis.entries()].map(([id, p]) => {
+      const perfil = perfilDe.get(id);
+      return {
+        id,
+        email: contas.get(id)?.email ?? (id === context.userId ? email : null),
+        nome: perfil?.nome ?? null,
+        cargo: perfil?.cargo ?? null,
+        admin: p.admin,
+        permissoes: normalizarPermissoes(perfil?.permissoes),
+        desde: p.desde,
+        ultimoAcesso: contas.get(id)?.ultimo ?? null,
+        voce: id === context.userId,
+      };
+    });
+    membros.sort(
       (a, b) =>
         Number(b.voce) - Number(a.voce) ||
-        Number(!!b.papel) - Number(!!a.papel) ||
-        (a.email ?? "").localeCompare(b.email ?? ""),
+        Number(b.admin) - Number(a.admin) ||
+        (a.nome ?? a.email ?? "").localeCompare(b.nome ?? b.email ?? ""),
     );
-    return { semChave: false, usuarios };
+
+    const agora = Date.now();
+    return {
+      semChave: !temChaveServico(),
+      membros,
+      convites: (convites.data ?? []).map((c) => ({
+        id: c.id,
+        email: c.email,
+        nome: c.nome,
+        cargo: c.cargo,
+        admin: c.admin,
+        permissoes: normalizarPermissoes(c.permissoes),
+        criadoEm: c.created_at,
+        expiraEm: c.expires_at,
+        expirado: new Date(c.expires_at).getTime() < agora,
+      })),
+    };
   });
 
-async function definirPapel(ctx: Ctx, userId: string, papel: Papel) {
-  const { error: e1 } = await ctx.supabase
-    .from("user_roles")
-    .delete()
-    .eq("user_id", userId)
-    .neq("role", papel);
-  checar(e1, "trocar papel (remover)");
-  const { error: e2 } = await ctx.supabase
-    .from("user_roles")
-    .upsert(
-      { user_id: userId, role: papel },
-      { onConflict: "user_id,role", ignoreDuplicates: true },
-    );
-  checar(e2, "trocar papel (gravar)");
-}
-
-export const convidarUsuarioFn = createServerFn({ method: "POST" })
+export const criarConviteFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator(
-    z.object({
+    esquemaPessoa.extend({
       email: z.string().trim().toLowerCase().email("E-mail inválido.").max(200),
-      papel: z.enum(["admin", "editor"]),
     }),
   )
-  .handler(async ({ data, context }): Promise<{ jaExistia: boolean }> => {
+  .handler(async ({ data, context }): Promise<{ link: string; expiraEm: string }> => {
     await exigirAdmin(context);
     if (!temChaveServico()) {
       throw new Error(
         "Convites precisam da chave SUPABASE_SERVICE_ROLE_KEY configurada no servidor.",
       );
     }
-    const { getRequest } = await import("@tanstack/react-start/server");
-    const req = getRequest();
-    const origem = req?.url ? new URL(req.url).origin : (process.env.SITE_URL ?? "");
-    const admin = await clienteAdmin();
-
-    const { data: convite, error } = await admin.auth.admin.inviteUserByEmail(data.email, {
-      redirectTo: `${origem}/redefinir-senha`,
-    });
-
-    let userId = convite?.user?.id;
-    let jaExistia = false;
-    if (error) {
-      const existe =
-        error.code === "email_exists" || /already.*registered|already exists/i.test(error.message);
-      if (!existe) {
-        console.error("[usuarios] convite:", error);
-        if (error.status === 429)
-          throw new Error("Muitos convites em pouco tempo. Aguarde alguns minutos.");
-        throw new Error("Não foi possível enviar o convite agora.");
-      }
-      const { data: lista, error: e2 } = await admin.auth.admin.listUsers({
-        page: 1,
-        perPage: 1000,
-      });
-      if (e2) throw new Error("Não foi possível localizar o usuário existente.");
-      userId = lista.users.find((u) => u.email?.toLowerCase() === data.email)?.id;
-      jaExistia = true;
+    if (!data.admin && !Object.keys(data.permissoes).length) {
+      throw new Error("Marque pelo menos uma permissão ou dê acesso de administrador.");
     }
-    if (!userId) throw new Error("Não foi possível identificar o usuário convidado.");
-    await definirPapel(context, userId, data.papel);
-    return { jaExistia };
+
+    // Quem já está na equipe não precisa de convite.
+    const admin = await clienteAdmin();
+    const { data: lista, error: e1 } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    if (e1) throw new Error("Não foi possível conferir os usuários existentes.");
+    const existente = lista.users.find((u) => u.email?.toLowerCase() === data.email);
+    if (existente) {
+      const { data: papel } = await context.supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", existente.id)
+        .limit(1);
+      if (papel?.length)
+        throw new Error("Este e-mail já tem acesso ao painel. Edite as permissões na lista.");
+    }
+
+    // Um convite pendente por e-mail: o novo substitui o anterior.
+    const { error: e2 } = await context.supabase
+      .from("staff_invites")
+      .delete()
+      .eq("email", data.email)
+      .is("used_at", null);
+    checar(e2, "substituir convite anterior");
+
+    const { token, hash } = await novoToken();
+    const expira = new Date(Date.now() + DIAS_CONVITE * 86_400_000).toISOString();
+    const { error: e3 } = await context.supabase.from("staff_invites").insert({
+      token_hash: hash,
+      email: data.email,
+      nome: data.nome,
+      cargo: data.cargo,
+      admin: data.admin,
+      permissoes: data.admin ? {} : data.permissoes,
+      created_by: context.userId,
+      expires_at: expira,
+    });
+    checar(e3, "criar convite");
+    return { link: `${await origemDoSite()}/convite/${token}`, expiraEm: expira };
   });
 
-export const mudarPapelFn = createServerFn({ method: "POST" })
+/** Gera um link novo para um convite pendente (o anterior deixa de valer). */
+export const renovarConviteFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator(z.object({ userId: z.string().uuid(), papel: z.enum(["admin", "editor"]) }))
+  .validator(z.object({ id: z.string().uuid() }))
+  .handler(async ({ data, context }): Promise<{ link: string; expiraEm: string }> => {
+    await exigirAdmin(context);
+    const { token, hash } = await novoToken();
+    const expira = new Date(Date.now() + DIAS_CONVITE * 86_400_000).toISOString();
+    const { data: atualizado, error } = await context.supabase
+      .from("staff_invites")
+      .update({ token_hash: hash, expires_at: expira })
+      .eq("id", data.id)
+      .is("used_at", null)
+      .select("id");
+    checar(error, "renovar convite");
+    if (!atualizado?.length) throw new Error("Este convite já foi usado ou não existe mais.");
+    return { link: `${await origemDoSite()}/convite/${token}`, expiraEm: expira };
+  });
+
+export const revogarConviteFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator(z.object({ id: z.string().uuid() }))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
     await exigirAdmin(context);
-    if (data.userId === context.userId && data.papel !== "admin") {
+    const { error } = await context.supabase
+      .from("staff_invites")
+      .delete()
+      .eq("id", data.id)
+      .is("used_at", null);
+    checar(error, "cancelar convite");
+    return { ok: true };
+  });
+
+export const salvarMembroFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator(esquemaPessoa.extend({ userId: z.string().uuid() }))
+  .handler(async ({ data, context }): Promise<{ ok: true }> => {
+    await exigirAdmin(context);
+    if (data.userId === context.userId && !data.admin) {
       throw new Error("Você não pode tirar o seu próprio acesso de administrador.");
     }
-    await definirPapel(context, data.userId, data.papel);
+    if (!data.admin && !Object.keys(data.permissoes).length) {
+      throw new Error("Marque pelo menos uma permissão ou use “Remover acesso”.");
+    }
+    const { error: e1 } = await context.supabase.from("staff_profiles").upsert({
+      user_id: data.userId,
+      nome: data.nome,
+      cargo: data.cargo,
+      permissoes: data.admin ? {} : data.permissoes,
+      updated_by: context.userId,
+    });
+    checar(e1, "salvar perfil");
+
+    const papel = data.admin ? "admin" : "editor";
+    const { error: e2 } = await context.supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", data.userId)
+      .neq("role", papel);
+    checar(e2, "trocar papel (remover)");
+    const { error: e3 } = await context.supabase
+      .from("user_roles")
+      .upsert(
+        { user_id: data.userId, role: papel },
+        { onConflict: "user_id,role", ignoreDuplicates: true },
+      );
+    checar(e3, "trocar papel (gravar)");
     return { ok: true };
   });
 
@@ -213,7 +319,15 @@ export const removerAcessoFn = createServerFn({ method: "POST" })
     await exigirAdmin(context);
     if (data.userId === context.userId)
       throw new Error("Você não pode remover o seu próprio acesso.");
-    const { error } = await context.supabase.from("user_roles").delete().eq("user_id", data.userId);
-    checar(error, "remover acesso");
+    const { error: e1 } = await context.supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", data.userId);
+    checar(e1, "remover acesso");
+    const { error: e2 } = await context.supabase
+      .from("staff_profiles")
+      .delete()
+      .eq("user_id", data.userId);
+    checar(e2, "remover perfil");
     return { ok: true };
   });

@@ -4,6 +4,7 @@ export const TIPOS_LEAD = [
   { value: "interesse", label: "Interesse" },
   { value: "corporativo", label: "Corporativo" },
   { value: "diagnostico", label: "Diagnóstico" },
+  { value: "lp", label: "LP de lançamento" },
 ] as const;
 
 export const STATUS_LEAD = [

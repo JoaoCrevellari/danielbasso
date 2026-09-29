@@ -18,7 +18,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useMidia } from "@/components/admin/BibliotecaMidia";
-import { QK } from "@/components/admin/contexto";
+import { QK, ExigePermissao, useAdmin } from "@/components/admin/contexto";
 import { useConfirmar } from "@/components/admin/Dialogo";
 import { useToast } from "@/components/admin/Toast";
 import {
@@ -41,7 +41,11 @@ export const Route = createFileRoute("/admin/midia")({
   head: () => ({
     meta: [{ title: "Mídia | Painel" }, { name: "robots", content: "noindex, nofollow" }],
   }),
-  component: MidiaPagina,
+  component: () => (
+    <ExigePermissao modulo="midia">
+      <MidiaPagina />
+    </ExigePermissao>
+  ),
 });
 
 type Envio = { id: number; nome: string; estado: "enviando" | "ok" | "erro"; erro?: string };
@@ -52,6 +56,9 @@ function MidiaPagina() {
   const toast = useToast();
   const confirmar = useConfirmar();
   const reduzir = useReducedMotion();
+  const { pode } = useAdmin();
+  const podeEnviar = pode("midia", "editar");
+  const podeApagar = pode("midia", "apagar");
   const [busca, setBusca] = useState("");
   const [envios, setEnvios] = useState<Envio[]>([]);
   const [arrastando, setArrastando] = useState(false);
@@ -67,6 +74,7 @@ function MidiaPagina() {
   const enviandoAgora = envios.some((e) => e.estado === "enviando");
 
   async function enviar(lista: FileList | File[] | null) {
+    if (!podeEnviar) return;
     const fs = Array.from(lista ?? []);
     if (!fs.length) return;
     const novos = fs.map((f) => ({ id: ++seq.current, nome: f.name, estado: "enviando" as const }));
@@ -162,15 +170,17 @@ function MidiaPagina() {
         titulo="Mídia"
         descricao="Imagens e PDFs do site. Fotos são reduzidas para no máximo 2000 px e convertidas para WebP antes do envio. Limite de 10 MB por arquivo."
         acoes={
-          <button
-            type="button"
-            className={acao("primario")}
-            onClick={() => input.current?.click()}
-            disabled={enviandoAgora}
-          >
-            {enviandoAgora ? <Girando /> : <UploadSimple aria-hidden className="size-4" />}
-            {enviandoAgora ? "Enviando…" : "Enviar arquivos"}
-          </button>
+          podeEnviar && (
+            <button
+              type="button"
+              className={acao("primario")}
+              onClick={() => input.current?.click()}
+              disabled={enviandoAgora}
+            >
+              {enviandoAgora ? <Girando /> : <UploadSimple aria-hidden className="size-4" />}
+              {enviandoAgora ? "Enviando…" : "Enviar arquivos"}
+            </button>
+          )
         }
       />
       <input
@@ -185,23 +195,27 @@ function MidiaPagina() {
       />
 
       {/* Zona de soltar (visível no desktop; no celular o botão resolve) */}
-      <button
-        type="button"
-        onClick={() => input.current?.click()}
-        className={cn(
-          "mb-5 hidden w-full flex-col items-center justify-center gap-1 rounded-[2px] border border-dashed px-6 py-7 text-center transition-colors md:flex",
-          arrastando
-            ? "border-petroleo bg-petroleo-50"
-            : "border-linha-forte bg-papel/50 hover:border-petroleo/50",
-        )}
-      >
-        <UploadSimple aria-hidden className="size-6 text-petroleo" />
-        <span className="text-sm text-grafite">
-          Arraste arquivos para cá ou{" "}
-          <span className="text-petroleo underline underline-offset-4">escolha no computador</span>
-        </span>
-        <span className="text-xs text-cinza">JPG, PNG, WebP, AVIF, GIF, SVG ou PDF</span>
-      </button>
+      {podeEnviar && (
+        <button
+          type="button"
+          onClick={() => input.current?.click()}
+          className={cn(
+            "mb-5 hidden w-full flex-col items-center justify-center gap-1 rounded-[2px] border border-dashed px-6 py-7 text-center transition-colors md:flex",
+            arrastando
+              ? "border-petroleo bg-petroleo-50"
+              : "border-linha-forte bg-papel/50 hover:border-petroleo/50",
+          )}
+        >
+          <UploadSimple aria-hidden className="size-6 text-petroleo" />
+          <span className="text-sm text-grafite">
+            Arraste arquivos para cá ou{" "}
+            <span className="text-petroleo underline underline-offset-4">
+              escolha no computador
+            </span>
+          </span>
+          <span className="text-xs text-cinza">JPG, PNG, WebP, AVIF, GIF, SVG ou PDF</span>
+        </button>
+      )}
 
       {/* Progresso dos envios */}
       <AnimatePresence initial={false}>
@@ -287,7 +301,8 @@ function MidiaPagina() {
                 : "Envie imagens e PDFs para usar nas páginas, cursos, livros e posts."
             }
             acao={
-              !busca && (
+              !busca &&
+              podeEnviar && (
                 <button
                   type="button"
                   className={acao("primario")}
@@ -364,15 +379,17 @@ function MidiaPagina() {
                   >
                     <ArrowSquareOut aria-hidden className="size-[1.1rem]" />
                   </a>
-                  <button
-                    type="button"
-                    className={acaoIcone(true, "text-terracota-texto hover:bg-terracota/10")}
-                    aria-label={`Excluir ${a.nome}`}
-                    title="Excluir"
-                    onClick={() => excluir(a)}
-                  >
-                    <Trash aria-hidden className="size-[1.1rem]" />
-                  </button>
+                  {podeApagar && (
+                    <button
+                      type="button"
+                      className={acaoIcone(true, "text-terracota-texto hover:bg-terracota/10")}
+                      aria-label={`Excluir ${a.nome}`}
+                      title="Excluir"
+                      onClick={() => excluir(a)}
+                    >
+                      <Trash aria-hidden className="size-[1.1rem]" />
+                    </button>
+                  )}
                 </div>
               </motion.li>
             ))}

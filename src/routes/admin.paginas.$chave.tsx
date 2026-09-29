@@ -18,7 +18,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { EditorCampos, validarCampos, type Erros } from "@/components/admin/campos/EditorCampos";
-import { QK } from "@/components/admin/contexto";
+import { ExigePermissao, QK, useAdmin } from "@/components/admin/contexto";
 import { useConfirmar } from "@/components/admin/Dialogo";
 import { AvisoSaida, useProtecaoSaida } from "@/components/admin/ProtecaoSaida";
 import { useToast } from "@/components/admin/Toast";
@@ -69,7 +69,20 @@ function EditorPaginaRota() {
       />
     );
   }
-  return <Carregar key={chave} pagina={pagina} />;
+  return (
+    <ExigePermissao modulo={moduloDaPagina(chave)}>
+      <Carregar key={chave} pagina={pagina} />
+    </ExigePermissao>
+  );
+}
+
+/** Mesmo mapeamento de public.modulo_do_texto no banco. */
+function moduloDaPagina(chave: string) {
+  return chave === "settings"
+    ? "configuracoes"
+    : chave === "diagnostico"
+      ? "diagnostico"
+      : "paginas";
 }
 
 function Carregar({ pagina }: { pagina: PaginaConfig }) {
@@ -110,6 +123,7 @@ function Editor({
   const toast = useToast();
   const confirmar = useConfirmar();
   const reduzir = useReducedMotion();
+  const podeEditar = useAdmin().pode(moduloDaPagina(pagina.key), "editar");
 
   const inicial = useMemo(() => clonar(mesclar(pagina.padrao, salvo)) as Values, [pagina, salvo]);
   const [valores, setValores] = useState<Values>(inicial);
@@ -142,7 +156,7 @@ function Editor({
   }
 
   function tentarSalvar() {
-    if (salvar.isPending) return;
+    if (salvar.isPending || !podeEditar) return;
     const e = validar();
     setErros(e);
     if (Object.keys(e).length) {
@@ -262,9 +276,9 @@ function Editor({
           <button
             type="button"
             onClick={tentarSalvar}
-            disabled={salvar.isPending || !sujo}
+            disabled={salvar.isPending || !sujo || !podeEditar}
             className={acao("primario", "sm", "relative")}
-            title="Salvar (Ctrl+S)"
+            title={podeEditar ? "Salvar (Ctrl+S)" : "Você tem acesso só para ver"}
           >
             {salvar.isPending ? <Girando /> : <FloppyDisk aria-hidden className="size-4" />}
             Salvar
@@ -280,6 +294,11 @@ function Editor({
 
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <p className="max-w-2xl text-[0.9375rem] text-cinza">
+          {!podeEditar && (
+            <span className="mb-1 block font-medium text-ouro-texto">
+              Você tem acesso só para ver esta página.
+            </span>
+          )}
           {DESCRICOES[pagina.key] ??
             "Edite os textos por seção. Use *asteriscos* nos títulos para destacar uma palavra em dourado."}
           {salvoEm && (

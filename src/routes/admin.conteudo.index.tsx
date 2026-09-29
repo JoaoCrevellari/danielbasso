@@ -5,7 +5,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowRight } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 
-import { QK } from "@/components/admin/contexto";
+import { QK, ExigePermissao } from "@/components/admin/contexto";
 import { Esqueleto, EstadoErro, TopoPagina } from "@/components/admin/ui";
 import { COLLECTIONS, type CollectionConfig } from "@/content/collections";
 import { contarItensFn } from "@/lib/admin/conteudo.functions";
@@ -15,7 +15,11 @@ export const Route = createFileRoute("/admin/conteudo/")({
   head: () => ({
     meta: [{ title: "Conteúdo | Painel" }, { name: "robots", content: "noindex, nofollow" }],
   }),
-  component: IndiceConteudo,
+  component: () => (
+    <ExigePermissao modulo="conteudo">
+      <IndiceConteudo />
+    </ExigePermissao>
+  ),
 });
 
 function IndiceConteudo() {

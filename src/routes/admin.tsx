@@ -24,6 +24,7 @@ import { ToastProvider } from "@/components/admin/Toast";
 import { Girando, acao } from "@/components/admin/ui";
 import { ehErroDeSessao, mensagemErro } from "@/lib/admin/formato";
 import { meuPerfilFn } from "@/lib/admin/perfil.functions";
+import { temPermissao } from "@/lib/admin/permissoes";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -142,6 +143,12 @@ function LayoutAdmin() {
     () => ({
       ...perfil,
       admin: perfil.papeis.includes("admin"),
+      pode: (modulo, acao = "ver") =>
+        temPermissao(
+          { admin: perfil.papeis.includes("admin"), permissoes: perfil.permissoes },
+          modulo,
+          acao,
+        ),
       sair: async () => {
         const { supabase } = await import("@/integrations/supabase/client");
         await supabase.auth.signOut().catch(() => undefined);

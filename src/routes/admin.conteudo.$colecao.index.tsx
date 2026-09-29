@@ -20,7 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useMemo, useState } from "react";
 
-import { QK } from "@/components/admin/contexto";
+import { QK, ExigePermissao, useAdmin } from "@/components/admin/contexto";
 import { useConfirmar } from "@/components/admin/Dialogo";
 import { useToast } from "@/components/admin/Toast";
 import {
@@ -54,7 +54,11 @@ export const Route = createFileRoute("/admin/conteudo/$colecao/")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: ListaColecao,
+  component: () => (
+    <ExigePermissao modulo="conteudo">
+      <ListaColecao />
+    </ExigePermissao>
+  ),
 });
 
 type FiltroStatus = "todos" | "published" | "draft";
@@ -84,6 +88,9 @@ function Lista({ col }: { col: CollectionConfig }) {
   const toast = useToast();
   const confirmar = useConfirmar();
   const navigate = useNavigate();
+  const { pode } = useAdmin();
+  const podeEditar = pode("conteudo", "editar");
+  const podeApagar = pode("conteudo", "apagar");
   const reduzir = useReducedMotion();
   const [busca, setBusca] = useState("");
   const [status, setStatus] = useState<FiltroStatus>("todos");
@@ -108,7 +115,7 @@ function Lista({ col }: { col: CollectionConfig }) {
   }, [itens, busca, status]);
 
   const manual = col.ordem === "manual";
-  const podeReordenar = manual && !busca.trim() && status === "todos";
+  const podeReordenar = podeEditar && manual && !busca.trim() && status === "todos";
   const contagem = {
     todos: itens.length,
     published: itens.filter((i) => i.status === "published").length,
@@ -200,14 +207,16 @@ function Lista({ col }: { col: CollectionConfig }) {
         titulo={col.plural}
         descricao={col.descricao}
         acoes={
-          <Link
-            to="/admin/conteudo/$colecao/$id"
-            params={{ colecao: col.key, id: "novo" }}
-            className={acao("primario")}
-          >
-            <Plus aria-hidden weight="bold" className="size-4" />
-            {novo} {col.singular.toLowerCase()}
-          </Link>
+          podeEditar && (
+            <Link
+              to="/admin/conteudo/$colecao/$id"
+              params={{ colecao: col.key, id: "novo" }}
+              className={acao("primario")}
+            >
+              <Plus aria-hidden weight="bold" className="size-4" />
+              {novo} {col.singular.toLowerCase()}
+            </Link>
+          )
         }
       />
 
@@ -389,26 +398,28 @@ function Lista({ col }: { col: CollectionConfig }) {
                             </button>
                           </>
                         )}
-                        <button
-                          type="button"
-                          className={acaoIcone(true)}
-                          aria-label={
-                            publicado ? `Despublicar ${item.title}` : `Publicar ${item.title}`
-                          }
-                          title={publicado ? "Despublicar" : "Publicar"}
-                          onClick={() =>
-                            mudarStatus.mutate({
-                              id: item.id,
-                              status: publicado ? "draft" : "published",
-                            })
-                          }
-                        >
-                          {publicado ? (
-                            <EyeSlash aria-hidden className="size-[1.1rem]" />
-                          ) : (
-                            <Eye aria-hidden className="size-[1.1rem]" />
-                          )}
-                        </button>
+                        {podeEditar && (
+                          <button
+                            type="button"
+                            className={acaoIcone(true)}
+                            aria-label={
+                              publicado ? `Despublicar ${item.title}` : `Publicar ${item.title}`
+                            }
+                            title={publicado ? "Despublicar" : "Publicar"}
+                            onClick={() =>
+                              mudarStatus.mutate({
+                                id: item.id,
+                                status: publicado ? "draft" : "published",
+                              })
+                            }
+                          >
+                            {publicado ? (
+                              <EyeSlash aria-hidden className="size-[1.1rem]" />
+                            ) : (
+                              <Eye aria-hidden className="size-[1.1rem]" />
+                            )}
+                          </button>
+                        )}
                         {publicado && col.path && (
                           <a
                             href={`${col.path}/${item.slug}`}
@@ -421,39 +432,46 @@ function Lista({ col }: { col: CollectionConfig }) {
                             <ArrowSquareOut aria-hidden className="size-[1.1rem]" />
                           </a>
                         )}
-                        <button
-                          type="button"
-                          className={acaoIcone(true)}
-                          aria-label={`Duplicar ${item.title}`}
-                          title="Duplicar"
-                          disabled={duplicar.isPending}
-                          onClick={() => duplicar.mutate(item.id)}
-                        >
-                          <CopySimple aria-hidden className="size-[1.1rem]" />
-                        </button>
-                        <button
-                          type="button"
-                          className={acaoIcone(true, "text-terracota-texto hover:bg-terracota/10")}
-                          aria-label={`Excluir ${item.title}`}
-                          title="Excluir"
-                          onClick={async () => {
-                            const ok = await confirmar({
-                              titulo: `Excluir ${artigo} ${col.singular.toLowerCase()}?`,
-                              descricao: (
-                                <>
-                                  <strong>{item.title}</strong> será apagad{artigo} de vez
-                                  {publicado ? " e sai do site imediatamente" : ""}. Não dá para
-                                  desfazer.
-                                </>
-                              ),
-                              confirmar: "Excluir",
-                              perigo: true,
-                            });
-                            if (ok) excluir.mutate(item.id);
-                          }}
-                        >
-                          <Trash aria-hidden className="size-[1.1rem]" />
-                        </button>
+                        {podeEditar && (
+                          <button
+                            type="button"
+                            className={acaoIcone(true)}
+                            aria-label={`Duplicar ${item.title}`}
+                            title="Duplicar"
+                            disabled={duplicar.isPending}
+                            onClick={() => duplicar.mutate(item.id)}
+                          >
+                            <CopySimple aria-hidden className="size-[1.1rem]" />
+                          </button>
+                        )}
+                        {podeApagar && (
+                          <button
+                            type="button"
+                            className={acaoIcone(
+                              true,
+                              "text-terracota-texto hover:bg-terracota/10",
+                            )}
+                            aria-label={`Excluir ${item.title}`}
+                            title="Excluir"
+                            onClick={async () => {
+                              const ok = await confirmar({
+                                titulo: `Excluir ${artigo} ${col.singular.toLowerCase()}?`,
+                                descricao: (
+                                  <>
+                                    <strong>{item.title}</strong> será apagad{artigo} de vez
+                                    {publicado ? " e sai do site imediatamente" : ""}. Não dá para
+                                    desfazer.
+                                  </>
+                                ),
+                                confirmar: "Excluir",
+                                perigo: true,
+                              });
+                              if (ok) excluir.mutate(item.id);
+                            }}
+                          >
+                            <Trash aria-hidden className="size-[1.1rem]" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </motion.li>

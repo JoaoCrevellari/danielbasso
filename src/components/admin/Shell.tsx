@@ -15,6 +15,7 @@ import {
   GearSix,
   GraduationCap,
   Images,
+  Megaphone,
   List,
   Quotes,
   SignOut,
@@ -31,7 +32,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { COLLECTIONS, type CollectionConfig } from "@/content/collections";
 import { contarLeadsNovosFn } from "@/lib/admin/perfil.functions";
-import { rotuloPapel } from "@/lib/admin/rotulos";
+import type { Modulo } from "@/lib/admin/permissoes";
 import { cn } from "@/lib/utils";
 import { QK, useAdmin } from "./contexto";
 import { EASE } from "./ui";
@@ -47,6 +48,8 @@ const ICONES_COLECAO: Record<string, Icon> = {
 
 type ItemNav = {
   chave: string;
+  /** Módulo exigido para aparecer no menu (sem ele, só administradores). */
+  modulo?: Modulo;
   rotulo: string;
   icone: Icon;
   ativo: (p: string) => boolean;
@@ -61,13 +64,14 @@ function semBarra(p: string) {
 }
 
 function useGrupos(novos: number): GrupoNav[] {
-  const { admin } = useAdmin();
+  const { admin, pode } = useAdmin();
   const colecoes = Object.values(COLLECTIONS) as CollectionConfig[];
   const grupos: GrupoNav[] = [
     {
       itens: [
         {
           chave: "visao",
+          modulo: "painel",
           rotulo: "Visão geral",
           icone: ChartLineUp,
           ativo: (p) => p === "/admin",
@@ -79,6 +83,7 @@ function useGrupos(novos: number): GrupoNav[] {
         },
         {
           chave: "leads",
+          modulo: "leads",
           rotulo: "Leads",
           icone: Tray,
           contador: novos,
@@ -89,12 +94,25 @@ function useGrupos(novos: number): GrupoNav[] {
             </Link>
           ),
         },
+        {
+          chave: "lps",
+          modulo: "lps",
+          rotulo: "LPs",
+          icone: Megaphone,
+          ativo: (p) => p.startsWith("/admin/lps"),
+          link: (c, n, f) => (
+            <Link to="/admin/lps" className={c} onClick={f}>
+              {n}
+            </Link>
+          ),
+        },
       ],
     },
     {
       titulo: "Conteúdo",
       itens: colecoes.map((col) => ({
         chave: `col-${col.key}`,
+        modulo: "conteudo" as const,
         rotulo: col.plural,
         icone: ICONES_COLECAO[col.key] ?? Stack,
         ativo: (p: string) =>
@@ -116,6 +134,7 @@ function useGrupos(novos: number): GrupoNav[] {
       itens: [
         {
           chave: "paginas",
+          modulo: "paginas",
           rotulo: "Páginas",
           icone: Files,
           ativo: (p) =>
@@ -130,6 +149,7 @@ function useGrupos(novos: number): GrupoNav[] {
         },
         {
           chave: "diagnostico",
+          modulo: "diagnostico",
           rotulo: "Diagnóstico",
           icone: Compass,
           ativo: (p) =>
@@ -142,6 +162,7 @@ function useGrupos(novos: number): GrupoNav[] {
         },
         {
           chave: "midia",
+          modulo: "midia",
           rotulo: "Mídia",
           icone: Images,
           ativo: (p) => p.startsWith("/admin/midia"),
@@ -153,6 +174,7 @@ function useGrupos(novos: number): GrupoNav[] {
         },
         {
           chave: "config",
+          modulo: "configuracoes",
           rotulo: "Configurações",
           icone: GearSix,
           ativo: (p) => p.startsWith("/admin/paginas/settings"),
@@ -188,7 +210,10 @@ function useGrupos(novos: number): GrupoNav[] {
       ],
     });
   }
-  return grupos;
+  // Cada pessoa vê só os módulos liberados para ela.
+  return grupos
+    .map((g) => ({ ...g, itens: g.itens.filter((i) => (i.modulo ? pode(i.modulo) : admin)) }))
+    .filter((g) => g.itens.length);
 }
 
 function Assinatura() {
@@ -210,6 +235,7 @@ function ConteudoMenu({ onNavegar }: { onNavegar?: () => void }) {
   const { data: novos = 0 } = useQuery({
     queryKey: QK.leadsNovos,
     queryFn: () => contarLeadsNovosFn(),
+    enabled: perfil.pode("leads"),
     refetchInterval: 60_000,
     staleTime: 30_000,
   });
@@ -276,9 +302,11 @@ function ConteudoMenu({ onNavegar }: { onNavegar?: () => void }) {
       <div className="shrink-0 border-t border-gelo/10 px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <div className="px-3 pb-2">
           <p className="truncate text-sm text-gelo/85" title={perfil.email ?? undefined}>
-            {perfil.email ?? "Sessão ativa"}
+            {perfil.nome ?? perfil.email ?? "Sessão ativa"}
           </p>
-          <p className="text-xs text-gelo/45">{perfil.papeis.map(rotuloPapel).join(", ")}</p>
+          <p className="truncate text-xs text-gelo/45">
+            {perfil.cargo ?? (perfil.admin ? "Administrador" : "Equipe")}
+          </p>
         </div>
         <a
           href="/"

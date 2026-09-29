@@ -47,7 +47,7 @@ function useLargura<T extends HTMLElement>() {
 // ── Gráfico diário ──────────────────────────────────────────────────────────────
 export type PontoDiario = { day: string; visitors: number; pageviews: number };
 
-const SERIES = [
+const SERIES_PADRAO = [
   { chave: "visitors" as const, rotulo: "Visitantes", cor: COR_VISITANTES },
   { chave: "pageviews" as const, rotulo: "Páginas vistas", cor: COR_PAGINAS },
 ];
@@ -55,10 +55,16 @@ const SERIES = [
 export function GraficoDiario({
   dados,
   atualizando,
+  rotulos,
 }: {
   dados: PontoDiario[];
   atualizando?: boolean;
+  /** Outros nomes para as duas séries (ex.: LPs: visitantes × respostas). */
+  rotulos?: { visitors: string; pageviews: string };
 }) {
+  const SERIES = rotulos
+    ? SERIES_PADRAO.map((s) => ({ ...s, rotulo: rotulos[s.chave] }))
+    : SERIES_PADRAO;
   const [ref, largura] = useLargura<HTMLDivElement>();
   const [idx, setIdx] = useState<number | null>(null);
   const [tabela, setTabela] = useState(false);

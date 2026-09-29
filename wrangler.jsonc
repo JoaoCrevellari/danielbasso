@@ -21,6 +21,8 @@
   "routes": [
     { "pattern": "danielbasso.com.br", "custom_domain": true },
     { "pattern": "www.danielbasso.com.br", "custom_domain": true },
+    // LPs de lançamento: subdomínio próprio, isolado do painel (src/lp/servidor.ts).
+    { "pattern": "lp.danielbasso.com.br", "custom_domain": true },
   ],
   // Formulários: 6 envios por minuto por IP. Analytics: 120 lotes por minuto por IP.
   "ratelimits": [

@@ -54,6 +54,7 @@ export type LeadRow = {
   id: string;
   item_id: string | null;
   kind: string;
+  lp_id: string | null;
   message: string | null;
   name: string;
   notes: string | null;
@@ -81,6 +82,75 @@ type UserRoleRow = {
   user_id: string;
 };
 
+export type StaffProfileRow = {
+  cargo: string | null;
+  created_at: string;
+  nome: string;
+  permissoes: Json;
+  updated_at: string;
+  updated_by: string | null;
+  user_id: string;
+};
+
+export type StaffInviteRow = {
+  admin: boolean;
+  cargo: string | null;
+  created_at: string;
+  created_by: string | null;
+  email: string;
+  expires_at: string;
+  id: string;
+  nome: string;
+  permissoes: Json;
+  token_hash: string;
+  used_at: string | null;
+  used_by: string | null;
+};
+
+export type LandingPageRow = {
+  arquivos: Json;
+  conformidade: Json;
+  created_at: string;
+  created_by: string | null;
+  dominios_extras: string[];
+  fim: string | null;
+  id: string;
+  inicio: string | null;
+  notas: string | null;
+  pixels: Json;
+  publicada_em: string | null;
+  slug: string;
+  status: string;
+  titulo: string;
+  updated_at: string;
+  updated_by: string | null;
+  url_encerrada: string | null;
+  versao: number;
+};
+
+type LpEventRow = {
+  browser: string | null;
+  city: string | null;
+  country: string | null;
+  created_at: string;
+  device: string | null;
+  id: number;
+  label: string | null;
+  lp_id: string;
+  os: string | null;
+  referrer: string | null;
+  region: string | null;
+  session_id: string;
+  type: string;
+  utm_campaign: string | null;
+  utm_content: string | null;
+  utm_medium: string | null;
+  utm_source: string | null;
+  utm_term: string | null;
+  value: number | null;
+  visitor_id: string;
+};
+
 export type Database = {
   __InternalSupabase: { PostgrestVersion: "14.5" };
   public: {
@@ -102,6 +172,12 @@ export type Database = {
         Update: Ins<ContentItemRow>;
         Relationships: [];
       };
+      landing_pages: {
+        Row: Row<LandingPageRow>;
+        Insert: Ins<LandingPageRow> & { slug: string; titulo: string };
+        Update: Ins<LandingPageRow>;
+        Relationships: [];
+      };
       leads: {
         Row: Row<LeadRow>;
         Insert: Ins<LeadRow> & { kind: string; name: string };
@@ -114,12 +190,50 @@ export type Database = {
             referencedRelation: "content_items";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "leads_lp_id_fkey";
+            columns: ["lp_id"];
+            isOneToOne: false;
+            referencedRelation: "landing_pages";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      lp_events: {
+        Row: Row<LpEventRow>;
+        Insert: Ins<LpEventRow> & {
+          lp_id: string;
+          session_id: string;
+          type: string;
+          visitor_id: string;
+        };
+        Update: Ins<LpEventRow>;
+        Relationships: [
+          {
+            foreignKeyName: "lp_events_lp_id_fkey";
+            columns: ["lp_id"];
+            isOneToOne: false;
+            referencedRelation: "landing_pages";
+            referencedColumns: ["id"];
+          },
         ];
       };
       site_content: {
         Row: Row<SiteContentRow>;
         Insert: Ins<SiteContentRow> & { key: string };
         Update: Ins<SiteContentRow>;
+        Relationships: [];
+      };
+      staff_invites: {
+        Row: Row<StaffInviteRow>;
+        Insert: Ins<StaffInviteRow> & { email: string; nome: string; token_hash: string };
+        Update: Ins<StaffInviteRow>;
+        Relationships: [];
+      };
+      staff_profiles: {
+        Row: Row<StaffProfileRow>;
+        Insert: Ins<StaffProfileRow> & { nome: string; user_id: string };
+        Update: Ins<StaffProfileRow>;
         Relationships: [];
       };
       user_roles: {
@@ -132,10 +246,19 @@ export type Database = {
     Views: { [_ in never]: never };
     Functions: {
       analytics_overview: { Args: { p_from: string; p_to: string }; Returns: Json };
+      eh_admin: { Args: never; Returns: boolean };
       has_role: { Args: { _role: "admin" | "editor"; _user_id: string }; Returns: boolean };
       is_staff: { Args: never; Returns: boolean };
+      lp_relatorio: { Args: { p_from: string; p_lp: string; p_to: string }; Returns: Json };
+      lps_resumo: {
+        Args: { p_from: string; p_to: string };
+        Returns: { cliques: number; lp_id: string; respostas: number; visitantes: number }[];
+      };
+      pode: { Args: { _acao: string; _modulo: string }; Returns: boolean };
       submit_lead: { Args: { p: Json }; Returns: string };
+      submit_lp_lead: { Args: { p: Json }; Returns: string };
       track_events: { Args: { p: Json }; Returns: number };
+      track_lp_events: { Args: { p: Json; p_lp: string }; Returns: number };
     };
     Enums: { app_role: "admin" | "editor" };
     CompositeTypes: { [_ in never]: never };

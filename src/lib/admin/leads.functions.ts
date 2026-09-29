@@ -17,7 +17,7 @@ export type Lead = Omit<LeadRow, "data" | "utm"> & {
   item: LeadItemRef;
 };
 
-const TIPOS = ["contato", "interesse", "corporativo", "diagnostico"] as const;
+const TIPOS = ["contato", "interesse", "corporativo", "diagnostico", "lp"] as const;
 const STATUS = ["novo", "em_contato", "convertido", "arquivado"] as const;
 
 function objeto(v: unknown): Record<string, unknown> {

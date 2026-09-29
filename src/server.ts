@@ -51,12 +51,28 @@ export default {
     // Um endereço só (canonical, sitemap e login usam https sem www):
     // http → https e www → sem www, num único 301. Local (localhost) fica em http.
     const url = new URL(request.url);
-    const local = url.hostname === "localhost" || url.hostname === "127.0.0.1";
+    const local =
+      url.hostname === "localhost" ||
+      url.hostname.endsWith(".localhost") ||
+      url.hostname === "127.0.0.1";
     const semWww = url.hostname.startsWith("www.");
     if (semWww || (url.protocol === "http:" && !local)) {
       if (semWww) url.hostname = url.hostname.slice(4);
       if (!local) url.protocol = "https:";
       return Response.redirect(url.toString(), 301);
+    }
+    // LPs de lançamento: subdomínio próprio, isolado do site e do painel.
+    if (url.hostname.startsWith("lp.")) {
+      try {
+        const { atenderLp } = await import("./lp/servidor");
+        return await atenderLp(request);
+      } catch (error) {
+        console.error("[lp]", error);
+        return new Response("Página indisponível no momento.", {
+          status: 500,
+          headers: { "content-type": "text/plain; charset=utf-8" },
+        });
+      }
     }
     try {
       const handler = await getServerEntry();

@@ -6,7 +6,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Compass, PencilSimple } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 
-import { QK } from "@/components/admin/contexto";
+import { QK, ExigePermissao } from "@/components/admin/contexto";
 import { BarrasEscala, EsqueletoLista, ListaRanqueada } from "@/components/admin/graficos";
 import {
   Cartao,
@@ -27,7 +27,11 @@ export const Route = createFileRoute("/admin/diagnostico")({
   head: () => ({
     meta: [{ title: "Diagnóstico | Painel" }, { name: "robots", content: "noindex, nofollow" }],
   }),
-  component: DiagnosticoPagina,
+  component: () => (
+    <ExigePermissao modulo="diagnostico">
+      <DiagnosticoPagina />
+    </ExigePermissao>
+  ),
 });
 
 function DiagnosticoPagina() {

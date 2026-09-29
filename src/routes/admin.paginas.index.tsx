@@ -5,7 +5,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Compass, Files, GearSix } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 
-import { QK } from "@/components/admin/contexto";
+import { QK, ExigePermissao } from "@/components/admin/contexto";
 import { Cartao, Esqueleto, EstadoErro, Selo, TopoPagina } from "@/components/admin/ui";
 import { PAGINAS, type PaginaConfig } from "@/content/paginas";
 import { dataHora, mensagemErro, relativo } from "@/lib/admin/formato";
@@ -15,7 +15,11 @@ export const Route = createFileRoute("/admin/paginas/")({
   head: () => ({
     meta: [{ title: "Páginas | Painel" }, { name: "robots", content: "noindex, nofollow" }],
   }),
-  component: ListaPaginas,
+  component: () => (
+    <ExigePermissao modulo="paginas">
+      <ListaPaginas />
+    </ExigePermissao>
+  ),
 });
 
 function ListaPaginas() {

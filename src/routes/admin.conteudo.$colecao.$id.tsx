@@ -19,7 +19,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { EditorCampos, validarCampos, type Erros } from "@/components/admin/campos/EditorCampos";
 import { AreaTexto, Contador, Moldura, ariaCampo } from "@/components/admin/campos/base";
-import { QK } from "@/components/admin/contexto";
+import { QK, ExigePermissao, useAdmin } from "@/components/admin/contexto";
 import { useConfirmar } from "@/components/admin/Dialogo";
 import { AvisoSaida, useProtecaoSaida } from "@/components/admin/ProtecaoSaida";
 import { useToast } from "@/components/admin/Toast";
@@ -63,7 +63,11 @@ export const Route = createFileRoute("/admin/conteudo/$colecao/$id")({
         : `Editar ${col?.singular.toLowerCase() ?? "item"}`;
     return { meta: [{ title: `${t} | Painel` }, { name: "robots", content: "noindex, nofollow" }] };
   },
-  component: EditorItemPagina,
+  component: () => (
+    <ExigePermissao modulo="conteudo">
+      <EditorItemPagina />
+    </ExigePermissao>
+  ),
 });
 
 type Form = {
@@ -212,6 +216,8 @@ function Editor({ col, item }: { col: CollectionConfig; item: ItemAdmin | null }
   const qc = useQueryClient();
   const toast = useToast();
   const confirmar = useConfirmar();
+  const { pode } = useAdmin();
+  const podeEditar = pode("conteudo", "editar");
   const navigate = useNavigate();
   const idBase = useId();
 
@@ -295,7 +301,7 @@ function Editor({ col, item }: { col: CollectionConfig; item: ItemAdmin | null }
   });
 
   function tentarSalvar() {
-    if (salvar.isPending) return;
+    if (salvar.isPending || !podeEditar) return;
     const e = validar();
     setErros(e);
     if (Object.keys(e).length) {
@@ -386,9 +392,9 @@ function Editor({ col, item }: { col: CollectionConfig; item: ItemAdmin | null }
           <button
             type="button"
             onClick={tentarSalvar}
-            disabled={salvar.isPending || (!sujo && !novo)}
+            disabled={salvar.isPending || (!sujo && !novo) || !podeEditar}
             className={acao("primario", "sm", "relative")}
-            title="Salvar (Ctrl+S)"
+            title={podeEditar ? "Salvar (Ctrl+S)" : "Você tem acesso só para ver"}
           >
             {salvar.isPending ? <Girando /> : <FloppyDisk aria-hidden className="size-4" />}
             Salvar
@@ -600,7 +606,7 @@ function Editor({ col, item }: { col: CollectionConfig; item: ItemAdmin | null }
 
           <CartaoSeo col={col} form={form} set={set} idBase={idBase} />
 
-          {!novo && (
+          {!novo && pode("conteudo", "apagar") && (
             <div className="px-1">
               <button
                 type="button"

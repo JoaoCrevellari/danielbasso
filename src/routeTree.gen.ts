@@ -29,6 +29,7 @@ import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as ApiEventoRouteImport } from './routes/api.evento'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ConviteTokenRouteImport } from './routes/convite.$token'
 import { Route as CursosIndexRouteImport } from './routes/cursos.index'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
 import { Route as LivrosIndexRouteImport } from './routes/livros.index'
@@ -38,6 +39,8 @@ import { Route as MentoriasSlugRouteImport } from './routes/mentorias.$slug'
 import { Route as TreinamentosIndexRouteImport } from './routes/treinamentos.index'
 import { Route as TreinamentosSlugRouteImport } from './routes/treinamentos.$slug'
 import { Route as AdminConteudoIndexRouteImport } from './routes/admin.conteudo.index'
+import { Route as AdminLpsIndexRouteImport } from './routes/admin.lps.index'
+import { Route as AdminLpsIdRouteImport } from './routes/admin.lps.$id'
 import { Route as AdminPaginasIndexRouteImport } from './routes/admin.paginas.index'
 import { Route as AdminPaginasChaveRouteImport } from './routes/admin.paginas.$chave'
 import { Route as AdminConteudoColecaoIndexRouteImport } from './routes/admin.conteudo.$colecao.index'
@@ -143,6 +146,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConviteTokenRoute = ConviteTokenRouteImport.update({
+  id: '/convite/$token',
+  path: '/convite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CursosIndexRoute = CursosIndexRouteImport.update({
   id: '/cursos/',
   path: '/cursos/',
@@ -188,6 +196,16 @@ const AdminConteudoIndexRoute = AdminConteudoIndexRouteImport.update({
   path: '/conteudo/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLpsIndexRoute = AdminLpsIndexRouteImport.update({
+  id: '/lps/',
+  path: '/lps/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLpsIdRoute = AdminLpsIdRouteImport.update({
+  id: '/lps/$id',
+  path: '/lps/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPaginasIndexRoute = AdminPaginasIndexRouteImport.update({
   id: '/paginas/',
   path: '/paginas/',
@@ -229,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/api/evento': typeof ApiEventoRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/livros/$slug': typeof LivrosSlugRoute
   '/mentorias/$slug': typeof MentoriasSlugRoute
@@ -239,8 +258,10 @@ export interface FileRoutesByFullPath {
   '/livros/': typeof LivrosIndexRoute
   '/mentorias/': typeof MentoriasIndexRoute
   '/treinamentos/': typeof TreinamentosIndexRoute
+  '/admin/lps/$id': typeof AdminLpsIdRoute
   '/admin/paginas/$chave': typeof AdminPaginasChaveRoute
   '/admin/conteudo/': typeof AdminConteudoIndexRoute
+  '/admin/lps/': typeof AdminLpsIndexRoute
   '/admin/paginas/': typeof AdminPaginasIndexRoute
   '/admin/conteudo/$colecao/$id': typeof AdminConteudoColecaoIdRoute
   '/admin/conteudo/$colecao/': typeof AdminConteudoColecaoIndexRoute
@@ -263,6 +284,7 @@ export interface FileRoutesByTo {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/api/evento': typeof ApiEventoRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/livros/$slug': typeof LivrosSlugRoute
   '/mentorias/$slug': typeof MentoriasSlugRoute
@@ -273,8 +295,10 @@ export interface FileRoutesByTo {
   '/livros': typeof LivrosIndexRoute
   '/mentorias': typeof MentoriasIndexRoute
   '/treinamentos': typeof TreinamentosIndexRoute
+  '/admin/lps/$id': typeof AdminLpsIdRoute
   '/admin/paginas/$chave': typeof AdminPaginasChaveRoute
   '/admin/conteudo': typeof AdminConteudoIndexRoute
+  '/admin/lps': typeof AdminLpsIndexRoute
   '/admin/paginas': typeof AdminPaginasIndexRoute
   '/admin/conteudo/$colecao/$id': typeof AdminConteudoColecaoIdRoute
   '/admin/conteudo/$colecao': typeof AdminConteudoColecaoIndexRoute
@@ -299,6 +323,7 @@ export interface FileRoutesById {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/api/evento': typeof ApiEventoRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/livros/$slug': typeof LivrosSlugRoute
   '/mentorias/$slug': typeof MentoriasSlugRoute
@@ -309,8 +334,10 @@ export interface FileRoutesById {
   '/livros/': typeof LivrosIndexRoute
   '/mentorias/': typeof MentoriasIndexRoute
   '/treinamentos/': typeof TreinamentosIndexRoute
+  '/admin/lps/$id': typeof AdminLpsIdRoute
   '/admin/paginas/$chave': typeof AdminPaginasChaveRoute
   '/admin/conteudo/': typeof AdminConteudoIndexRoute
+  '/admin/lps/': typeof AdminLpsIndexRoute
   '/admin/paginas/': typeof AdminPaginasIndexRoute
   '/admin/conteudo/$colecao/$id': typeof AdminConteudoColecaoIdRoute
   '/admin/conteudo/$colecao/': typeof AdminConteudoColecaoIndexRoute
@@ -336,6 +363,7 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/api/evento'
     | '/blog/$slug'
+    | '/convite/$token'
     | '/cursos/$slug'
     | '/livros/$slug'
     | '/mentorias/$slug'
@@ -346,8 +374,10 @@ export interface FileRouteTypes {
     | '/livros/'
     | '/mentorias/'
     | '/treinamentos/'
+    | '/admin/lps/$id'
     | '/admin/paginas/$chave'
     | '/admin/conteudo/'
+    | '/admin/lps/'
     | '/admin/paginas/'
     | '/admin/conteudo/$colecao/$id'
     | '/admin/conteudo/$colecao/'
@@ -370,6 +400,7 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/api/evento'
     | '/blog/$slug'
+    | '/convite/$token'
     | '/cursos/$slug'
     | '/livros/$slug'
     | '/mentorias/$slug'
@@ -380,8 +411,10 @@ export interface FileRouteTypes {
     | '/livros'
     | '/mentorias'
     | '/treinamentos'
+    | '/admin/lps/$id'
     | '/admin/paginas/$chave'
     | '/admin/conteudo'
+    | '/admin/lps'
     | '/admin/paginas'
     | '/admin/conteudo/$colecao/$id'
     | '/admin/conteudo/$colecao'
@@ -405,6 +438,7 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/api/evento'
     | '/blog/$slug'
+    | '/convite/$token'
     | '/cursos/$slug'
     | '/livros/$slug'
     | '/mentorias/$slug'
@@ -415,8 +449,10 @@ export interface FileRouteTypes {
     | '/livros/'
     | '/mentorias/'
     | '/treinamentos/'
+    | '/admin/lps/$id'
     | '/admin/paginas/$chave'
     | '/admin/conteudo/'
+    | '/admin/lps/'
     | '/admin/paginas/'
     | '/admin/conteudo/$colecao/$id'
     | '/admin/conteudo/$colecao/'
@@ -437,6 +473,7 @@ export interface RootRouteChildren {
   TermosRoute: typeof TermosRoute
   ApiEventoRoute: typeof ApiEventoRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  ConviteTokenRoute: typeof ConviteTokenRoute
   CursosSlugRoute: typeof CursosSlugRoute
   LivrosSlugRoute: typeof LivrosSlugRoute
   MentoriasSlugRoute: typeof MentoriasSlugRoute
@@ -590,6 +627,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/convite/$token': {
+      id: '/convite/$token'
+      path: '/convite/$token'
+      fullPath: '/convite/$token'
+      preLoaderRoute: typeof ConviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cursos/': {
       id: '/cursos/'
       path: '/cursos'
@@ -653,6 +697,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminConteudoIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/lps/': {
+      id: '/admin/lps/'
+      path: '/lps'
+      fullPath: '/admin/lps/'
+      preLoaderRoute: typeof AdminLpsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/lps/$id': {
+      id: '/admin/lps/$id'
+      path: '/lps/$id'
+      fullPath: '/admin/lps/$id'
+      preLoaderRoute: typeof AdminLpsIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/paginas/': {
       id: '/admin/paginas/'
       path: '/paginas'
@@ -690,8 +748,10 @@ interface AdminRouteChildren {
   AdminMidiaRoute: typeof AdminMidiaRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminLpsIdRoute: typeof AdminLpsIdRoute
   AdminPaginasChaveRoute: typeof AdminPaginasChaveRoute
   AdminConteudoIndexRoute: typeof AdminConteudoIndexRoute
+  AdminLpsIndexRoute: typeof AdminLpsIndexRoute
   AdminPaginasIndexRoute: typeof AdminPaginasIndexRoute
   AdminConteudoColecaoIdRoute: typeof AdminConteudoColecaoIdRoute
   AdminConteudoColecaoIndexRoute: typeof AdminConteudoColecaoIndexRoute
@@ -703,8 +763,10 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMidiaRoute: AdminMidiaRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminLpsIdRoute: AdminLpsIdRoute,
   AdminPaginasChaveRoute: AdminPaginasChaveRoute,
   AdminConteudoIndexRoute: AdminConteudoIndexRoute,
+  AdminLpsIndexRoute: AdminLpsIndexRoute,
   AdminPaginasIndexRoute: AdminPaginasIndexRoute,
   AdminConteudoColecaoIdRoute: AdminConteudoColecaoIdRoute,
   AdminConteudoColecaoIndexRoute: AdminConteudoColecaoIndexRoute,
@@ -727,6 +789,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermosRoute: TermosRoute,
   ApiEventoRoute: ApiEventoRoute,
   BlogSlugRoute: BlogSlugRoute,
+  ConviteTokenRoute: ConviteTokenRoute,
   CursosSlugRoute: CursosSlugRoute,
   LivrosSlugRoute: LivrosSlugRoute,
   MentoriasSlugRoute: MentoriasSlugRoute,

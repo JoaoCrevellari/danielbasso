@@ -1,6 +1,6 @@
 /**
  * Leads: lista filtrável (cartões no celular, tabela no desktop), detalhe em gaveta,
- * mudança de status, anotações, contato rápido, exclusão (admin) e exportação CSV.
+ * mudança de status, anotações, contato rápido, exclusão e exportação CSV (conforme as permissões).
  * Filtros e lead aberto ficam na URL (dá para compartilhar o link).
  */
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -15,7 +15,8 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 
-import { QK, useAdmin } from "@/components/admin/contexto";
+import { QK, useAdmin, ExigePermissao } from "@/components/admin/contexto";
+import { moduloDoLead } from "@/lib/admin/permissoes";
 import { Gaveta, useConfirmar } from "@/components/admin/Dialogo";
 import { BarrasEscala } from "@/components/admin/graficos";
 import { useToast } from "@/components/admin/Toast";
@@ -78,7 +79,11 @@ export const Route = createFileRoute("/admin/leads")({
   head: () => ({
     meta: [{ title: "Leads | Painel" }, { name: "robots", content: "noindex, nofollow" }],
   }),
-  component: LeadsPagina,
+  component: () => (
+    <ExigePermissao modulo="leads">
+      <LeadsPagina />
+    </ExigePermissao>
+  ),
 });
 
 function LeadsPagina() {
@@ -430,7 +435,9 @@ function DetalheLead({ lead, onFechar }: { lead: Lead; onFechar: () => void }) {
   const qc = useQueryClient();
   const toast = useToast();
   const confirmar = useConfirmar();
-  const { admin } = useAdmin();
+  const { pode } = useAdmin();
+  const podeEditar = pode(moduloDoLead(lead.kind), "editar");
+  const podeApagar = pode(moduloDoLead(lead.kind), "apagar");
   const [notas, setNotas] = useState(lead.notes ?? "");
   useEffect(() => setNotas(lead.notes ?? ""), [lead.id, lead.notes]);
 
@@ -519,7 +526,7 @@ function DetalheLead({ lead, onFechar }: { lead: Lead; onFechar: () => void }) {
                 type="button"
                 role="radio"
                 aria-checked={ativo}
-                disabled={status.isPending}
+                disabled={status.isPending || !podeEditar}
                 onClick={() => !ativo && status.mutate(s.value)}
                 className={cn(
                   "min-h-11 rounded-full border px-3 text-sm font-medium transition-colors md:min-h-9",
@@ -653,22 +660,25 @@ function DetalheLead({ lead, onFechar }: { lead: Lead; onFechar: () => void }) {
           rows={4}
           placeholder="Ex.: liguei em 12/03, retornar na semana que vem."
           onChange={(e) => setNotas(e.target.value)}
+          readOnly={!podeEditar}
         />
-        <div className="mt-2 flex items-center gap-3">
-          <button
-            type="button"
-            className={acao("primario", "sm")}
-            disabled={!notasSujas || salvarNotas.isPending}
-            onClick={() => salvarNotas.mutate()}
-          >
-            {salvarNotas.isPending && <Girando />}
-            Salvar anotações
-          </button>
-          {notasSujas && <span className="text-xs text-cinza">Alterações não salvas</span>}
-        </div>
+        {podeEditar && (
+          <div className="mt-2 flex items-center gap-3">
+            <button
+              type="button"
+              className={acao("primario", "sm")}
+              disabled={!notasSujas || salvarNotas.isPending}
+              onClick={() => salvarNotas.mutate()}
+            >
+              {salvarNotas.isPending && <Girando />}
+              Salvar anotações
+            </button>
+            {notasSujas && <span className="text-xs text-cinza">Alterações não salvas</span>}
+          </div>
+        )}
       </section>
 
-      {admin && (
+      {podeApagar && (
         <section className="border-t border-linha pt-5">
           <button
             type="button"

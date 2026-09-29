@@ -72,8 +72,56 @@ function preencherDias(v: VisaoGeral): PontoDiario[] {
 }
 
 function VisaoGeralPagina() {
+  const { pode } = useAdmin();
+  return pode("painel") ? <VisaoGeral /> : <BoasVindas />;
+}
+
+/** Para quem não vê os números do site: atalhos para os módulos liberados. */
+function BoasVindas() {
+  const { nome, email, pode } = useAdmin();
+  const primeiro = (nome ?? email?.split("@")[0] ?? "").split(/s+/)[0];
+  const atalhos = [
+    { modulo: "lps", rotulo: "LPs de lançamento", to: "/admin/lps" },
+    { modulo: "leads", rotulo: "Leads", to: "/admin/leads" },
+    { modulo: "conteudo", rotulo: "Conteúdo", to: "/admin/conteudo" },
+    { modulo: "paginas", rotulo: "Páginas", to: "/admin/paginas" },
+    { modulo: "diagnostico", rotulo: "Diagnóstico", to: "/admin/diagnostico" },
+    { modulo: "midia", rotulo: "Mídia", to: "/admin/midia" },
+  ] as const;
+  const liberados = atalhos.filter((a) => pode(a.modulo));
+  return (
+    <>
+      <TopoPagina
+        titulo={`${saudacao()}${primeiro ? `, ${primeiro}` : ""}`}
+        descricao={
+          liberados.length
+            ? "Estas são as áreas do painel liberadas para você."
+            : "Seu acesso ainda não tem nenhuma área liberada. Fale com um administrador."
+        }
+      />
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {liberados.map((a) => (
+          <li key={a.to}>
+            <Link
+              to={a.to}
+              className="group flex min-h-16 items-center justify-between rounded-[2px] border border-linha bg-papel px-5 py-4 transition-colors hover:border-petroleo/40"
+            >
+              <span className="font-medium text-grafite">{a.rotulo}</span>
+              <ArrowRight
+                aria-hidden
+                className="size-4 text-petroleo transition-transform group-hover:translate-x-0.5"
+              />
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+function VisaoGeral() {
   const [dias, setDias] = useState<Dias>(30);
-  const { email } = useAdmin();
+  const { email, nome: nomePerfil } = useAdmin();
   const q = useQuery({
     queryKey: [...QK.visaoGeral, dias],
     queryFn: () => visaoGeralFn({ data: { dias } }),
@@ -84,7 +132,7 @@ function VisaoGeralPagina() {
   const v = q.data;
   const atualizando = q.isFetching && q.isPlaceholderData;
   const serie = useMemo(() => (v ? preencherDias(v) : []), [v]);
-  const nome = email?.split("@")[0];
+  const nome = (nomePerfil ?? email?.split("@")[0] ?? "").split(/s+/)[0];
 
   return (
     <>

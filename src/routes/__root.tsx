@@ -177,7 +177,9 @@ function Aplicacao() {
   const config = Route.useLoaderData();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const matches = useMatches();
-  const painel = ["/admin", "/entrar", "/redefinir-senha"].some((p) => pathname.startsWith(p));
+  const painel = ["/admin", "/entrar", "/redefinir-senha", "/convite"].some((p) =>
+    pathname.startsWith(p),
+  );
   const semFlutuante = matches.some((m) => m.staticData?.semFlutuante);
 
   useRevelar();
