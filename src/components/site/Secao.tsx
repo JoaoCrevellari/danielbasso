@@ -27,6 +27,7 @@ export function Secao({
   children,
   rotuloAria,
   semFlutuante,
+  adiar = true,
 }: {
   tom?: Tom;
   compacta?: boolean;
@@ -37,13 +38,15 @@ export function Secao({
   rotuloAria?: string;
   /** Esconde o botão flutuante do WhatsApp enquanto a seção está na tela (formulários). */
   semFlutuante?: boolean;
+  /** Adia layout/pintura enquanto longe da tela. Desligue em seções que medem posição no carregamento. */
+  adiar?: boolean;
 }) {
   return (
     <section
       id={id}
       aria-label={rotuloAria}
       data-sem-flutuante={semFlutuante || undefined}
-      className={cn(TONS[tom], id && "scroll-mt-16", className)}
+      className={cn(TONS[tom], id && "scroll-mt-16", adiar && "adiar-render", className)}
     >
       <div className="container-site">
         <div

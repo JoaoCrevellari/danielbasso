@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 
+import { srcSetMidia } from "@/lib/imagens";
 import { urlSegura } from "@/lib/url-segura";
 import { cn } from "@/lib/utils";
 
@@ -8,9 +9,12 @@ const LARGURAS = [480, 768, 1080, 1440, 1920];
 /**
  * Imagem responsiva. Gera srcset quando a origem permite redimensionar:
  * - Unsplash (parâmetros w/q/auto=format);
- * - Supabase Storage fica com a imagem original (enviada já otimizada pelo painel).
+ * - Supabase Storage: imagens enviadas pelo painel têm versões de 480/960/1440 px.
  */
 function montarSrcSet(src: string, max: number) {
+  // Fotos enviadas pelo painel: versões menores geradas no envio (src/lib/imagens.ts).
+  const midia = srcSetMidia(src, max);
+  if (midia) return midia;
   if (src.includes("images.unsplash.com")) {
     const base = src.split("?")[0];
     const larguras = LARGURAS.filter((w) => w <= max * 2);

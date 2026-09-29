@@ -1,14 +1,18 @@
 import { Link, useMatches, useRouterState } from "@tanstack/react-router";
 import { List } from "@phosphor-icons/react";
-import { useMotionValueEvent, useScroll } from "motion/react";
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 
 import { Botao } from "@/components/site/Botao";
 import { NAV_PRINCIPAL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { useConfig } from "./ConfigContext";
 import { Logo } from "./Logo";
-import { MenuMovel } from "./MenuMovel";
+import { useRolagem } from "./useRolagem";
+
+// O menu do celular (Radix + animações) fica fora do carregamento inicial: é baixado quando
+// o navegador fica ocioso ou quando a pessoa encosta no botão, e só então é montado.
+const carregarMenu = () => import("./MenuMovel");
+const MenuMovel = lazy(() => carregarMenu().then((m) => ({ default: m.MenuMovel })));
 
 /**
  * Cabeçalho fixo. Sobre aberturas escuras (rotas com staticData.cabecalho = "escuro")
@@ -20,17 +24,20 @@ export function Cabecalho() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const config = useConfig();
 
-  const { scrollY } = useScroll();
-  const [rolou, setRolou] = useState(false);
+  const rolou = useRolagem(24);
   const [menuAberto, setMenuAberto] = useState(false);
-
-  useMotionValueEvent(scrollY, "change", (y) => setRolou(y > 24));
+  const [menuPronto, setMenuPronto] = useState(false);
 
   // Nova página: menu fechado.
+  useEffect(() => setMenuAberto(false), [pathname]);
+
+  // Baixa o menu quando o navegador estiver livre (ou em 4 s, no máximo).
   useEffect(() => {
-    setMenuAberto(false);
-    setRolou(window.scrollY > 24);
-  }, [pathname]);
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: object) => number };
+    const pre = () => void carregarMenu().catch(() => undefined);
+    if (w.requestIdleCallback) w.requestIdleCallback(pre, { timeout: 4000 });
+    else setTimeout(pre, 2500);
+  }, []);
 
   const transparente = escuroNoTopo && !rolou;
 
@@ -84,7 +91,12 @@ export function Cabecalho() {
             )}
             <button
               type="button"
-              onClick={() => setMenuAberto(true)}
+              onPointerEnter={() => void carregarMenu()}
+              onTouchStart={() => void carregarMenu()}
+              onClick={() => {
+                setMenuPronto(true);
+                setMenuAberto(true);
+              }}
               aria-label="Abrir menu"
               aria-expanded={menuAberto}
               className={cn(
@@ -97,7 +109,11 @@ export function Cabecalho() {
           </div>
         </div>
       </header>
-      <MenuMovel aberto={menuAberto} onFechar={() => setMenuAberto(false)} />
+      {menuPronto && (
+        <Suspense fallback={null}>
+          <MenuMovel aberto={menuAberto} onFechar={() => setMenuAberto(false)} />
+        </Suspense>
+      )}
     </>
   );
 }

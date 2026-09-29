@@ -291,6 +291,14 @@
   }
 }
 
+/* Seções abaixo da dobra: o navegador só calcula layout e pintura quando chegam perto
+   da tela (economiza ~1 s de processamento no celular). "auto" lembra a altura real depois
+   da primeira vez, então a rolagem não pula. */
+@utility adiar-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
 /* Links de texto corrido: sublinhado que cresce */
 @utility link-texto {
   background-image: linear-gradient(currentColor, currentColor);

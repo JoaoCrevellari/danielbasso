@@ -17,7 +17,7 @@ export function ChamadaFinal({
   secundario?: { rotulo: string; link: string };
 }) {
   return (
-    <section className="superficie-escura grao bg-petroleo-900">
+    <section className="superficie-escura grao adiar-render bg-petroleo-900">
       <div
         className="container-site section-y grid gap-8 md:grid-cols-12 md:items-center md:gap-10"
         data-revelar-grupo

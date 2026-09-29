@@ -273,7 +273,7 @@ function Home() {
 
       {/* ── Livro em destaque ──────────────────────────────────────────────── */}
       {livro && (
-        <Secao tom="branco">
+        <Secao tom="branco" adiar={false}>
           <div className="grade items-center gap-y-8">
             {/* O livro se abre com a rolagem e para no capítulo 1 */}
             <div className="col-span-12 md:col-span-7 lg:col-span-6" data-revelar="fade">

@@ -4,9 +4,12 @@
  *
  * Imagens rasterizadas são redimensionadas no navegador (máx. 2000 px no maior lado) e
  * convertidas para WebP (qualidade 0.82) antes do envio. SVG, GIF e PDF vão como estão.
- * Caminho: AAAA/MM/<slug-do-nome>-<aleatório>.<ext>
+ * Caminho: AAAA/MM/<slug-do-nome>-<aleatório>.<ext>. Fotos convertidas ganham a largura no
+ * nome (…-w1600.webp) e versões menores ao lado (….480.webp, .960.webp, .1440.webp), que o
+ * site usa no srcset (src/lib/imagens.ts). As versões menores não aparecem na biblioteca.
  */
 import { supabase } from "@/integrations/supabase/client";
+import { LARGURAS_MIDIA, ehVariante, variantesDe } from "@/lib/imagens";
 import { slugificar } from "./formato";
 
 export const BUCKET = "media";
@@ -78,9 +81,33 @@ async function carregarImagem(arquivo: File): Promise<HTMLImageElement | ImageBi
 }
 
 /** Redimensiona e converte para WebP. Se o navegador não suportar, devolve o original. */
-export async function otimizarImagem(
-  arquivo: File,
-): Promise<{ blob: Blob; tipo: string; ext: string }> {
+type Otimizada = {
+  blob: Blob;
+  tipo: string;
+  ext: string;
+  /** Largura final (só para WebP gerado aqui). */
+  largura?: number;
+  /** Versões menores (480/960/1440 px), só as menores que a original. */
+  variantes?: { largura: number; blob: Blob }[];
+};
+
+async function paraWebp(
+  img: HTMLImageElement | ImageBitmap,
+  w: number,
+  h: number,
+): Promise<Blob | null> {
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, 0, 0, w, h);
+  const blob = await new Promise<Blob | null>((ok) => canvas.toBlob(ok, "image/webp", QUALIDADE));
+  return blob && blob.type === "image/webp" ? blob : null;
+}
+
+export async function otimizarImagem(arquivo: File): Promise<Otimizada> {
   if (!CONVERTER.has(arquivo.type)) {
     return { blob: arquivo, tipo: arquivo.type, ext: extensaoDe(arquivo.type, arquivo.name) };
   }
@@ -91,20 +118,20 @@ export async function otimizarImagem(
     const escala = Math.min(1, LADO_MAX / Math.max(w, h));
     const cw = Math.max(1, Math.round(w * escala));
     const ch = Math.max(1, Math.round(h * escala));
-    const canvas = document.createElement("canvas");
-    canvas.width = cw;
-    canvas.height = ch;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("sem canvas");
-    ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(img, 0, 0, cw, ch);
-    if ("close" in img) img.close();
-    const blob = await new Promise<Blob | null>((ok) => canvas.toBlob(ok, "image/webp", QUALIDADE));
+    const blob = await paraWebp(img, cw, ch);
     // Safari antigo devolve PNG quando não sabe gerar WebP: nesse caso, fica o original.
-    if (!blob || blob.type !== "image/webp") {
+    if (!blob) {
+      if ("close" in img) img.close();
       return { blob: arquivo, tipo: arquivo.type, ext: extensaoDe(arquivo.type, arquivo.name) };
     }
-    return { blob, tipo: "image/webp", ext: "webp" };
+    const variantes: { largura: number; blob: Blob }[] = [];
+    for (const lv of LARGURAS_MIDIA) {
+      if (lv >= cw) continue;
+      const v = await paraWebp(img, lv, Math.max(1, Math.round((ch * lv) / cw)));
+      if (v) variantes.push({ largura: lv, blob: v });
+    }
+    if ("close" in img) img.close();
+    return { blob, tipo: "image/webp", ext: "webp", largura: cw, variantes };
   } catch {
     return { blob: arquivo, tipo: arquivo.type, ext: extensaoDe(arquivo.type, arquivo.name) };
   }
@@ -120,7 +147,7 @@ export function validarArquivo(arquivo: File): string | null {
 export async function enviarArquivo(arquivo: File): Promise<ArquivoMidia> {
   const erro = validarArquivo(arquivo);
   if (erro) throw new Error(erro);
-  const { blob, tipo, ext } = await otimizarImagem(arquivo);
+  const { blob, tipo, ext, largura, variantes = [] } = await otimizarImagem(arquivo);
   if (blob.size > LIMITE_BYTES) {
     throw new Error(`"${arquivo.name}" passa de 10 MB mesmo depois de otimizado.`);
   }
@@ -128,7 +155,9 @@ export async function enviarArquivo(arquivo: File): Promise<ArquivoMidia> {
   const ano = agora.getFullYear();
   const mes = String(agora.getMonth() + 1).padStart(2, "0");
   const base = slugificar(arquivo.name.replace(/\.[^.]+$/, ""), 60) || "arquivo";
-  const caminho = `${ano}/${mes}/${base}-${aleatorio()}.${ext}`;
+  // Com versões menores, a largura vai no nome para o site montar o srcset.
+  const sufixo = variantes.length && largura ? `-w${largura}` : "";
+  const caminho = `${ano}/${mes}/${base}-${aleatorio()}${sufixo}.${ext}`;
   const { error } = await supabase.storage.from(BUCKET).upload(caminho, blob, {
     contentType: tipo,
     cacheControl: "31536000",
@@ -140,6 +169,24 @@ export async function enviarArquivo(arquivo: File): Promise<ArquivoMidia> {
     }
     if (/exceeded|too large|413/i.test(error.message))
       throw new Error(`"${arquivo.name}" passa de 10 MB.`);
+    throw new Error(`Falha ao enviar "${arquivo.name}". Tente de novo.`);
+  }
+  // Versões menores: se alguma falhar, desfaz o envio inteiro (o srcset supõe que todas
+  // as larguras indicadas no nome existem).
+  const semExt = caminho.replace(/\.webp$/, "");
+  const envios = await Promise.all(
+    variantes.map((v) =>
+      supabase.storage.from(BUCKET).upload(`${semExt}.${v.largura}.webp`, v.blob, {
+        contentType: "image/webp",
+        cacheControl: "31536000",
+        upsert: false,
+      }),
+    ),
+  );
+  if (envios.some((r) => r.error)) {
+    await supabase.storage
+      .from(BUCKET)
+      .remove([caminho, ...variantes.map((v) => `${semExt}.${v.largura}.webp`)]);
     throw new Error(`Falha ao enviar "${arquivo.name}". Tente de novo.`);
   }
   return {
@@ -173,7 +220,7 @@ export async function listarMidia(): Promise<ArquivoMidia[]> {
         if (nivel < 3) pastas.push(caminho);
         continue;
       }
-      if (item.name === ".emptyFolderPlaceholder") continue;
+      if (item.name === ".emptyFolderPlaceholder" || ehVariante(item.name)) continue;
       const meta = (item.metadata ?? {}) as { size?: number; mimetype?: string };
       out.push({
         caminho,
@@ -193,7 +240,9 @@ export async function listarMidia(): Promise<ArquivoMidia[]> {
 }
 
 export async function excluirMidia(caminho: string): Promise<void> {
-  const { data, error } = await supabase.storage.from(BUCKET).remove([caminho]);
+  const { data, error } = await supabase.storage
+    .from(BUCKET)
+    .remove([caminho, ...variantesDe(caminho).map((v) => v.caminho)]);
   if (error) throw new Error("Não foi possível excluir o arquivo.");
   if (!data?.length) throw new Error("Arquivo não encontrado ou sem permissão para excluir.");
 }
