@@ -17,6 +17,7 @@ import { ConfigProvider } from "@/components/layout/ConfigContext";
 import { Rodape } from "@/components/layout/Rodape";
 import { WhatsAppFlutuante } from "@/components/layout/WhatsAppFlutuante";
 import { Botao, classeBotao } from "@/components/site/Botao";
+import { SCRIPT_REVELAR } from "@/components/site/revelar-inline";
 import { useRevelar } from "@/components/site/useRevelar";
 import { instalarAnalytics, registrar } from "@/lib/analytics";
 import { carregarPagina } from "@/lib/conteudo";
@@ -111,8 +112,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://images.unsplash.com" },
     ],
     scripts: [
-      // Marca que há JS antes da pintura: só então o conteúdo com [data-revelar] começa oculto.
-      { children: "document.documentElement.classList.add('js')" },
+      // Marca que há JS antes da pintura e já liga as animações de entrada (sem esperar o bundle).
+      { children: SCRIPT_REVELAR },
       {
         type: "application/ld+json",
         children: JSON.stringify({

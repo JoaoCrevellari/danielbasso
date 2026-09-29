@@ -35,11 +35,11 @@ export function SeloEtapa({
 
 const STATUS: Record<string, { rotulo: string; cor: string }> = {
   aberto: { rotulo: "Inscrições abertas", cor: "bg-salvia/15 text-salvia-texto" },
-  espera: { rotulo: "Lista de espera", cor: "bg-ouro/15 text-ouro-texto" },
+  espera: { rotulo: "Lista de espera", cor: "bg-ouro/10 text-ouro-texto" },
   "em-breve": { rotulo: "Em breve", cor: "bg-petroleo/8 text-petroleo" },
   encerrado: { rotulo: "Encerrado", cor: "bg-grafite/8 text-cinza" },
   lancado: { rotulo: "Disponível", cor: "bg-salvia/15 text-salvia-texto" },
-  "pre-venda": { rotulo: "Pré-venda", cor: "bg-ouro/15 text-ouro-texto" },
+  "pre-venda": { rotulo: "Pré-venda", cor: "bg-ouro/10 text-ouro-texto" },
 };
 
 export function SeloStatus({ status, className }: { status?: string; className?: string }) {

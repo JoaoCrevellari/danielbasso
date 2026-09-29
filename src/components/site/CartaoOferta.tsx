@@ -25,11 +25,15 @@ export function CartaoOferta({
   item,
   horizontal,
   className,
+  nivel = "h3",
 }: {
   item: ItemConteudo;
   horizontal?: boolean;
   className?: string;
+  /** Nível do título: h2 quando a lista vem logo abaixo do h1 da página. */
+  nivel?: "h2" | "h3";
 }) {
+  const TituloCartao = nivel;
   const col = getCollection(item.collection);
   if (!col?.path) return null;
   return (
@@ -58,9 +62,9 @@ export function CartaoOferta({
           <SeloEtapa etapa={txt(item, "etapa")} />
           <SeloStatus status={txt(item, "status_oferta") || txt(item, "situacao")} />
         </div>
-        <h3 className="type-h2 mt-3 text-petroleo transition-colors group-hover:text-petroleo-700">
+        <TituloCartao className="type-h2 mt-3 text-petroleo transition-colors group-hover:text-petroleo-700">
           {item.title}
-        </h3>
+        </TituloCartao>
         {item.excerpt && (
           <p className="mt-2 line-clamp-2 text-[0.95rem] leading-relaxed text-cinza">
             {item.excerpt}

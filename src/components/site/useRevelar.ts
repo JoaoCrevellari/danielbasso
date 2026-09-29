@@ -15,6 +15,8 @@ const SELETOR = "[data-revelar]:not(.visivel), [data-revelar-grupo]:not(.visivel
  */
 export function useRevelar() {
   useEffect(() => {
+    // O script inline do <head> (revelar-inline.ts) já cuida de tudo desde o início.
+    if ((window as { __revelar?: boolean }).__revelar) return;
     if (!("IntersectionObserver" in window)) {
       document.documentElement.classList.remove("js");
       return;

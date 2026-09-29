@@ -194,7 +194,7 @@ const TONS: Record<TomSelo, string> = {
   neutro: "bg-gelo-2 text-cinza",
   petroleo: "bg-petroleo-50 text-petroleo",
   salvia: "bg-salvia/[0.14] text-salvia-texto",
-  ouro: "bg-ouro/[0.16] text-ouro-texto",
+  ouro: "bg-ouro/[0.1] text-ouro-texto",
   terracota: "bg-terracota/[0.14] text-terracota-texto",
 };
 

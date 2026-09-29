@@ -60,7 +60,7 @@ function Cursos() {
             data-revelar-grupo
           >
             {visiveis.map((item) => (
-              <CartaoOferta key={item.id} item={item} horizontal />
+              <CartaoOferta key={item.id} item={item} horizontal nivel="h2" />
             ))}
           </div>
         )}
