@@ -74,6 +74,13 @@ export default {
         });
       }
     }
+    const novoEndereco = ENDERECOS_ANTIGOS[url.pathname.replace(/\/+$/, "")];
+    if (novoEndereco) {
+      return new Response(null, {
+        status: 301,
+        headers: { location: novoEndereco + url.search, "cache-control": "public, max-age=86400" },
+      });
+    }
     if (EM_BREVE) {
       const bloqueio = await portaoDeValidacao(request, url);
       if (bloqueio) return bloqueio;
@@ -97,6 +104,23 @@ export default {
   },
 };
 
+// ── Endereços antigos → novos (revisão do Daniel, 12/11/2026) ───────────────────────
+// Os itens mudaram de nome e de endereço. Quem tiver um link antigo cai no novo (301).
+const ENDERECOS_ANTIGOS: Record<string, string> = {
+  "/cursos/reconstrucao-pessoal": "/cursos/diagnostico-completo",
+  "/cursos/fundamentos-do-autogoverno": "/cursos/metodo-autogoverno",
+  "/cursos/lideranca-com-proposito": "/cursos/assuma-o-controle",
+  "/cursos/alta-performance-sustentavel": "/cursos/nada-pode-me-deter",
+  "/mentorias/mentoria-para-lideres": "/mentorias/mentoria-para-gestores",
+  "/mentorias/circulo-de-autogoverno": "/mentorias/mastermind",
+  "/treinamentos/lideranca-que-forma-pessoas": "/treinamentos/jornada-de-desenvolvimento-humano",
+  "/treinamentos/cultura-de-responsabilidade": "/treinamentos/seu-problema-nao-e-tempo",
+  "/treinamentos/o-lider-que-se-governa": "/treinamentos/a-vida-que-voce-nao-governa",
+  "/livros/o-governo-de-si": "/livros/as-leis-do-autogoverno",
+  "/livros/reconstruir": "/livros/ninguem-vai-fazer-por-voce",
+  "/livros/liderar-a-partir-de-dentro": "/livros/nada-pode-me-deter",
+};
+
 // ── Site só para quem tem o link de validação (pedido de 2026-11-12) ────────────────
 // O Daniel começou uma campanha e o site ainda está em revisão. Sem o cookie de acesso,
 // qualquer endereço público mostra a página "Em breve" (src/em-breve.ts). Abrir
@@ -110,7 +134,8 @@ const ACESSO_COOKIE = "db_validacao";
 const ACESSO_CAMINHO = /^\/validacao\/([a-z0-9-]+)(\/.*)?$/;
 const SEMPRE_LIVRE =
   /^\/(admin|entrar|redefinir-senha|convite|api|_serverFn|_lp|assets|fontes|marca|exemplo)(\/|$)/;
-const ARQUIVO_ESTATICO = /\.(png|jpe?g|webp|avif|gif|svg|ico|css|js|mjs|map|woff2?|webmanifest|txt)$/i;
+const ARQUIVO_ESTATICO =
+  /\.(png|jpe?g|webp|avif|gif|svg|ico|css|js|mjs|map|woff2?|webmanifest|txt)$/i;
 
 async function portaoDeValidacao(request: Request, url: URL): Promise<Response | null> {
   const entrada = ACESSO_CAMINHO.exec(url.pathname);

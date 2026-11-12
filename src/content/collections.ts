@@ -41,10 +41,40 @@ export const COLLECTION_KEYS = [
 export type CollectionKey = (typeof COLLECTION_KEYS)[number];
 
 const STATUS_OFERTA: Option[] = [
+  { value: "disponivel", label: "Disponível" },
   { value: "aberto", label: "Inscrições abertas" },
   { value: "espera", label: "Lista de espera" },
   { value: "em-breve", label: "Em breve" },
+  { value: "sob-consulta", label: "Sob consulta" },
+  { value: "aplicacao", label: "Por aplicação" },
   { value: "encerrado", label: "Encerrado" },
+];
+
+/** Texto curto do cartão nas listagens, quando deve ser diferente do resumo da página. */
+const RESUMO_CARTAO: Field = {
+  key: "resumo_cartao",
+  label: "Texto do cartão",
+  type: "textarea",
+  rows: 2,
+  help: "Aparece nos cartões das listagens. Vazio = o resumo.",
+};
+
+/** Título e texto do bloco de lista de interesse, quando o item pede um próprio. */
+const INTERESSE: Field[] = [
+  {
+    key: "interesse_titulo",
+    label: "Título da lista de interesse",
+    type: "text",
+    half: true,
+    help: "Vazio = o rótulo padrão do botão.",
+  },
+  {
+    key: "interesse_texto",
+    label: "Texto da lista de interesse",
+    type: "textarea",
+    rows: 2,
+    help: "Vazio = texto padrão.",
+  },
 ];
 
 const FAQ: Field = {
@@ -87,6 +117,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
     interesse: "Quero participar",
     fields: [
       ETAPA,
+      RESUMO_CARTAO,
       {
         key: "status_oferta",
         label: "Situação",
@@ -101,6 +132,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
         half: true,
         options: [
           { value: "online", label: "Online" },
+          { value: "ao-vivo", label: "Online com encontros ao vivo" },
           { value: "presencial", label: "Presencial" },
           { value: "hibrido", label: "Híbrido" },
         ],
@@ -121,8 +153,21 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
         placeholder: "Sob consulta",
         half: true,
       },
+      {
+        key: "link_pagamento",
+        label: "Link de pagamento",
+        type: "url",
+        help: "Quando preenchido, o botão principal leva direto ao pagamento (Hotmart, Kiwify, Eduzz…) no lugar da lista de interesse.",
+      },
       { key: "para_quem", label: "Para quem é", type: "list", itemLabel: "Perfil" },
       { key: "resultados", label: "O que você leva", type: "list", itemLabel: "Resultado" },
+      {
+        key: "rotulo_modulos",
+        label: "Título da seção de módulos",
+        type: "text",
+        placeholder: "Módulos",
+        help: 'Vazio = "Módulos". Ex.: "Áreas avaliadas" no Diagnóstico Completo.',
+      },
       {
         key: "modulos",
         label: "Módulos",
@@ -135,6 +180,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
         ],
       },
       FAQ,
+      ...INTERESSE,
     ],
   },
 
@@ -157,6 +203,15 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
     fields: [
       ETAPA,
       {
+        key: "etiqueta",
+        label: "Etiqueta do cartão",
+        type: "text",
+        half: true,
+        placeholder: "Estratégia",
+        help: "Vazio = o nome da etapa.",
+      },
+      RESUMO_CARTAO,
+      {
         key: "status_oferta",
         label: "Situação",
         type: "select",
@@ -166,12 +221,9 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
       {
         key: "formato",
         label: "Formato",
-        type: "select",
+        type: "text",
+        placeholder: "Individual, online",
         half: true,
-        options: [
-          { value: "individual", label: "Individual" },
-          { value: "grupo", label: "Grupo reduzido" },
-        ],
       },
       { key: "duracao", label: "Duração", type: "text", placeholder: "6 meses", half: true },
       {
@@ -201,7 +253,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
           { key: "descricao", label: "Descrição", type: "textarea", rows: 2 },
         ],
       },
-      { key: "entregas", label: "O que está incluído", type: "list", itemLabel: "Item" },
+      { key: "entregas", label: "O que você leva", type: "list", itemLabel: "Item" },
       FAQ,
     ],
   },
@@ -212,7 +264,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
     plural: "Treinamentos corporativos",
     genero: "o",
     path: "/treinamentos",
-    descricao: "Palestras, workshops e programas para empresas e equipes.",
+    descricao: "Palestras, treinamentos e programas para instituições e equipes.",
     titleLabel: "Nome do treinamento",
     columns: {
       subtitle: { label: "Frase de apoio" },
@@ -224,14 +276,15 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
     interesse: "Solicitar proposta",
     fields: [
       ETAPA,
+      RESUMO_CARTAO,
       {
         key: "formato",
-        label: "Formato",
+        label: "Tipo",
         type: "select",
         half: true,
         options: [
           { value: "palestra", label: "Palestra" },
-          { value: "workshop", label: "Workshop" },
+          { value: "treinamento", label: "Treinamento" },
           { value: "programa", label: "Programa contínuo" },
         ],
       },
@@ -252,9 +305,16 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
       },
       {
         key: "modalidade",
-        label: "Modalidade",
+        label: "Formato",
         type: "text",
         placeholder: "Presencial ou online",
+        half: true,
+      },
+      {
+        key: "investimento",
+        label: "Investimento",
+        type: "text",
+        placeholder: "Sob consulta",
         half: true,
       },
       { key: "objetivos", label: "Objetivos", type: "list", itemLabel: "Objetivo" },
@@ -269,7 +329,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
           { key: "descricao", label: "Descrição", type: "textarea", rows: 2 },
         ],
       },
-      { key: "resultados", label: "Resultados esperados", type: "list", itemLabel: "Resultado" },
+      { key: "resultados", label: "O que a equipe leva", type: "list", itemLabel: "Resultado" },
       FAQ,
     ],
   },
@@ -411,15 +471,9 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
         label: "Categoria",
         type: "select",
         half: true,
-        options: [
-          { value: "autogoverno", label: "Autogoverno" },
-          { value: "lideranca", label: "Liderança" },
-          { value: "carreira", label: "Carreira" },
-          { value: "relacoes", label: "Relações" },
-          { value: "ensaios", label: "Ensaios" },
-        ],
+        help: "As categorias do blog são as cinco etapas do Método.",
+        options: ETAPAS,
       },
-      ETAPA,
     ],
   },
 };

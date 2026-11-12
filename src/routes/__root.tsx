@@ -94,14 +94,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { name: "theme-color", content: "#001F2E" },
+      { name: "theme-color", content: "#003F5C" },
       { title: `${SITE.name} | ${SITE.tagline}` },
       { name: "description", content: loaderData?.seo.descricao ?? SITE.description },
       { name: "author", content: SITE.name },
       { property: "og:site_name", content: SITE.name },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "pt_BR" },
-      { property: "og:image", content: `${SITE.url}/compartilhamento-v2.jpg` },
+      { property: "og:image", content: `${SITE.url}/compartilhamento-v3.jpg` },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [

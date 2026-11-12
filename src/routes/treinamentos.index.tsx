@@ -5,9 +5,10 @@ import { Abertura } from "@/components/site/Abertura";
 import { Botao } from "@/components/site/Botao";
 import { CartaoOferta } from "@/components/site/CartaoOferta";
 import { FormularioLead } from "@/components/site/FormularioLead";
+import { CartoesInstituicoes, NaImprensa } from "@/components/site/Instituicoes";
 import { Passos } from "@/components/site/Passos";
 import { CabecalhoSecao, Secao } from "@/components/site/Secao";
-import { Titulo, semDestaque } from "@/components/site/Titulo";
+import { Titulo } from "@/components/site/Titulo";
 import { carregarPagina, listarItens } from "@/lib/conteudo";
 import { buildMeta, canonical } from "@/lib/seo";
 
@@ -21,8 +22,9 @@ export const Route = createFileRoute("/treinamentos/")({
   },
   head: ({ loaderData }) => ({
     meta: buildMeta({
-      title: "Treinamentos corporativos",
-      description: semDestaque(loaderData?.pagina.hero.subtitulo),
+      title: "Instituições",
+      description:
+        "Palestras, treinamentos e jornadas de capacitação em desenvolvimento humano para prefeituras, escolas e empresas, com Daniel Basso.",
       path: "/treinamentos",
     }),
     links: canonical("/treinamentos"),
@@ -38,7 +40,7 @@ function Treinamentos() {
   return (
     <>
       <Abertura
-        rotulo="Para empresas"
+        rotulo={pagina.hero.rotulo}
         titulo={pagina.hero.titulo}
         subtitulo={pagina.hero.subtitulo}
         imagem={pagina.hero.imagem}
@@ -49,7 +51,7 @@ function Treinamentos() {
           <Botao
             href="whatsapp"
             variante="contorno"
-            mensagemWhatsApp="Olá, Daniel. Gostaria de conversar sobre um treinamento para a minha empresa."
+            mensagemWhatsApp="Olá, Daniel. Gostaria de conversar sobre um treinamento para a minha instituição."
           >
             Falar pelo WhatsApp
           </Botao>
@@ -84,9 +86,9 @@ function Treinamentos() {
       {itens.length > 0 && (
         <Secao tom="suave">
           <CabecalhoSecao
-            rotulo="Programas"
-            titulo="Palestras, workshops e *programas*"
-            texto="Cada formato pode ser adaptado ao contexto, ao tamanho da equipe e ao objetivo da empresa."
+            rotulo={pagina.programas.rotulo}
+            titulo={pagina.programas.titulo}
+            texto={pagina.programas.texto}
             textoAoLado
           />
           <div
@@ -100,31 +102,38 @@ function Treinamentos() {
         </Secao>
       )}
 
-      {/* Processo + setores */}
+      {/* Processo */}
       <Secao tom="escuro">
         <CabecalhoSecao rotulo={pagina.processo.rotulo} titulo={pagina.processo.titulo} />
         <Passos escuro itens={pagina.processo.itens} className="mt-conteudo" />
       </Secao>
 
-      {/* Setores */}
-      <Secao tom="profundo" compacta>
-        <div
-          className="flex flex-col gap-5 md:flex-row md:items-center md:gap-10"
-          data-revelar-grupo
-        >
-          <p className="rotulo-secao shrink-0">{pagina.segmentos.titulo}</p>
-          <ul className="flex flex-wrap gap-2">
-            {pagina.segmentos.itens.map((s) => (
-              <li
-                key={s}
-                className="rounded-full border border-gelo/20 px-4 py-1.5 text-[0.875rem] text-gelo/80"
-              >
-                {s}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Secao>
+      {/* Onde já trabalhamos */}
+      {pagina.instituicoes.itens.length > 0 && (
+        <Secao id="instituicoes">
+          <CabecalhoSecao rotulo={pagina.instituicoes.rotulo} titulo={pagina.instituicoes.titulo} />
+          <div className="mt-conteudo">
+            <CartoesInstituicoes itens={pagina.instituicoes.itens} trilho />
+          </div>
+        </Secao>
+      )}
+
+      {/* Na imprensa */}
+      {pagina.imprensa.itens.length > 0 && (
+        <Secao tom="suave">
+          <div className="grade gap-y-8">
+            <div className="col-span-12 lg:col-span-4" data-revelar-grupo>
+              <p className="rotulo-secao mb-4">{pagina.imprensa.rotulo}</p>
+              <Titulo as="h2" className="type-h1 text-petroleo">
+                {pagina.imprensa.titulo}
+              </Titulo>
+            </div>
+            <div className="col-span-12 lg:col-span-7 lg:col-start-6">
+              <NaImprensa itens={pagina.imprensa.itens} />
+            </div>
+          </div>
+        </Secao>
+      )}
 
       {/* Proposta */}
       <Secao tom="branco" id="proposta" semFlutuante>
@@ -143,7 +152,7 @@ function Treinamentos() {
               tipo="corporativo"
               empresa="obrigatoria"
               rotuloMensagem="Contexto e objetivo"
-              assuntos={["Palestra", "Workshop", "Programa contínuo", "Ainda não sei"]}
+              assuntos={pagina.formulario.assuntos}
               botao="Solicitar proposta"
               sucesso={{
                 titulo: "Pedido recebido",

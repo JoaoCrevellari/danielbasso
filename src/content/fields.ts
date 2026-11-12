@@ -81,12 +81,13 @@ export function itemVazio(fields: Field[]): Values {
   return Object.fromEntries(fields.map((f) => [f.key, valorVazio(f)]));
 }
 
+/** As cinco etapas do Método Autogoverno, na ordem (nomes novos desde 12/11/2026). */
 export const ETAPAS: Option[] = [
-  { value: "reconstrucao", label: "Reconstrução" },
-  { value: "autogoverno", label: "Autogoverno" },
-  { value: "transformacao", label: "Transformação" },
-  { value: "lideranca", label: "Liderança" },
-  { value: "performance", label: "Performance" },
+  { value: "clareza", label: "Clareza" },
+  { value: "ordem", label: "Ordem" },
+  { value: "progresso", label: "Progresso" },
+  { value: "excelencia", label: "Excelência" },
+  { value: "legado", label: "Legado" },
 ];
 
 export function nomeEtapa(valor: unknown): string | undefined {

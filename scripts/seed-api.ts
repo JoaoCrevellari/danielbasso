@@ -18,7 +18,7 @@ const todos = [...CURSOS, ...MENTORIAS, ...TREINAMENTOS, ...LIVROS, ...DEPOIMENT
 const agora = Date.now();
 const linhas = todos.map((it, n) => ({
   ...it,
-  status: "published",
+  status: it.status ?? "published",
   featured: it.featured ?? false,
   sort_order: it.sort_order ?? 0,
   published_at: it.published_at ?? new Date(agora - n * 86_400_000).toISOString(),

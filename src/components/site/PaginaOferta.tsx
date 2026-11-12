@@ -10,6 +10,7 @@ import { FormularioLead } from "./FormularioLead";
 import { Imagem } from "./Imagem";
 import { LinkInterno } from "./LinkInterno";
 import { Markdown } from "./Markdown";
+import { Expansivel } from "./Expansivel";
 import { CabecalhoSecao, Secao } from "./Secao";
 import { SeloEtapa, SeloStatus } from "./Selo";
 import { TextoExpansivel } from "./TextoExpansivel";
@@ -17,7 +18,24 @@ import { TextoExpansivel } from "./TextoExpansivel";
 const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
 
 /** Campos que ganham destaque próprio e não entram na ficha técnica. */
-const FORA_DA_FICHA = new Set(["etapa", "status_oferta", "investimento", "situacao", "cor"]);
+const FORA_DA_FICHA = new Set([
+  "etapa",
+  "etiqueta",
+  "status_oferta",
+  "investimento",
+  "situacao",
+  "cor",
+  "rotulo_modulos",
+  "interesse_titulo",
+]);
+
+/** Texto com mais de ~900 caracteres e subtítulos (##): o que vem antes do primeiro fica à vista. */
+function dividirCorpo(corpo: string): [string, string] {
+  if (corpo.length < 900) return [corpo, ""];
+  const partes = corpo.split(/\n(?=## )/);
+  if (partes.length < 2) return [corpo, ""];
+  return [partes[0], partes.slice(1).join("\n")];
+}
 
 function valorFicha(col: CollectionConfig, f: Field, item: ItemConteudo) {
   if (f.type === "select") return opcaoLabel(col, f.key, txt(item, f.key));
@@ -63,12 +81,21 @@ export function PaginaOferta({
   const investimento = txt(item, "investimento");
   const corporativo = item.collection === "treinamento";
   const rotuloInteresse = col.interesse ?? "Quero saber mais";
+  const tituloInteresse = txt(item, "interesse_titulo") || rotuloInteresse;
+  const textoInteresse =
+    txt(item, "interesse_texto") ||
+    "Deixe seu contato. Você recebe as datas, as condições e a resposta para qualquer dúvida antes de decidir.";
+  const pagamento = txt(item, "link_pagamento");
+  const rotuloModulos = txt(item, "rotulo_modulos");
+  // Textos longos (com várias partes): a primeira parte fica à vista e o resto abre em
+  // "Continuar lendo", para a seção caber numa tela também no desktop.
+  const [corpoVisivel, corpoResto] = dividirCorpo(item.body ?? "");
 
   return (
     <>
       {/* ── Abertura ─────────────────────────────────────────────────────── */}
       <section className="pt-cabecalho">
-        <div className="container-site grid items-center gap-8 pt-8 pb-12 md:grid-cols-12 md:gap-10 md:pt-12 md:pb-16">
+        <div className="container-site grid items-center gap-6 pt-5 pb-9 md:grid-cols-12 md:gap-10 md:pt-12 md:pb-16">
           <div className="md:col-span-7">
             <nav
               aria-label="Você está em"
@@ -80,8 +107,8 @@ export function PaginaOferta({
               <CaretRight className="size-3" aria-hidden />
               <span className="truncate text-petroleo">{item.title}</span>
             </nav>
-            <div className="mt-6 flex flex-wrap gap-2 anima-subir" style={i(1)}>
-              <SeloEtapa etapa={txt(item, "etapa")} />
+            <div className="mt-4 flex flex-wrap gap-2 anima-subir md:mt-6" style={i(1)}>
+              <SeloEtapa etapa={txt(item, "etapa")} rotulo={txt(item, "etiqueta")} />
               <SeloStatus status={txt(item, "status_oferta")} />
             </div>
             <h1 className="type-display mt-4 pb-1 text-petroleo anima-subir" style={i(1)}>
@@ -103,11 +130,14 @@ export function PaginaOferta({
                 {item.excerpt}
               </p>
             )}
-            <div
-              className="mt-8 flex flex-col gap-3 anima-subir sm:flex-row sm:items-center"
-              style={i(4)}
-            >
-              <Botao href="#interesse">{rotuloInteresse}</Botao>
+            <div className="mt-8 flex flex-wrap items-center gap-3 anima-subir" style={i(4)}>
+              {pagamento ? (
+                <Botao href={pagamento}>
+                  {`Garantir ${artigo === "a" ? "minha vaga" : "meu acesso"}`}
+                </Botao>
+              ) : (
+                <Botao href="#interesse">{tituloInteresse}</Botao>
+              )}
               <Botao
                 href="whatsapp"
                 variante="contorno"
@@ -164,8 +194,13 @@ export function PaginaOferta({
           <div className="col-span-12 lg:col-span-7" data-revelar-grupo>
             <p className="rotulo-secao mb-4">{`Sobre ${artigo} ${nome}`}</p>
             <TextoExpansivel>
-              <Markdown>{item.body}</Markdown>
+              <Markdown>{corpoVisivel}</Markdown>
             </TextoExpansivel>
+            {corpoResto && (
+              <Expansivel rotulo="Continuar lendo" rotuloAberto="Recolher" className="mt-5">
+                <Markdown>{corpoResto}</Markdown>
+              </Expansivel>
+            )}
           </div>
           {publico && (
             <aside className="col-span-12 lg:col-span-4 lg:col-start-9" data-revelar>
@@ -210,8 +245,12 @@ export function PaginaOferta({
         <Secao key={f.key} tom="suave">
           <CabecalhoSecao
             rotulo="Programa"
-            titulo={f.label}
-            texto={`${itens.length} ${itens.length === 1 ? "etapa" : "etapas"}, na ordem em que acontecem.`}
+            titulo={(f.key === "modulos" && rotuloModulos) || f.label}
+            texto={
+              f.key === "modulos" && rotuloModulos
+                ? undefined
+                : `${itens.length} ${itens.length === 1 ? "etapa" : "etapas"}, na ordem em que acontecem.`
+            }
           />
           <ol
             className="trilho mt-conteudo md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-4"
@@ -256,12 +295,12 @@ export function PaginaOferta({
           <div className="col-span-12 lg:col-span-5" data-revelar-grupo>
             <p className="rotulo-secao mb-4">{corporativo ? "Proposta" : "Lista de interesse"}</p>
             <h2 className="type-h1 text-gelo">
-              {corporativo ? "Vamos desenhar a proposta" : rotuloInteresse}
+              {corporativo ? "Vamos desenhar a proposta" : tituloInteresse}
             </h2>
             <p className="mt-4 max-w-[44ch] text-[1.0625rem] leading-relaxed text-gelo/70 max-md:hidden">
               {corporativo
-                ? "Conte um pouco sobre a empresa e a equipe. Retorno em até dois dias úteis com uma sugestão de formato."
-                : "Deixe seu contato. Você recebe as datas, as condições e a resposta para qualquer dúvida antes de decidir."}
+                ? "Conte um pouco sobre a instituição e a equipe. Retorno em até dois dias úteis com uma sugestão de formato."
+                : textoInteresse}
             </p>
           </div>
           <div className="col-span-12 lg:col-span-6 lg:col-start-7" data-revelar>

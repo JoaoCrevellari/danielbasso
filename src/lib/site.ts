@@ -7,10 +7,10 @@ export const SITE = {
   name: "Daniel Basso",
   shortName: "Daniel Basso",
   tagline: "Desenvolvimento Humano",
-  role: "Mentor, escritor e treinador de líderes",
+  role: "Professor, pesquisador, escritor e mentor",
   url: "https://danielbasso.com.br",
   description:
-    "Reconstrução, autogoverno e liderança. Cursos, mentorias, treinamentos corporativos e livros de Daniel Basso para quem quer crescer com responsabilidade.",
+    "Você não perdeu o controle da sua vida. Você entregou, sem perceber. Daniel Basso ensina pessoas e instituições a retomar o comando com o Método Autogoverno.",
   locale: "pt_BR",
 } as const;
 
@@ -20,7 +20,9 @@ export const CONTATO_PADRAO = {
   email: "contato@danielbasso.com.br",
   instagram: "https://instagram.com/danielbassooficial/",
   youtube: "https://youtube.com/@danielbassooficial01",
-  cidade: "São Paulo, SP",
+  tiktok: "https://www.tiktok.com/@danielbassooficial",
+  facebook: "",
+  cidade: "Jundiaí e região, SP",
 };
 
 export type NavItem = { label: string; to: string };
@@ -31,13 +33,13 @@ export const NAV_PRINCIPAL: NavItem[] = [
   { label: "Método", to: "/metodo" },
   { label: "Cursos", to: "/cursos" },
   { label: "Mentorias", to: "/mentorias" },
-  { label: "Empresas", to: "/treinamentos" },
+  { label: "Instituições", to: "/treinamentos" },
   { label: "Livros", to: "/livros" },
   { label: "Blog", to: "/blog" },
 ];
 
+// "Depoimentos" sai do menu enquanto não houver depoimentos reais (pedido de 12/11/2026).
 export const NAV_SECUNDARIA: NavItem[] = [
-  { label: "Depoimentos", to: "/depoimentos" },
   { label: "Diagnóstico", to: "/diagnostico" },
   { label: "Contato", to: "/contato" },
 ];

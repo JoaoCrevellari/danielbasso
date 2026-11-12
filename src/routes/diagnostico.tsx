@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 
 import { Botao, classeBotao } from "@/components/site/Botao";
 import { CampoTexto, mascararTelefone } from "@/components/site/Campo";
-import { Titulo, semDestaque } from "@/components/site/Titulo";
+import { Titulo } from "@/components/site/Titulo";
 import { ETAPAS, nomeEtapa } from "@/content/fields";
 import type { DiagnosticoConteudo } from "@/content/paginas/diagnostico";
 import { contextoDoVisitante, registrar } from "@/lib/analytics";
@@ -20,7 +20,8 @@ export const Route = createFileRoute("/diagnostico")({
   head: ({ loaderData }) => ({
     meta: buildMeta({
       title: "Diagnóstico de Autogoverno",
-      description: semDestaque(loaderData?.diagnostico.intro.subtitulo),
+      description:
+        "Quem está governando a sua vida hoje? Quinze afirmações, cinco minutos. Descubra onde você entregou o comando e qual é o seu próximo passo.",
       path: "/diagnostico",
     }),
     links: canonical("/diagnostico"),
@@ -32,7 +33,10 @@ type Fase = "intro" | "perguntas" | "captura" | "resultado";
 const EASE = [0.16, 1, 0.3, 1] as const;
 const CHAVE = "db_diagnostico";
 
-/** Média de 1 a 5 por etapa e a etapa-foco (menor média; empate fica com a que vem antes). */
+/**
+ * Média de 1 a 5 por etapa e a etapa-foco: a de MAIOR média, porque as afirmações
+ * descrevem a situação da pessoa (empate fica com a que vem antes no método).
+ */
 function calcular(perguntas: { etapa: string }[], respostas: (number | null)[]) {
   const pontuacao: Record<string, number> = {};
   for (const e of ETAPAS) {
@@ -45,10 +49,10 @@ function calcular(perguntas: { etapa: string }[], respostas: (number | null)[]) 
   const foco = ETAPAS.map((e) => e.value)
     .filter((k) => k in pontuacao)
     .reduce<string | null>(
-      (menor, k) => (menor === null || pontuacao[k] < pontuacao[menor] ? k : menor),
+      (maior, k) => (maior === null || pontuacao[k] > pontuacao[maior] ? k : maior),
       null,
     );
-  return { pontuacao, foco: foco ?? "autogoverno" };
+  return { pontuacao, foco: foco ?? "clareza" };
 }
 
 function Diagnostico() {
@@ -420,18 +424,33 @@ function Resultado({
             </Titulo>
             <p className="type-lead mt-6 max-w-xl text-grafite">{analise.texto}</p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              {analise.link && (
-                <Botao href={analise.link}>{`Conhecer: ${analise.recomendacao}`}</Botao>
-              )}
+              {analise.link && <Botao href={analise.link}>{analise.recomendacao}</Botao>}
               <Botao
                 href="whatsapp"
                 variante="contorno"
-                mensagemWhatsApp={`Olá, Daniel. Fiz o diagnóstico e meu próximo passo é ${nomeEtapa(resultado.foco)}. Gostaria de conversar.`}
+                mensagemWhatsApp={`Olá, Daniel. Fiz o diagnóstico e meu momento é ${nomeEtapa(resultado.foco)}. Gostaria de conversar.`}
               >
                 Conversar sobre o resultado
               </Botao>
             </div>
           </>
+        )}
+        {d.complemento.texto && (
+          <div className="mt-10 border-t border-linha pt-6">
+            <p className="max-w-xl text-[1.0125rem] leading-relaxed text-grafite">
+              {d.complemento.texto}
+            </p>
+            {d.complemento.link && (
+              <Botao href={d.complemento.link} variante="texto" className="mt-3">
+                {d.complemento.rotulo || "Saiba mais"}
+              </Botao>
+            )}
+          </div>
+        )}
+        {d.complemento.aviso && (
+          <p className="mt-6 max-w-xl text-[0.8125rem] leading-relaxed text-cinza">
+            {d.complemento.aviso}
+          </p>
         )}
         <button
           type="button"
@@ -495,7 +514,7 @@ function Resultado({
           })}
         </ul>
         <p className="mt-4 text-[0.8125rem] text-cinza">
-          Médias de 1 a 5. A etapa-foco é a de menor média.
+          Médias de 1 a 5. A etapa com mais concordância é o seu momento.
         </p>
       </div>
     </motion.div>

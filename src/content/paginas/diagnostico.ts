@@ -1,6 +1,7 @@
 /**
  * Diagnóstico de Autogoverno: afirmações avaliadas de 1 a 5, agrupadas por etapa do método.
- * A etapa de menor média é a recomendada como próximo passo (empate: a que vem antes no método).
+ * Desde 12/11/2026 as afirmações descrevem a situação da pessoa ("Planejo muito e executo
+ * pouco"): a etapa de MAIOR média é o momento dela (empate: a que vem antes no método).
  */
 import { ETAPAS, type FieldGroup } from "../fields";
 
@@ -18,59 +19,41 @@ export const DIAGNOSTICO_PADRAO = {
   perguntas: {
     itens: [
       {
-        texto: "Consigo olhar para a minha história sem me definir pelos erros que cometi.",
-        etapa: "reconstrucao",
+        texto: "Sinto que algo está errado na minha vida, mas não sei dizer o quê.",
+        etapa: "clareza",
+      },
+      { texto: "Se eu perdesse meu cargo amanhã, não saberia dizer quem sou.", etapa: "clareza" },
+      { texto: "Não sei qual é o próximo passo da minha vida.", etapa: "clareza" },
+      {
+        texto: "Meu dia é decidido pelas urgências dos outros, não pelas minhas prioridades.",
+        etapa: "ordem",
+      },
+      { texto: "Chego ao fim do mês sem saber para onde foi o dinheiro.", etapa: "ordem" },
+      { texto: "Digo sim quando queria dizer não, para não decepcionar alguém.", etapa: "ordem" },
+      { texto: "Planejo muito e executo pouco.", etapa: "progresso" },
+      {
+        texto: "Começo projetos com empolgação e abandono quando ela passa.",
+        etapa: "progresso",
+      },
+      { texto: "Trabalho muito e sinto que não avanço.", etapa: "progresso" },
+      {
+        texto: "Já tenho resultados, mas esbarro em medo, culpa ou insegurança para crescer.",
+        etapa: "excelencia",
       },
       {
-        texto: "Sei com clareza quais áreas da minha vida precisam ser reorganizadas agora.",
-        etapa: "reconstrucao",
+        texto: "Tenho medo de que crescer mais custe a minha família ou a minha saúde.",
+        etapa: "excelencia",
       },
+      { texto: "Só mantenho a disciplina quando estou empolgado.", etapa: "excelencia" },
       {
-        texto: "Depois de perdas ou frustrações, retomo o rumo em pouco tempo.",
-        etapa: "reconstrucao",
+        texto: "Tomo decisões que afetam muitas pessoas e não tenho com quem pensá-las.",
+        etapa: "legado",
       },
+      { texto: "Penso com frequência no que vou deixar depois de mim.", etapa: "legado" },
       {
-        texto: "Cumpro os compromissos que faço comigo mesmo, mesmo quando ninguém está cobrando.",
-        etapa: "autogoverno",
+        texto: "Sinto falta de conviver com pessoas com o mesmo nível de responsabilidade.",
+        etapa: "legado",
       },
-      {
-        texto: "Minhas reações em momentos de tensão raramente me trazem arrependimento.",
-        etapa: "autogoverno",
-      },
-      {
-        texto: "Eu decido onde vai a minha atenção, em vez de deixar o urgente decidir por mim.",
-        etapa: "autogoverno",
-      },
-      {
-        texto: "Tenho hábitos diários que sustentam os objetivos que defini.",
-        etapa: "transformacao",
-      },
-      {
-        texto: "O ambiente em que vivo e trabalho favorece as decisões que tomei.",
-        etapa: "transformacao",
-      },
-      {
-        texto: "Quando começo algo importante, mantenho a constância por meses.",
-        etapa: "transformacao",
-      },
-      {
-        texto: "As pessoas ao meu redor crescem por causa da forma como eu conduzo as coisas.",
-        etapa: "lideranca",
-      },
-      {
-        texto: "Tenho conversas difíceis sem adiá-las e sem perder o respeito.",
-        etapa: "lideranca",
-      },
-      { texto: "Delego com clareza e acompanho sem precisar controlar tudo.", etapa: "lideranca" },
-      {
-        texto: "Sei quais são as três prioridades mais importantes deste trimestre.",
-        etapa: "performance",
-      },
-      {
-        texto: "Entrego resultados consistentes sem sacrificar a saúde ou a família.",
-        etapa: "performance",
-      },
-      { texto: "Acompanho indicadores que me mostram se estou avançando.", etapa: "performance" },
     ],
   },
   captura: {
@@ -81,46 +64,54 @@ export const DIAGNOSTICO_PADRAO = {
   resultados: {
     itens: [
       {
-        etapa: "reconstrucao",
-        titulo: "Seu próximo passo é a *Reconstrução*",
+        etapa: "clareza",
+        titulo: "Seu momento é a *Clareza*",
         texto:
-          "Suas respostas indicam capítulos da sua história pedindo reorganização antes de novos voos. Isso não é um retrocesso: é a base que sustenta todo o resto. Comece por um inventário honesto do que ficou de pé e do que precisa ser refeito.",
-        recomendacao: "Curso Reconstrução Pessoal",
-        link: "/cursos/reconstrucao-pessoal",
+          "Hoje, boa parte da sua vida está sendo decidida fora de você, e você ainda não enxerga o quadro inteiro. Isso não é fraqueza; é o que acontece com quem sustenta muita coisa sem ter aprendido a governar a si mesmo. O primeiro passo é ver onde você entregou o comando.",
+        recomendacao: "Fazer o Diagnóstico Completo",
+        link: "/cursos/diagnostico-completo",
       },
       {
-        etapa: "autogoverno",
-        titulo: "Seu próximo passo é o *Autogoverno*",
+        etapa: "ordem",
+        titulo: "Seu momento é a *Ordem*",
         texto:
-          "Você já tem clareza sobre o que quer, mas a execução ainda depende do humor do dia e das urgências dos outros. Fortalecer o autogoverno vai devolver a você o comando da agenda, da atenção e das reações.",
-        recomendacao: "Curso Fundamentos do Autogoverno",
-        link: "/cursos/fundamentos-do-autogoverno",
+          "Você já sabe que algo precisa mudar. Agora é hora de retomar o comando, começando por uma área: a agenda, o dinheiro, os seus sins e nãos.",
+        recomendacao: "Conhecer o Método Autogoverno",
+        link: "/cursos/metodo-autogoverno",
       },
       {
-        etapa: "transformacao",
-        titulo: "Seu próximo passo é a *Transformação*",
+        etapa: "progresso",
+        titulo: "Seu momento é o *Progresso*",
         texto:
-          "As decisões estão tomadas; falta transformá-las em rotina. O trabalho agora é redesenhar hábitos, ambientes e relações para que a constância deixe de depender da força de vontade.",
-        recomendacao: "Mentoria Individual",
-        link: "/mentorias/mentoria-individual",
+          "A base existe. O que falta é transformar organização em resultado, com meta, plano e acompanhamento.",
+        recomendacao: "Conhecer o Assuma o Controle",
+        link: "/cursos/assuma-o-controle",
       },
       {
-        etapa: "lideranca",
-        titulo: "Seu próximo passo é a *Liderança*",
+        etapa: "excelencia",
+        titulo: "Seu momento é a *Excelência*",
         texto:
-          "Você governa bem a si mesmo, e isso já é raro. O desafio agora é fazer as pessoas ao seu redor crescerem: conversas que não podem mais ser adiadas, delegação real e formação de sucessores.",
-        recomendacao: "Mentoria para Líderes",
-        link: "/mentorias/mentoria-para-lideres",
+          "Você já governa a maior parte da sua vida e está crescendo. O desafio agora é sustentar esse crescimento por anos sem perder a família, a saúde e a paz.",
+        recomendacao: "Conhecer o Nada Pode Me Deter",
+        link: "/cursos/nada-pode-me-deter",
       },
       {
-        etapa: "performance",
-        titulo: "Seu próximo passo é a *Performance*",
+        etapa: "legado",
+        titulo: "Seu momento é o *Legado*",
         texto:
-          "A base está sólida. O próximo nível é transformar consistência em resultado mensurável, com prioridades claras, indicadores simples e um ritmo que não cobra o preço da saúde.",
-        recomendacao: "Curso Alta Performance Sustentável",
-        link: "/cursos/alta-performance-sustentavel",
+          "Suas decisões já afetam muitas pessoas. O próximo passo é ter alguém ao lado e um ambiente à altura das suas responsabilidades.",
+        recomendacao: "Conhecer as Mentorias",
+        link: "/mentorias",
       },
     ],
+  },
+  complemento: {
+    texto:
+      "Quer o mapa inteiro? O Diagnóstico Completo avalia onze áreas da sua vida, com relatório, plano de prioridades e vídeo explicando o resultado. R$ 47.",
+    rotulo: "Conhecer o Diagnóstico Completo",
+    link: "/cursos/diagnostico-completo",
+    aviso:
+      "Este diagnóstico é uma ferramenta de autoconhecimento e não substitui avaliação médica ou psicológica.",
   },
 };
 
@@ -140,7 +131,7 @@ export const DIAGNOSTICO_CAMPOS: FieldGroup[] = [
   {
     key: "perguntas",
     label: "Afirmações",
-    help: "Cada afirmação é avaliada de 1 a 5 e soma pontos para a etapa escolhida. Mantenha o mesmo número de afirmações por etapa.",
+    help: "Cada afirmação é avaliada de 1 a 5 e soma pontos para a etapa escolhida; a etapa com maior média é o resultado. Escreva afirmações que descrevem a situação da pessoa (concordar = este é o meu momento) e mantenha o mesmo número por etapa.",
     fields: [
       {
         key: "itens",
@@ -183,10 +174,20 @@ export const DIAGNOSTICO_CAMPOS: FieldGroup[] = [
           { key: "etapa", label: "Etapa", type: "select", options: ETAPAS, half: true },
           { key: "titulo", label: "Título", type: "text", half: true },
           { key: "texto", label: "Análise", type: "textarea", rows: 4 },
-          { key: "recomendacao", label: "Recomendação", type: "text", half: true },
-          { key: "link", label: "Link da recomendação", type: "text", half: true },
+          { key: "recomendacao", label: "Texto do botão", type: "text", half: true },
+          { key: "link", label: "Link do botão", type: "text", half: true },
         ],
       },
+    ],
+  },
+  {
+    key: "complemento",
+    label: "Linha no fim de todos os resultados",
+    fields: [
+      { key: "texto", label: "Texto", type: "textarea", rows: 3 },
+      { key: "rotulo", label: "Texto do link", type: "text", half: true },
+      { key: "link", label: "Link", type: "text", half: true },
+      { key: "aviso", label: "Aviso em letra pequena", type: "textarea", rows: 2 },
     ],
   },
 ];

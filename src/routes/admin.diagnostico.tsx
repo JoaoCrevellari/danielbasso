@@ -46,7 +46,7 @@ function DiagnosticoPagina() {
     <>
       <TopoPagina
         titulo="Diagnóstico"
-        descricao="Resultados do Diagnóstico de Autogoverno respondido no site. A etapa foco é a de menor média nas respostas."
+        descricao="Resultados do Diagnóstico de Autogoverno respondido no site. A etapa foco é a de maior média nas respostas (as afirmações descrevem a situação da pessoa)."
         acoes={
           <Link
             to="/admin/paginas/$chave"

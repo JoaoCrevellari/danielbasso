@@ -9,5 +9,7 @@ export type ItemSemente = {
   featured?: boolean;
   sort_order?: number;
   published_at?: string;
+  /** Padrão: published. Depoimentos e posts de exemplo ficam como rascunho. */
+  status?: "published" | "draft";
   data: Record<string, unknown>;
 };

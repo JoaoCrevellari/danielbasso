@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Abertura } from "@/components/site/Abertura";
 import { CartaoOferta } from "@/components/site/CartaoOferta";
 import { ChamadaFinal } from "@/components/site/ChamadaFinal";
+import { EscadaEtapas } from "@/components/site/EscadaEtapas";
 import { Filtros } from "@/components/site/Filtros";
 import { Passos } from "@/components/site/Passos";
 import { CabecalhoSecao, Secao } from "@/components/site/Secao";
-import { semDestaque } from "@/components/site/Titulo";
 import { ETAPAS } from "@/content/fields";
 import { carregarPagina, listarItens, txt } from "@/lib/conteudo";
 import { buildMeta, canonical } from "@/lib/seo";
@@ -20,7 +20,8 @@ export const Route = createFileRoute("/cursos/")({
   head: ({ loaderData }) => ({
     meta: buildMeta({
       title: "Cursos",
-      description: semDestaque(loaderData?.pagina.hero.subtitulo),
+      description:
+        "Do Diagnóstico Completo ao Nada Pode Me Deter: cursos do Método Autogoverno para colocar a vida em ordem, transformar ordem em resultado e crescer sem se perder.",
       path: "/cursos",
     }),
     links: canonical("/cursos"),
@@ -65,6 +66,15 @@ function Cursos() {
           </div>
         )}
       </Secao>
+
+      {pagina.escada.itens.length > 0 && (
+        <Secao tom="suave">
+          <CabecalhoSecao rotulo={pagina.escada.rotulo} titulo={pagina.escada.titulo} />
+          <div className="mt-conteudo">
+            <EscadaEtapas degraus={pagina.escada.itens} />
+          </div>
+        </Secao>
+      )}
 
       <Secao tom="branco">
         <CabecalhoSecao rotulo={pagina.como.rotulo} titulo={pagina.como.titulo} />

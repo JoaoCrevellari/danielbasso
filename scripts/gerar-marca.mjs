@@ -17,7 +17,10 @@ const OURO = [250, 187, 56];
 const BRANCO = [255, 255, 255];
 const PETROLEO = { r: 0, g: 63, b: 92 };
 
-const { data, info } = await sharp(origem).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+const { data, info } = await sharp(origem)
+  .removeAlpha()
+  .raw()
+  .toBuffer({ resolveWithObject: true });
 const W = info.width;
 
 /** Quanto do pixel é a cor `c` sobre o fundo (0–1) e o erro dessa explicação. */
@@ -31,7 +34,8 @@ function mistura(p, c) {
 }
 
 function recorte(x0, y0, x1, y1, cores, corSaida) {
-  const w = x1 - x0, h = y1 - y0;
+  const w = x1 - x0,
+    h = y1 - y0;
   const out = Buffer.alloc(w * h * 4);
   for (let y = 0; y < h; y++)
     for (let x = 0; x < w; x++) {
@@ -46,7 +50,10 @@ function recorte(x0, y0, x1, y1, cores, corSaida) {
       if (a < 0.04) a = 0; // ruído do JPG no fundo
       const cor = corSaida ?? c;
       const o = (y * w + x) * 4;
-      out[o] = cor[0]; out[o + 1] = cor[1]; out[o + 2] = cor[2]; out[o + 3] = Math.round(a * 255);
+      out[o] = cor[0];
+      out[o + 1] = cor[1];
+      out[o + 2] = cor[2];
+      out[o + 3] = Math.round(a * 255);
     }
   return sharp(out, { raw: { width: w, height: h, channels: 4 } });
 }

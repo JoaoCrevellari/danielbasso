@@ -23,7 +23,8 @@ export const Route = createFileRoute("/metodo")({
   head: ({ loaderData }) => ({
     meta: buildMeta({
       title: "O Método",
-      description: semDestaque(loaderData?.metodo.hero.subtitulo),
+      description:
+        "A vida que você não governa, governa você. Conheça as cinco etapas do Método Autogoverno: Clareza, Ordem, Progresso, Excelência e Legado.",
       path: "/metodo",
     }),
     links: canonical("/metodo"),
@@ -34,19 +35,19 @@ export const Route = createFileRoute("/metodo")({
 const CAMINHOS = [
   {
     titulo: "Cursos",
-    texto: "As etapas viram trilhas de estudo com começo, meio e fim.",
+    texto: "Do Diagnóstico Completo ao Nada Pode Me Deter.",
     link: "/cursos",
     Icone: GraduationCap,
   },
   {
     titulo: "Mentorias",
-    texto: "As etapas viram um plano pessoal acompanhado de perto.",
+    texto: "Acompanhamento individual e Mastermind.",
     link: "/mentorias",
     Icone: ChatsCircle,
   },
   {
-    titulo: "Empresas",
-    texto: "As etapas viram programas para lideranças e equipes.",
+    titulo: "Instituições",
+    texto: "Prefeituras, escolas e empresas.",
     link: "/treinamentos",
     Icone: Buildings,
   },
@@ -130,7 +131,7 @@ function Metodo() {
       </Secao>
 
       <ChamadaFinal
-        titulo="Descubra em qual etapa *você está*"
+        titulo="Descubra onde você *entregou o comando*"
         texto="O diagnóstico leva cinco minutos e indica o seu próximo passo."
         cta={metodo.aplicacao.cta}
       />

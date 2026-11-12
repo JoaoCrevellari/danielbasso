@@ -6,46 +6,60 @@ import { CTA, HERO_IMAGEM, ROTULO } from "./comum";
  */
 export const HOME_PADRAO = {
   hero: {
-    titulo: "Reconstruir-se é o *primeiro ato* de liderança.",
+    titulo: "Você não perdeu o controle da sua vida. Você *entregou, sem perceber*.",
     subtitulo:
-      "Formação humana com profundidade intelectual e aplicação prática, para quem lidera a própria vida, uma equipe ou uma empresa.",
+      "Aos poucos, sem perceber, você deixou que o chefe, as urgências, o medo e a opinião dos outros passassem a decidir por você. Eu ajudo pessoas comuns a retomar o comando da própria vida, colocar tudo em ordem e voltar a avançar.",
     cta_primario: { rotulo: "Fazer o diagnóstico", link: "/diagnostico" },
     cta_secundario: { rotulo: "Conhecer o método", link: "/metodo" },
     imagem: "/exemplo/daniel-retrato.jpg",
   },
   manifesto: {
     rotulo: "Por que este trabalho",
-    titulo: "Não falta informação. Falta *estrutura interior*.",
+    titulo: "O problema não é tempo, nem dinheiro. É *quem está no comando*.",
     texto:
-      "Há vinte anos acompanho pessoas e organizações em momentos de virada. Mudança duradoura não nasce de motivação, mas de clareza, disciplina e responsabilidade assumida.",
+      "Por fora, tudo funciona: você trabalha, paga as contas, cuida de gente. Por dentro, a vida saiu dos trilhos. Quase todo mundo trata o sintoma, com um aplicativo, uma planilha ou um vídeo de motivação. A causa é outra: alguém ou alguma coisa está decidindo por você. E o que você entregou, você pode retomar.",
     link: { rotulo: "Conheça minha trajetória", link: "/quem-sou" },
     pilares: [
       {
-        titulo: "Profundidade",
-        texto: "Ideias sérias, estudadas com calma, antes de qualquer fórmula pronta.",
+        titulo: "Causa, não sintoma",
+        texto:
+          "Disciplina, foco e organização são sintomas. O método trata quem está governando a sua vida.",
       },
       {
         titulo: "Prática",
-        texto: "Cada encontro termina em um passo concreto para a semana seguinte.",
+        texto: "Cada etapa termina em uma decisão concreta para a semana seguinte.",
       },
       {
         titulo: "Responsabilidade",
-        texto: "Assumir a própria vida por inteiro é o ponto de partida de toda mudança.",
+        texto: "Assumir a própria vida não é se condenar. É recuperar o poder de resposta.",
       },
+    ],
+    credenciais: [
+      "Mestre em Educação, Arte e História da Cultura (Mackenzie)",
+      "MDiv em Teologia Histórica (CPAJ)",
+      "Licenciado em História (UNIRIO)",
+      "Bacharel em Teologia e em Filosofia",
+      "Professor na Grace School of Theology (EUA)",
+      "Cidadão Vinhedense",
     ],
   },
   metodo: {
     rotulo: "O Método",
-    titulo: "Cinco movimentos, *uma direção*.",
+    titulo: "Cinco etapas, *uma direção*.",
     texto:
-      "O Método organiza o desenvolvimento em etapas que se sustentam umas às outras. Não é uma escada que se sobe uma vez: é um ciclo que amadurece com o tempo.",
+      "A vida que você não governa, governa você. O Método Autogoverno organiza a retomada em cinco etapas, do primeiro diagnóstico ao legado, uma área de cada vez.",
     link: { rotulo: "Ver o método completo", link: "/metodo" },
   },
   diagnostico: {
     rotulo: "Gratuito · 5 minutos",
-    titulo: "Onde você está hoje?",
+    titulo: "Quem está *governando a sua vida* hoje?",
     texto:
-      "Quinze afirmações, cinco minutos. O diagnóstico mostra em qual das cinco etapas está o seu próximo passo e o que faz sentido estudar agora.",
+      "Quinze afirmações, cinco minutos. O diagnóstico mostra em quais áreas você entregou o comando e qual é o seu próximo passo.",
+    passos: [
+      "Responda 15 afirmações",
+      "Veja onde você entregou o comando",
+      "Receba a indicação do próximo passo",
+    ],
     cta: { rotulo: "Começar o diagnóstico", link: "/diagnostico" },
     imagem: "/exemplo/daniel-biblioteca.jpg",
   },
@@ -53,33 +67,39 @@ export const HOME_PADRAO = {
     rotulo: "Como trabalhar comigo",
     titulo: "Quatro formas de *caminhar junto*",
     texto:
-      "Escolha pelo momento que você vive: estudo no seu ritmo, acompanhamento próximo, programas para empresas ou leitura.",
+      "Escolha pelo momento que você vive: colocar a vida em ordem, ter alguém ao lado nas grandes decisões, levar o método para a sua instituição ou começar pela leitura.",
     itens: [
       {
         titulo: "Cursos",
-        texto: "Formações com começo, meio e fim, para estudar no seu ritmo ou em turma.",
+        texto:
+          "Do diagnóstico ao programa avançado: Método Autogoverno, Assuma o Controle e Nada Pode Me Deter.",
         link: "/cursos",
         imagem: "https://images.unsplash.com/photo-1638537690617-ebc561143de0",
       },
       {
         titulo: "Mentorias",
-        texto: "Acompanhamento próximo para decisões que não cabem em um curso.",
+        texto: "Acompanhamento individual e Mastermind para decisões que não cabem em um curso.",
         link: "/mentorias",
         imagem: "https://images.unsplash.com/photo-1681301865120-7c74657dc01a",
       },
       {
-        titulo: "Empresas",
-        texto: "Palestras, workshops e programas para lideranças e equipes.",
+        titulo: "Instituições",
+        texto: "Palestras, treinamentos e programas para prefeituras, escolas e empresas.",
         link: "/treinamentos",
         imagem: "https://images.unsplash.com/photo-1544531586-fde5298cdd40",
       },
       {
         titulo: "Livros",
-        texto: "As ideias do método em forma de leitura demorada.",
+        texto: "As Leis do Autogoverno, Ninguém Vai Fazer Por Você e Nada Pode Me Deter.",
         link: "/livros",
         imagem: "https://images.unsplash.com/photo-1642160428828-334bf07023ec",
       },
     ],
+  },
+  instituicoes: {
+    rotulo: "Onde já trabalhamos",
+    titulo: "Prefeituras, escolas e empresas que *já receberam o método*",
+    link: { rotulo: "Ver os trabalhos", link: "/treinamentos#instituicoes" },
   },
   depoimentos: {
     rotulo: "Depoimentos",
@@ -87,7 +107,8 @@ export const HOME_PADRAO = {
   },
   livro: {
     rotulo: "Livro em destaque",
-    slug: "o-governo-de-si",
+    slug: "ninguem-vai-fazer-por-voce",
+    botao: "Quero ser avisado do lançamento",
   },
   blog: {
     rotulo: "Blog",
@@ -96,7 +117,8 @@ export const HOME_PADRAO = {
   },
   cta_final: {
     titulo: "Toda reconstrução começa com *uma conversa honesta*.",
-    texto: "Conte o seu momento. Respondo pessoalmente e indico o caminho que faz mais sentido.",
+    texto:
+      "Conte o seu momento em poucas linhas. Eu leio e indico o caminho que faz mais sentido para você. O que um homem faz, outro também faz.",
     cta: { rotulo: "Conversar pelo WhatsApp", link: "whatsapp" },
     secundario: { rotulo: "Enviar uma mensagem", link: "/contato" },
   },
@@ -149,6 +171,13 @@ export const HOME_CAMPOS: FieldGroup[] = [
           { key: "texto", label: "Texto", type: "textarea", rows: 2 },
         ],
       },
+      {
+        key: "credenciais",
+        label: "Faixa de credenciais",
+        type: "list",
+        itemLabel: "Credencial",
+        help: "Linha discreta logo abaixo deste bloco. Vazia = a faixa some.",
+      },
     ],
   },
   {
@@ -169,6 +198,7 @@ export const HOME_CAMPOS: FieldGroup[] = [
       ROTULO,
       { key: "titulo", label: "Título", type: "text" },
       { key: "texto", label: "Texto", type: "textarea", rows: 3 },
+      { key: "passos", label: "Passos", type: "list", itemLabel: "Passo" },
       { ...CTA, key: "cta", label: "Botão" },
       { ...HERO_IMAGEM, key: "imagem", label: "Imagem" },
     ],
@@ -196,6 +226,16 @@ export const HOME_CAMPOS: FieldGroup[] = [
     ],
   },
   {
+    key: "instituicoes",
+    label: "Onde já trabalhamos",
+    help: "A lista de instituições (nomes, escopo e logos) fica na página Instituições.",
+    fields: [
+      ROTULO,
+      { key: "titulo", label: "Título", type: "text" },
+      { ...CTA, key: "link", label: "Link" },
+    ],
+  },
+  {
     key: "depoimentos",
     label: "Depoimentos",
     help: "Os depoimentos marcados como destaque aparecem aqui.",
@@ -211,8 +251,9 @@ export const HOME_CAMPOS: FieldGroup[] = [
         label: "Endereço do livro",
         type: "text",
         half: true,
-        help: "O final do link do livro, ex.: o-governo-de-si",
+        help: "O final do link do livro, ex.: ninguem-vai-fazer-por-voce",
       },
+      { key: "botao", label: "Texto do botão", type: "text" },
     ],
   },
   {

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { CaretDown } from "@phosphor-icons/react";
 import { useState } from "react";
 
@@ -19,6 +19,8 @@ export const Route = createFileRoute("/depoimentos")({
       carregarPagina("depoimentos"),
       listarItens("depoimento"),
     ]);
+    // Sem depoimentos reais publicados, a página não existe para o visitante.
+    if (!itens.length) throw redirect({ to: "/", statusCode: 302 });
     return { pagina, itens };
   },
   head: ({ loaderData }) => ({

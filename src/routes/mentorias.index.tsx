@@ -6,7 +6,6 @@ import { CartaoOferta } from "@/components/site/CartaoOferta";
 import { ChamadaFinal } from "@/components/site/ChamadaFinal";
 import { Passos } from "@/components/site/Passos";
 import { CabecalhoSecao, Secao } from "@/components/site/Secao";
-import { semDestaque } from "@/components/site/Titulo";
 import { carregarPagina, listarItens } from "@/lib/conteudo";
 import { buildMeta, canonical } from "@/lib/seo";
 
@@ -21,7 +20,8 @@ export const Route = createFileRoute("/mentorias/")({
   head: ({ loaderData }) => ({
     meta: buildMeta({
       title: "Mentorias",
-      description: semDestaque(loaderData?.pagina.hero.subtitulo),
+      description:
+        "Mentoria individual, mentoria para gestores e Mastermind com Daniel Basso, para decisões que não cabem em um curso.",
       path: "/mentorias",
     }),
     links: canonical("/mentorias"),
@@ -46,9 +46,9 @@ function Mentorias() {
 
       <Secao>
         <CabecalhoSecao
-          rotulo="Programas"
-          titulo="Escolha o formato de *acompanhamento*"
-          texto="Individual, para líderes ou em grupo reduzido: escolha pelo tipo de decisão que você precisa tomar."
+          rotulo={pagina.programas.rotulo}
+          titulo={pagina.programas.titulo}
+          texto={pagina.programas.texto}
           textoAoLado
         />
         {itens.length === 0 ? (

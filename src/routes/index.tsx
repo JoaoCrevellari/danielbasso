@@ -9,6 +9,7 @@ import { PostDestaque, PostLinha } from "@/components/site/CartaoPost";
 import { ChamadaFinal } from "@/components/site/ChamadaFinal";
 import { CarrosselDepoimentos } from "@/components/site/Depoimentos";
 import { Imagem } from "@/components/site/Imagem";
+import { FaixaInstituicoes } from "@/components/site/Instituicoes";
 import { LinkInterno } from "@/components/site/LinkInterno";
 import { CabecalhoSecao, Secao } from "@/components/site/Secao";
 import { Titulo, semDestaque } from "@/components/site/Titulo";
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/")({
   staticData: { cabecalho: "escuro" },
   loader: async () => {
     const [paginas, depoimentos, posts] = await Promise.all([
-      carregarPaginas(["home", "metodo"]),
+      carregarPaginas(["home", "metodo", "treinamentos"]),
       listarItens("depoimento", { destaque: true, limite: 9 }),
       listarItens("post", { limite: 3 }),
     ]);
@@ -41,14 +42,9 @@ export const Route = createFileRoute("/")({
 
 const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
 const ICONES_PILARES = [BookOpenText, Footprints, HandHeart];
-const PASSOS_DIAGNOSTICO = [
-  "Responda 15 afirmações",
-  "Veja seu perfil nas cinco etapas",
-  "Receba a indicação do próximo passo",
-];
 
 function Home() {
-  const { home, metodo, depoimentos, posts, livro } = Route.useLoaderData();
+  const { home, metodo, treinamentos, depoimentos, posts, livro } = Route.useLoaderData();
   const [postPrincipal, ...outrosPosts] = posts;
 
   return (
@@ -61,7 +57,15 @@ function Home() {
         />
         <div className="container-site relative grid items-center gap-8 pt-6 pb-10 md:min-h-[calc(100dvh-var(--header-h)-4.75rem)] md:grid-cols-12 md:gap-10 md:py-12">
           <div className="md:col-span-7">
-            <Titulo as="h1" className="type-display pb-1 text-gelo anima-subir">
+            <Titulo
+              as="h1"
+              className={cn(
+                "type-display pb-1 text-gelo anima-subir",
+                // Frase longa da campanha: um tamanho abaixo para caber em 2 linhas no desktop.
+                semDestaque(home.hero.titulo).length > 44 &&
+                  "max-w-none text-[clamp(2.1rem,1.2rem+2.1vw,3.1rem)]",
+              )}
+            >
               {home.hero.titulo}
             </Titulo>
             <p
@@ -118,13 +122,17 @@ function Home() {
               {home.manifesto.link.rotulo}
             </Botao>
           </div>
-          <ul className="col-span-12 flex flex-col md:col-span-5 md:col-start-8" data-revelar-grupo>
+          {/* No celular, os pilares viram um trilho lateral para a seção caber numa tela. */}
+          <ul
+            className="trilho col-span-12 max-md:mt-2 md:col-span-5 md:col-start-8 md:flex md:flex-col"
+            data-revelar-grupo
+          >
             {home.manifesto.pilares.map((p, n) => {
               const Icone = ICONES_PILARES[n % ICONES_PILARES.length];
               return (
                 <li
                   key={p.titulo + n}
-                  className="flex gap-5 border-t border-linha py-5 last:border-b md:py-6"
+                  className="flex gap-4 rounded-[2px] border border-linha bg-papel p-4 md:gap-5 md:rounded-none md:border-x-0 md:border-b-0 md:bg-transparent md:px-0 md:py-6 md:last:border-b"
                 >
                   <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-petroleo-50 text-petroleo">
                     <Icone className="size-5" weight="light" />
@@ -138,6 +146,20 @@ function Home() {
             })}
           </ul>
         </div>
+        {home.manifesto.credenciais.length > 0 && (
+          <ul
+            className="mt-14 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 border-t border-linha pt-6 text-center text-[0.875rem] leading-relaxed text-cinza max-md:hidden"
+            aria-label="Credenciais"
+            data-revelar
+          >
+            {home.manifesto.credenciais.map((c, n) => (
+              <li key={c} className="flex items-center gap-3">
+                {n > 0 && <span aria-hidden className="size-1 rounded-full bg-ouro/70" />}
+                {c}
+              </li>
+            ))}
+          </ul>
+        )}
       </Secao>
 
       {/* ── Método ─────────────────────────────────────────────────────────── */}
@@ -189,7 +211,7 @@ function Home() {
               {home.diagnostico.texto}
             </p>
             <ol className="mt-6 flex flex-col gap-2.5 text-[0.975rem] text-grafite">
-              {PASSOS_DIAGNOSTICO.map((t, n) => (
+              {home.diagnostico.passos.map((t, n) => (
                 <li key={t} className="flex items-center gap-3">
                   <span className="type-numeral inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-ouro/60 text-[0.95rem] text-ouro-texto">
                     {n + 1}
@@ -253,9 +275,27 @@ function Home() {
         </ul>
       </Secao>
 
-      {/* ── Depoimentos ────────────────────────────────────────────────────── */}
-      {depoimentos.length > 0 && (
+      {/* ── Onde já trabalhamos ────────────────────────────────────────────── */}
+      {treinamentos.instituicoes.itens.length > 0 && (
         <Secao tom="suave">
+          <CabecalhoSecao
+            rotulo={home.instituicoes.rotulo}
+            titulo={home.instituicoes.titulo}
+            acao={
+              <Botao href={home.instituicoes.link.link} variante="texto">
+                {home.instituicoes.link.rotulo}
+              </Botao>
+            }
+          />
+          <div className="mt-conteudo">
+            <FaixaInstituicoes itens={treinamentos.instituicoes.itens} />
+          </div>
+        </Secao>
+      )}
+
+      {/* ── Depoimentos (só aparecem quando houver depoimentos reais publicados) ── */}
+      {depoimentos.length > 0 && (
+        <Secao tom="claro">
           <CabecalhoSecao
             rotulo={home.depoimentos.rotulo}
             titulo={home.depoimentos.titulo}
@@ -313,8 +353,8 @@ function Home() {
               {livro.excerpt && (
                 <p className="mt-5 max-w-[52ch] text-cinza max-md:hidden">{livro.excerpt}</p>
               )}
-              <Botao href={`/livros/${livro.slug}`} className="mt-7">
-                Conhecer o livro
+              <Botao href={`/livros/${livro.slug}#interesse`} className="mt-7">
+                {home.livro.botao || "Conhecer o livro"}
               </Botao>
             </div>
           </div>

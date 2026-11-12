@@ -2,8 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Clock,
   EnvelopeSimple,
+  FacebookLogo,
   InstagramLogo,
   MapPin,
+  TiktokLogo,
   WhatsappLogo,
   YoutubeLogo,
 } from "@phosphor-icons/react";
@@ -12,7 +14,6 @@ import { useConfig } from "@/components/layout/ConfigContext";
 import { Abertura } from "@/components/site/Abertura";
 import { FormularioLead } from "@/components/site/FormularioLead";
 import { Secao } from "@/components/site/Secao";
-import { semDestaque } from "@/components/site/Titulo";
 import { registrar } from "@/lib/analytics";
 import { carregarPagina } from "@/lib/conteudo";
 import { buildMeta, canonical } from "@/lib/seo";
@@ -25,13 +26,26 @@ export const Route = createFileRoute("/contato")({
   head: ({ loaderData }) => ({
     meta: buildMeta({
       title: "Contato",
-      description: semDestaque(loaderData?.hero.subtitulo),
+      description:
+        "Fale com Daniel Basso sobre cursos, mentorias, palestras, treinamentos, entrevistas ou convites. Resposta em até dois dias úteis.",
       path: "/contato",
     }),
     links: canonical("/contato"),
   }),
   component: Contato,
 });
+
+/** "https://instagram.com/fulano/" → "@fulano" (o perfil sai do link das Configurações). */
+function arroba(url: string | undefined) {
+  if (!url) return undefined;
+  const parte =
+    url
+      .replace(/[?#].*$/, "")
+      .replace(/\/+$/, "")
+      .split("/")
+      .pop() ?? "";
+  return parte ? `@${parte.replace(/^@/, "")}` : undefined;
+}
 
 function formatarTelefone(n: string) {
   const d = n.replace(/\D/g, "").replace(/^55/, "");
@@ -60,15 +74,29 @@ function Contato() {
     {
       Icone: InstagramLogo,
       rotulo: "Instagram",
-      valor: "@danielbassooficial",
+      valor: arroba(urlSegura(contato.instagram)),
       href: urlSegura(contato.instagram),
       evento: "social",
     },
     {
       Icone: YoutubeLogo,
       rotulo: "YouTube",
-      valor: "@danielbassooficial01",
+      valor: arroba(urlSegura(contato.youtube)),
       href: urlSegura(contato.youtube),
+      evento: "social",
+    },
+    {
+      Icone: TiktokLogo,
+      rotulo: "TikTok",
+      valor: arroba(urlSegura(contato.tiktok)),
+      href: urlSegura(contato.tiktok),
+      evento: "social",
+    },
+    {
+      Icone: FacebookLogo,
+      rotulo: "Facebook",
+      valor: arroba(urlSegura(contato.facebook)),
+      href: urlSegura(contato.facebook),
       evento: "social",
     },
   ].filter((c) => c.href && c.valor);
@@ -76,7 +104,7 @@ function Contato() {
   return (
     <>
       <Abertura rotulo="Contato" titulo={p.hero.titulo} subtitulo={p.hero.subtitulo}>
-        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {canais.map(({ Icone, rotulo, valor, href, evento, destaque }) => (
             <li key={rotulo}>
               <a
@@ -125,8 +153,8 @@ function Contato() {
               </li>
               {contato.cidade && (
                 <li className="flex items-center gap-3">
-                  <MapPin className="size-5 text-ouro-texto" /> {contato.cidade}, atendimento online
-                  em todo o Brasil
+                  <MapPin className="size-5 shrink-0 text-ouro-texto" /> {contato.cidade} ·
+                  atendimento presencial e online em todo o Brasil e no exterior
                 </li>
               )}
             </ul>

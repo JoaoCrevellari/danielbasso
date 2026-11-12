@@ -1,27 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { GraduationCap } from "@phosphor-icons/react";
+import { ArrowUpRight, GraduationCap } from "@phosphor-icons/react";
 
 import { ChamadaFinal } from "@/components/site/ChamadaFinal";
+import { Expansivel } from "@/components/site/Expansivel";
 import { Imagem } from "@/components/site/Imagem";
+import { NaImprensa } from "@/components/site/Instituicoes";
 import { Markdown } from "@/components/site/Markdown";
 import { CabecalhoSecao, Secao } from "@/components/site/Secao";
 import { TextoExpansivel } from "@/components/site/TextoExpansivel";
 import { Titulo, semDestaque } from "@/components/site/Titulo";
-import { carregarPagina } from "@/lib/conteudo";
+import { carregarPaginas } from "@/lib/conteudo";
 import { buildMeta, canonical } from "@/lib/seo";
 
 const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
 
 export const Route = createFileRoute("/quem-sou")({
   staticData: { cabecalho: "escuro" },
-  loader: () => carregarPagina("quem-sou"),
+  loader: () => carregarPaginas(["quem-sou", "treinamentos"]),
   head: ({ loaderData }) => ({
     meta: buildMeta({
       title: "Quem sou",
-      description: semDestaque(loaderData?.hero.subtitulo),
+      description:
+        "Professor, pesquisador e mentor. Daniel Basso perdeu o que achava que era, reconstruiu a vida com autogoverno e hoje ensina pessoas e instituições a fazer o mesmo.",
       path: "/quem-sou",
       ogType: "profile",
-      ogImage: loaderData?.hero.imagem,
+      ogImage: loaderData?.["quem-sou"].hero.imagem,
     }),
     links: canonical("/quem-sou"),
   }),
@@ -29,7 +32,8 @@ export const Route = createFileRoute("/quem-sou")({
 });
 
 function QuemSou() {
-  const p = Route.useLoaderData();
+  const { "quem-sou": p, treinamentos } = Route.useLoaderData();
+  const imprensa = treinamentos.imprensa;
 
   return (
     <>
@@ -72,6 +76,11 @@ function QuemSou() {
             <TextoExpansivel>
               <Markdown>{p.historia.texto}</Markdown>
             </TextoExpansivel>
+            {p.historia.completo && (
+              <Expansivel rotulo="Ler descrição completa" rotuloAberto="Recolher" className="mt-6">
+                <Markdown>{p.historia.completo}</Markdown>
+              </Expansivel>
+            )}
           </div>
         </div>
       </Secao>
@@ -150,7 +159,7 @@ function QuemSou() {
             <h2 className="type-h2 text-petroleo">{p.formacao.titulo}</h2>
           </div>
           <ul
-            className="col-span-12 grid gap-x-8 gap-y-2.5 sm:grid-cols-2 lg:col-span-8 lg:col-start-5"
+            className="col-span-12 grid gap-x-8 gap-y-2 text-[0.95rem] sm:grid-cols-2 md:gap-y-2.5 md:text-base lg:col-span-8 lg:col-start-5"
             data-revelar-grupo
           >
             {p.formacao.itens.map((f) => (
@@ -161,7 +170,70 @@ function QuemSou() {
             ))}
           </ul>
         </div>
+        {p.curriculo.grupos.length > 0 && (
+          <div className="grade mt-8">
+            <Expansivel
+              rotulo={p.curriculo.botao || "Ver currículo completo"}
+              rotuloAberto="Recolher currículo"
+              className="col-span-12 lg:col-span-8 lg:col-start-5"
+            >
+              <div className="grid gap-x-10 gap-y-8 border-t border-linha pt-8 md:grid-cols-2">
+                {p.curriculo.grupos.map((g) => (
+                  <section key={g.titulo}>
+                    <h3 className="type-meta text-ouro-texto">{g.titulo}</h3>
+                    <ul className="mt-3 flex flex-col gap-2.5">
+                      {g.itens
+                        .split("\n")
+                        .map((t) => t.trim())
+                        .filter(Boolean)
+                        .map((t) => (
+                          <li key={t} className="text-[0.95rem] leading-relaxed text-grafite">
+                            {t}
+                          </li>
+                        ))}
+                    </ul>
+                  </section>
+                ))}
+              </div>
+              {p.curriculo.links.length > 0 && (
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {p.curriculo.links
+                    .filter((l) => l.link)
+                    .map((l) => (
+                      <a
+                        key={l.link}
+                        href={l.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-linha-forte px-5 text-[0.9rem] font-medium text-petroleo transition-colors hover:border-petroleo hover:bg-petroleo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ouro"
+                      >
+                        {l.rotulo}
+                        <ArrowUpRight aria-hidden className="size-4" />
+                      </a>
+                    ))}
+                </div>
+              )}
+            </Expansivel>
+          </div>
+        )}
       </Secao>
+
+      {/* ── Na imprensa ──────────────────────────────────────────────────── */}
+      {imprensa.itens.length > 0 && (
+        <Secao tom="suave">
+          <div className="grade gap-y-8">
+            <div className="col-span-12 lg:col-span-4" data-revelar-grupo>
+              <p className="rotulo-secao mb-4">{imprensa.rotulo}</p>
+              <Titulo as="h2" className="type-h1 text-petroleo">
+                {imprensa.titulo}
+              </Titulo>
+            </div>
+            <div className="col-span-12 lg:col-span-7 lg:col-start-6">
+              <NaImprensa itens={imprensa.itens} />
+            </div>
+          </div>
+        </Secao>
+      )}
 
       <ChamadaFinal titulo={p.cta.titulo} cta={p.cta.cta} />
     </>

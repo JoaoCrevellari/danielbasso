@@ -1,75 +1,109 @@
 import type { ItemSemente } from "./tipos";
 
+// Livros do Daniel (textos de 12/11/2026). Sem capa enviada, o site gera a capa tipográfica
+// com o título; editora, páginas e ISBN ficam vazios até ele mandar.
 export const LIVROS: ItemSemente[] = [
   {
     collection: "livro",
-    slug: "o-governo-de-si",
-    title: "O Governo de Si",
-    subtitle: "Ensaios sobre disciplina, liberdade e responsabilidade",
+    slug: "as-leis-do-autogoverno",
+    title: "As Leis do Autogoverno",
+    subtitle: "Os princípios que dão forma a uma vida",
     excerpt:
-      "Dez ensaios curtos sobre a arte de conduzir a própria vida, com exercícios práticos ao final de cada capítulo.",
-    featured: true,
+      "O fundamento de todo o método: por que algumas vidas se ordenam e outras se desfazem, e o que cabe a você governar.",
     sort_order: 1,
-    body: `*O Governo de Si* reúne dez anos de anotações de campo sobre uma pergunta simples e difícil: o que faz uma pessoa cumprir aquilo que decidiu?
+    body: `Governo é o princípio que dá unidade, direção e ordem a uma vida. Quando ele está fora de você, a vida toma a forma do que está fora: o medo, a culpa, a urgência dos outros.
 
-Cada capítulo parte de uma situação real, dialoga com autores clássicos e termina em um exercício prático. É um livro para ler devagar, com um lápis na mão.
+Neste livro, Daniel Basso reúne a tradição clássica da formação humana, de Agostinho à filosofia concreta de Mário Ferreira dos Santos, e a traduz em leis práticas para quem tem casa, trabalho e família para governar.
 
 ## O que você vai encontrar
 
-- Por que a força de vontade não é suficiente
-- A diferença entre rigidez e disciplina
-- Como a atenção se tornou o recurso mais disputado da vida adulta
-- Rotinas de revisão que cabem em dez minutos`,
+- O que é governar a si mesmo
+- A diferença entre controle, rigidez e autogoverno
+- Ser, ter e fazer: a ordem que sustenta uma vida
+- Por que a ordem dos afetos decide o rumo de tudo`,
     data: {
-      situacao: "lancado",
+      situacao: "em-breve",
       cor: "petroleo",
-      ano: "2016",
-      editora: "Editora Exemplo",
-      paginas: 224,
-      isbn: "978-00-00000-00-0",
-      etapa: "autogoverno",
-      trecho:
-        "Autogoverno não é rigidez. É a liberdade de escolher quem você será antes que as circunstâncias escolham por você.",
+      ano: "2026",
+      editora: "",
+      paginas: null,
+      isbn: "",
+      etapa: "clareza",
+      trecho: "Toda vida assume a forma daquilo que a governa.",
       sumario:
-        "A vontade não basta\nRigidez não é disciplina\nO preço da atenção\nDecidir antes da tentação\nA revisão de dez minutos\nLiberdade com responsabilidade",
+        "O que é governar a si mesmo\nControle, rigidez e autogoverno\nSer, ter e fazer\nA ordem dos afetos",
       abertura:
-        "Toda pessoa que já prometeu a si mesma começar na segunda-feira conhece o problema: a decisão é tomada num dia calmo e cobrada num dia difícil. Este livro começa exatamente aí, no intervalo entre o que decidimos e o que de fato fazemos.",
+        "Governo é o princípio que dá unidade, direção e ordem a uma vida. Quando ele está fora de você, a vida toma a forma do que está fora: o medo, a culpa, a urgência dos outros.",
       lojas: [],
     },
   },
   {
     collection: "livro",
-    slug: "reconstruir",
-    title: "Reconstruir",
-    subtitle: "O que fazer com o que sobrou",
-    excerpt: "Um guia honesto para recomeçar depois de perdas, demissões, separações e fracassos.",
+    slug: "ninguem-vai-fazer-por-voce",
+    title: "Ninguém Vai Fazer Por Você",
+    subtitle: "Assuma o Controle da Sua Vida Agora",
+    excerpt:
+      "O livro da retomada: como sair da reação, parar de terceirizar a própria vida e retomar o comando da agenda, do dinheiro e das decisões. Lançamento em 2026.",
+    featured: true,
     sort_order: 2,
-    body: `Ninguém atravessa a vida sem rupturas. *Reconstruir* é um livro para o dia seguinte: quando a crise já aconteceu e a pergunta passa a ser o que fazer com o que ficou de pé.`,
+    body: `Em algum momento, sem assinar nada, você passou o comando da sua vida para outra pessoa: o chefe, a urgência, o medo, a opinião dos outros. Este livro mostra como isso acontece e como retomar.
+
+Não começa com grandes discursos. Começa com uma área, uma decisão pequena, repetida e sustentada. Porque ninguém vai fazer isso por você.
+
+## O que você vai encontrar
+
+- O momento exato em que entregamos o comando
+- Por que o problema não é tempo, é prioridade
+- Como retomar uma área de cada vez
+- Como transformar culpa em responsabilidade`,
     data: {
-      situacao: "lancado",
+      situacao: "em-breve",
       cor: "terracota",
-      ano: "2021",
-      editora: "Editora Exemplo",
-      paginas: 192,
-      etapa: "reconstrucao",
-      trecho: "Reconstruir não é apagar o passado. É decidir o que dele merece virar alicerce.",
+      ano: "2026",
+      editora: "",
+      paginas: null,
+      isbn: "",
+      etapa: "ordem",
+      trecho: "Você não perdeu o controle da sua vida. Você entregou, sem perceber.",
+      // Provisório: o sumário e as primeiras linhas reais vêm com o livro.
+      sumario:
+        "O momento em que entregamos o comando\nO problema não é tempo, é prioridade\nUma área de cada vez\nDa culpa à responsabilidade",
+      abertura:
+        "Em algum momento, sem assinar nada, você passou o comando da sua vida para outra pessoa: o chefe, a urgência, o medo, a opinião dos outros.",
       lojas: [],
     },
   },
   {
     collection: "livro",
-    slug: "liderar-a-partir-de-dentro",
-    title: "Liderar a partir de Dentro",
-    subtitle: "Autoridade, responsabilidade e sucessão",
-    excerpt: "Em preparação. Um livro sobre a liderança que nasce do autogoverno e se mede pelo crescimento das pessoas.",
+    slug: "nada-pode-me-deter",
+    title: "Nada Pode Me Deter",
+    subtitle: "Firmeza para atravessar as crises sem ser governado por elas",
+    excerpt: "Para quem já se reconstruiu e quer permanecer firme diante das crises.",
     sort_order: 3,
-    body: `Livro em preparação. Cadastre-se para ser avisado do lançamento e receber um capítulo antes de todo mundo.`,
+    body: `Reconstruir é o começo. Permanecer é outra coisa. Este livro é para quem já retomou o comando e agora precisa sustentar o crescimento por anos, sem ser governado pelo medo, pela culpa, pelo passado ou pelas circunstâncias.
+
+Não é sobre arrogância nem sobre uma vida sem dor. É sobre maturidade, constância e coragem.
+
+## O que você vai encontrar
+
+- Como crescer sem perder a família, a saúde e a paz
+- Disciplina que não depende de empolgação
+- Como atravessar crises sem voltar ao ponto de partida
+- O que significa ser uma pessoa reconstruída`,
     data: {
       situacao: "em-breve",
       cor: "salvia",
-      ano: "2027",
-      etapa: "lideranca",
-      trecho: "Um líder se mede menos pelo que entrega e mais por quem ele forma.",
+      ano: "2026",
+      editora: "",
+      paginas: null,
+      isbn: "",
+      etapa: "excelencia",
+      trecho:
+        "Nada pode deter uma pessoa reconstruída, não porque ela não sofre, mas porque não é mais governada pela dor.",
+      sumario:
+        "Crescer sem perder a família, a saúde e a paz\nDisciplina sem empolgação\nAtravessar crises\nUma pessoa reconstruída",
+      abertura:
+        "Reconstruir é o começo. Permanecer é outra coisa. Este livro é para quem já retomou o comando e agora precisa sustentar o crescimento por anos.",
       lojas: [],
     },
   },
@@ -93,8 +127,11 @@ const dep = (
   featured,
   sort_order,
   data: { origem, referencia },
+  status: "draft",
 });
 
+// Depoimentos de exemplo: ficam como rascunho (não aparecem no site) até chegarem os reais,
+// com nome, cargo e autorização por escrito (pedido do Daniel, 12/11/2026; regra do CONAR).
 export const DEPOIMENTOS: ItemSemente[] = [
   dep(
     "marina-toledo",

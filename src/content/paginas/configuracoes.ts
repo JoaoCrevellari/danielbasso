@@ -4,7 +4,18 @@ import { CONTATO_PADRAO, SITE } from "@/lib/site";
 export const CONFIG_PADRAO = {
   contato: { ...CONTATO_PADRAO, linkedin: "" },
   rodape: {
-    frase: "Profundidade intelectual aplicada à vida.",
+    frase: "Ajudo pessoas a retomar o comando da própria vida.",
+  },
+  conheca: {
+    titulo: "Conheça também",
+    itens: [
+      { nome: "Pr. Daniel Basso", link: "https://prdanielbasso.com.br", nota: "" },
+      {
+        nome: "Instituto Via Educare",
+        link: "https://viaeducare.com.br",
+        nota: "em desenvolvimento",
+      },
+    ],
   },
   seo: {
     descricao: SITE.description as string,
@@ -34,13 +45,41 @@ export const CONFIG_CAMPOS: FieldGroup[] = [
       { key: "instagram", label: "Instagram", type: "url", half: true },
       { key: "youtube", label: "YouTube", type: "url", half: true },
       { key: "linkedin", label: "LinkedIn", type: "url", half: true },
-      { key: "cidade", label: "Cidade", type: "text", half: true },
+      { key: "tiktok", label: "TikTok", type: "url", half: true },
+      { key: "facebook", label: "Facebook", type: "url", half: true },
+      { key: "cidade", label: "Cidade e atendimento", type: "text", half: true },
     ],
   },
   {
     key: "rodape",
     label: "Rodapé",
     fields: [{ key: "frase", label: "Frase de assinatura", type: "text" }],
+  },
+  {
+    key: "conheca",
+    label: "Conheça também (rodapé)",
+    help: "Links para os outros projetos do Daniel. Pedido do Daniel em 12/11/2026. Lista vazia = a linha some.",
+    fields: [
+      { key: "titulo", label: "Título", type: "text" },
+      {
+        key: "itens",
+        label: "Links",
+        type: "repeater",
+        itemLabel: "Link",
+        summaryKey: "nome",
+        fields: [
+          { key: "nome", label: "Nome", type: "text", half: true },
+          { key: "link", label: "Endereço", type: "url", half: true },
+          {
+            key: "nota",
+            label: "Observação",
+            type: "text",
+            placeholder: "em desenvolvimento",
+            help: "Aparece entre parênteses ao lado do nome.",
+          },
+        ],
+      },
+    ],
   },
   {
     key: "seo",

@@ -11,7 +11,10 @@ import { SeloEtapa, SeloStatus } from "./Selo";
 export function metaOferta(item: ItemConteudo) {
   const col = getCollection(item.collection);
   if (!col) return "";
-  return [txt(item, "duracao"), opcaoLabel(col, "formato", txt(item, "formato"))]
+  return [
+    txt(item, "duracao"),
+    opcaoLabel(col, "formato", txt(item, "formato")) ?? txt(item, "formato"),
+  ]
     .filter(Boolean)
     .join(" · ");
 }
@@ -59,20 +62,25 @@ export function CartaoOferta({
       />
       <div className="flex flex-1 flex-col p-5 md:p-6">
         <div className="flex flex-wrap items-center gap-2">
-          <SeloEtapa etapa={txt(item, "etapa")} />
-          <SeloStatus status={txt(item, "status_oferta") || txt(item, "situacao")} />
+          <SeloEtapa etapa={txt(item, "etapa")} rotulo={txt(item, "etiqueta")} />
+          <SeloStatus
+            status={txt(item, "status_oferta") || txt(item, "situacao")}
+            ano={txt(item, "ano")}
+          />
         </div>
         <TituloCartao className="type-h2 mt-3 text-petroleo transition-colors group-hover:text-petroleo-700">
           {item.title}
         </TituloCartao>
-        {item.excerpt && (
+        {(txt(item, "resumo_cartao") || item.excerpt) && (
           <p className="mt-2 line-clamp-2 text-[0.95rem] leading-relaxed text-cinza">
-            {item.excerpt}
+            {txt(item, "resumo_cartao") || item.excerpt}
           </p>
         )}
         <div className="mt-auto flex items-center justify-between gap-4 pt-5">
-          <span className="type-meta text-cinza">{metaOferta(item)}</span>
-          <span className="inline-flex items-center gap-1.5 text-[0.9rem] font-medium text-petroleo">
+          <span className="type-meta min-w-0 truncate text-cinza" title={metaOferta(item)}>
+            {metaOferta(item)}
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1.5 text-[0.9rem] font-medium text-petroleo">
             Ver detalhes
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
           </span>

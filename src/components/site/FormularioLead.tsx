@@ -74,7 +74,8 @@ export function FormularioLead({
     if (dados.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(dados.email))
       novos.email = "Confira o e-mail.";
     if (dados.phone && dados.phone.replace(/\D/g, "").length < 10) novos.phone = "Inclua o DDD.";
-    if (empresa === "obrigatoria" && !dados.company) novos.company = "Informe a empresa.";
+    if (empresa === "obrigatoria" && !dados.company)
+      novos.company = "Informe a instituição ou empresa.";
     if (mensagem === "obrigatoria" && !dados.message) novos.message = "Escreva uma mensagem.";
     setErros(novos);
     if (Object.keys(novos).length) {
@@ -179,7 +180,7 @@ export function FormularioLead({
               <div className="col-span-2">
                 <CampoTexto
                   name="company"
-                  rotulo="Empresa"
+                  rotulo="Instituição ou empresa"
                   autoComplete="organization"
                   opcional={empresa !== "obrigatoria"}
                   erro={erros.company}

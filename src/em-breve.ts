@@ -4,7 +4,6 @@
 // É HTML puro, sem React: carrega rápido e não depende do banco nem do build do app.
 import { CONTATO_PADRAO } from "./lib/site";
 
-
 export function renderEmBreve(): string {
   // Na Cloudflare o relógio só anda dentro de uma requisição: fora dela, Date() dá 1970.
   const ANO = new Date().getFullYear();
@@ -22,7 +21,7 @@ export function renderEmBreve(): string {
 <meta name="theme-color" content="#00141e">
 <meta property="og:title" content="Daniel Basso · Desenvolvimento Humano">
 <meta property="og:description" content="Você não perdeu o controle da sua vida. Você entregou, sem perceber. O novo site está a caminho.">
-<meta property="og:image" content="https://danielbasso.com.br/compartilhamento-v2.jpg">
+<meta property="og:image" content="https://danielbasso.com.br/compartilhamento-v3.jpg">
 <link rel="icon" href="/favicon-48.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/fontes/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>

@@ -13,7 +13,8 @@ import { POSTS } from "./exemplo/posts";
 
 const todos = [...CURSOS, ...MENTORIAS, ...TREINAMENTOS, ...LIVROS, ...DEPOIMENTOS, ...POSTS];
 
-const s = (v: unknown) => (v === undefined || v === null ? "NULL" : `'${String(v).replace(/'/g, "''")}'`);
+const s = (v: unknown) =>
+  v === undefined || v === null ? "NULL" : `'${String(v).replace(/'/g, "''")}'`;
 
 const agora = Date.now();
 const linhas = todos.map((it, n) => {
@@ -26,7 +27,7 @@ const linhas = todos.map((it, n) => {
     s(it.excerpt),
     s(it.body),
     s(it.cover_url),
-    "'published'",
+    s(it.status ?? "published"),
     it.featured ? "true" : "false",
     String(it.sort_order ?? 0),
     `${s(JSON.stringify(it.data))}::jsonb`,

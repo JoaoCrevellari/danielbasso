@@ -5,7 +5,6 @@ import { CapaLivro } from "@/components/site/CapaLivro";
 import { ChamadaFinal } from "@/components/site/ChamadaFinal";
 import { Secao } from "@/components/site/Secao";
 import { SeloStatus } from "@/components/site/Selo";
-import { semDestaque } from "@/components/site/Titulo";
 import { carregarPagina, listarItens, txt } from "@/lib/conteudo";
 import { buildMeta, canonical } from "@/lib/seo";
 
@@ -17,7 +16,8 @@ export const Route = createFileRoute("/livros/")({
   head: ({ loaderData }) => ({
     meta: buildMeta({
       title: "Livros",
-      description: semDestaque(loaderData?.pagina.hero.subtitulo),
+      description:
+        "As Leis do Autogoverno, Ninguém Vai Fazer Por Você e Nada Pode Me Deter: os livros de Daniel Basso, lançamento em 2026.",
       path: "/livros",
     }),
     links: canonical("/livros"),
@@ -52,7 +52,7 @@ function Livros() {
                   </div>
                 </div>
                 <div className="mt-5">
-                  <SeloStatus status={txt(l, "situacao")} />
+                  <SeloStatus status={txt(l, "situacao")} ano={txt(l, "ano")} />
                   <h2 className="type-h2 mt-3 text-petroleo transition-colors group-hover:text-petroleo-700">
                     {l.title}
                   </h2>

@@ -51,7 +51,7 @@ function Livro() {
               <span className="truncate text-petroleo">{l.title}</span>
             </nav>
             <div className="mt-6 flex flex-wrap gap-2 anima-subir" style={i(1)}>
-              <SeloStatus status={txt(l, "situacao")} />
+              <SeloStatus status={txt(l, "situacao")} ano={txt(l, "ano")} />
               <SeloEtapa etapa={txt(l, "etapa")} />
             </div>
             <h1 className="type-display mt-4 pb-1 text-petroleo anima-subir" style={i(1)}>
@@ -160,12 +160,10 @@ function Livro() {
           <div className="grade gap-y-8">
             <div className="col-span-12 lg:col-span-5" data-revelar-grupo>
               <p className="rotulo-secao mb-4">Lista de interesse</p>
-              <h2 className="type-h1 text-gelo">
-                {emBreve ? "Seja avisado do lançamento" : "Quero ser avisado"}
-              </h2>
+              <h2 className="type-h1 text-gelo">Quero ser avisado</h2>
               <p className="mt-4 max-w-[44ch] text-[1.0625rem] leading-relaxed text-gelo/70">
                 {emBreve
-                  ? "Deixe seu contato e receba um capítulo antes do lançamento."
+                  ? "Deixe seu contato para receber as informações do lançamento."
                   : "Deixe seu contato para receber as informações de compra e os próximos eventos do livro."}
               </p>
             </div>

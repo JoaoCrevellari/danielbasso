@@ -15,7 +15,7 @@ const PAGINAS: Array<[string, string]> = [
   ["/livros", "0.7"],
   ["/diagnostico", "0.8"],
   ["/blog", "0.7"],
-  ["/depoimentos", "0.6"],
+  // /depoimentos volta quando houver depoimentos reais (redireciona para a Início sem eles).
   ["/contato", "0.6"],
   ["/privacidade", "0.2"],
   ["/termos", "0.2"],

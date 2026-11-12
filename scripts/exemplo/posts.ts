@@ -13,7 +13,8 @@ export const POSTS: ItemSemente[] = [
     cover_url: U("photo-1603328199263-ebe2c5162b42"),
     published_at: "2026-09-16T12:00:00Z",
     featured: true,
-    data: { categoria: "ensaios", etapa: "reconstrucao" },
+    data: { categoria: "clareza", etapa: "clareza" },
+    status: "draft",
     body: `Existe uma fantasia comum sobre recomeços: a de que eles acontecem numa página em branco. Mudamos de cidade, de emprego, de relacionamento, e imaginamos que a vida nova começa limpa, sem as marcas da anterior.
 
 Não é assim. Todo recomeço acontece numa página rasurada.
@@ -47,7 +48,8 @@ Recomeços grandiosos costumam durar pouco. O que sustenta uma reconstrução é
       "Confundir autogoverno com controle absoluto é o caminho mais curto para desistir dele. A disciplina que funciona é a que deixa espaço para a vida.",
     cover_url: U("photo-1602503497793-4094d8c53e88"),
     published_at: "2026-09-02T12:00:00Z",
-    data: { categoria: "autogoverno", etapa: "autogoverno" },
+    data: { categoria: "ordem", etapa: "ordem" },
+    status: "draft",
     body: `Quando falo em autogoverno, muita gente imagina uma vida cronometrada, sem espaço para imprevistos, com cada minuto sob controle. É compreensível, e é um equívoco.
 
 ## Rigidez é medo
@@ -77,7 +79,8 @@ No fim, autogoverno é uma forma de liberdade: a de escolher quem você será an
       "Três perguntas no fim do dia fazem mais pela sua agenda do que qualquer aplicativo de produtividade.",
     cover_url: U("photo-1643148636637-58b3eb95cdad"),
     published_at: "2026-08-19T12:00:00Z",
-    data: { categoria: "autogoverno", etapa: "autogoverno" },
+    data: { categoria: "ordem", etapa: "ordem" },
+    status: "draft",
     body: `De todas as práticas do método, a revisão diária é a que mais recomendo e a que as pessoas mais subestimam. Parece pequena demais para fazer diferença. É justamente por isso que funciona.
 
 ## Como fazer
@@ -103,7 +106,8 @@ Com o tempo, a segunda pergunta revela padrões: os mesmos motivos aparecem, as 
       "Quem delega tarefas continua dono de tudo. Quem delega responsabilidade forma pessoas capazes de decidir.",
     cover_url: U("photo-1563891925196-a3e34f6d869c"),
     published_at: "2026-08-05T12:00:00Z",
-    data: { categoria: "lideranca", etapa: "lideranca" },
+    data: { categoria: "excelencia", etapa: "excelencia" },
+    status: "draft",
     body: `Muitos líderes dizem que delegam, mas no fim do dia continuam respondendo por todas as decisões. O que eles fazem, na verdade, é repassar tarefas.
 
 ## Tarefa e responsabilidade
@@ -127,7 +131,8 @@ Delegar responsabilidade tem um custo: as pessoas vão errar, e vão fazer difer
       "Um passo pequeno repetido por meses vale mais do que um impulso enorme que dura uma semana.",
     cover_url: U("photo-1493106641515-6b5631de4bb9"),
     published_at: "2026-07-22T12:00:00Z",
-    data: { categoria: "ensaios", etapa: "transformacao" },
+    data: { categoria: "progresso", etapa: "progresso" },
+    status: "draft",
     body: `Toda segunda-feira, milhares de pessoas começam uma vida nova. Academia, dieta, leitura, projeto. Poucas chegam à sexta-feira da semana seguinte.
 
 ## O problema da intensidade
@@ -149,7 +154,8 @@ Parece pouco, mas o que está sendo construído não é o resultado: é a identi
       "A cultura da exaustão confunde movimento com resultado. Performance de verdade se mede em anos, não em semanas.",
     cover_url: U("photo-1468581264429-2548ef9eb732"),
     published_at: "2026-07-08T12:00:00Z",
-    data: { categoria: "carreira", etapa: "performance" },
+    data: { categoria: "legado", etapa: "legado" },
+    status: "draft",
     body: `Existe uma confusão comum entre estar ocupado e estar produzindo. Agendas cheias, mensagens respondidas às onze da noite, fins de semana sacrificados. Muito movimento, pouco resultado.
 
 ## Performance é colheita

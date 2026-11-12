@@ -1,7 +1,9 @@
 import {
   EnvelopeSimple,
+  FacebookLogo,
   InstagramLogo,
   LinkedinLogo,
+  TiktokLogo,
   WhatsappLogo,
   YoutubeLogo,
 } from "@phosphor-icons/react";
@@ -28,6 +30,8 @@ export function RedesSociais({ claro, className }: { claro?: boolean; className?
       evento: "social",
     },
     { nome: "YouTube", href: urlSegura(contato.youtube), Icone: YoutubeLogo, evento: "social" },
+    { nome: "TikTok", href: urlSegura(contato.tiktok), Icone: TiktokLogo, evento: "social" },
+    { nome: "Facebook", href: urlSegura(contato.facebook), Icone: FacebookLogo, evento: "social" },
     { nome: "LinkedIn", href: urlSegura(contato.linkedin), Icone: LinkedinLogo, evento: "social" },
     {
       nome: "E-mail",

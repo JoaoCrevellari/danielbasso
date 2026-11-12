@@ -141,14 +141,20 @@ export function SeletorEtapas({
                   </div>
                 ))}
             </div>
-            {oferta && (
-              <Botao
-                href={`/${oferta.collection === "curso" ? "cursos" : "mentorias"}/${oferta.slug}`}
-                variante="texto"
-                className="mt-6"
-              >
-                {`Para esta etapa: ${oferta.title}`}
+            {e.produto && e.link ? (
+              <Botao href={e.link} variante="texto" className="mt-6">
+                {`Para esta etapa: ${e.produto}`}
               </Botao>
+            ) : (
+              oferta && (
+                <Botao
+                  href={`/${oferta.collection === "curso" ? "cursos" : "mentorias"}/${oferta.slug}`}
+                  variante="texto"
+                  className="mt-6"
+                >
+                  {`Para esta etapa: ${oferta.title}`}
+                </Botao>
+              )
             )}
           </motion.div>
         </AnimatePresence>

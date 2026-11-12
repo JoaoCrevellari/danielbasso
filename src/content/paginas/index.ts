@@ -81,7 +81,7 @@ export const PAGINAS = {
   },
   treinamentos: {
     key: "treinamentos",
-    titulo: "Empresas (página)",
+    titulo: "Instituições (página)",
     path: "/treinamentos",
     grupo: "paginas",
     campos: TREINAMENTOS_CAMPOS,

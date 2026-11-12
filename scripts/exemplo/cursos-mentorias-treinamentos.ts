@@ -1,3 +1,9 @@
+/**
+ * Cursos, mentorias e programas para instituições.
+ * Textos do Daniel ("Textos do site · versão 2", recebido em 12/11/2026). Campos que ele
+ * ainda vai mandar (carga horária, próxima turma, módulos) ficam vazios e somem da página.
+ * As capas são de banco de imagens (exemplo) até chegarem as fotos reais.
+ */
 import type { ItemSemente } from "./tipos";
 
 const U = (id: string) => `https://images.unsplash.com/${id}`;
@@ -5,171 +11,254 @@ const U = (id: string) => `https://images.unsplash.com/${id}`;
 export const CURSOS: ItemSemente[] = [
   {
     collection: "curso",
-    slug: "fundamentos-do-autogoverno",
-    title: "Fundamentos do Autogoverno",
-    subtitle: "Retomar o comando da agenda, da atenção e das reações",
+    slug: "diagnostico-completo",
+    title: "Diagnóstico Completo",
+    subtitle: "Descubra exatamente o que está impedindo sua vida de avançar",
     excerpt:
-      "Oito semanas para construir a base de todo o método: decisões que se sustentam, rotina que protege o essencial e reações que deixam de trabalhar contra você.",
+      "Não é um teste de internet. É um mapa completo da sua vida, com pontuação por área, relatório, plano de prioridades e um vídeo explicando o seu resultado.",
+    cover_url: U("photo-1519143009590-e3800b9df468"),
+    sort_order: 1,
+    body: `Quem está perdido não precisa, primeiro, de transformação. Precisa de clareza. O Diagnóstico Completo avalia onze áreas da sua vida e mostra onde você entregou o comando.
+
+Você sai com um quadro inteiro, não com uma janela só. E sabe qual área retomar primeiro.
+
+## Como funciona
+
+Você responde a avaliação online, recebe a pontuação e o relatório por área, o plano de prioridades e um vídeo do Daniel explicando o que o seu resultado significa.
+
+> Você não perdeu o controle da sua vida. Você entregou, sem perceber.`,
+    data: {
+      etapa: "clareza",
+      status_oferta: "disponivel",
+      formato: "online",
+      duracao: "No seu ritmo",
+      carga: "Cerca de 40 minutos",
+      proxima_turma: "Acesso imediato",
+      investimento: "R$ 47",
+      resumo_cartao:
+        "Descubra exatamente o que está impedindo sua vida de avançar. Onze áreas avaliadas, relatório e plano de prioridades.",
+      para_quem: [
+        "Quem sente que algo está errado, mas não sabe o quê",
+        'Quem diz "minha vida virou um caos"',
+        "Quem não sabe por onde começar",
+      ],
+      resultados: [
+        "Pontuação em onze áreas",
+        "Relatório completo",
+        "Plano de prioridades",
+        "Vídeo explicando o resultado",
+      ],
+      rotulo_modulos: "Áreas avaliadas",
+      modulos: [
+        "Saúde",
+        "Emoções",
+        "Família",
+        "Casamento",
+        "Trabalho",
+        "Finanças",
+        "Organização",
+        "Hábitos",
+        "Conhecimento",
+        "Propósito",
+        "Espiritualidade (quando fizer sentido)",
+      ].map((titulo) => ({ titulo, descricao: "" })),
+      faq: [
+        {
+          pergunta: "É a mesma coisa que o teste gratuito?",
+          resposta:
+            "Não. O teste gratuito mostra a direção em cinco minutos. O Diagnóstico Completo avalia onze áreas e entrega relatório, plano e vídeo.",
+        },
+        {
+          pergunta: "Preciso ter feito outro curso antes?",
+          resposta: "Não. Ele é o ponto de partida.",
+        },
+        {
+          pergunta: "O diagnóstico substitui terapia?",
+          resposta:
+            "Não. É uma ferramenta de autoconhecimento e não substitui avaliação médica ou psicológica.",
+        },
+      ],
+      interesse_titulo: "Quero meu diagnóstico",
+      interesse_texto: "Deixe seu contato para receber o acesso e as instruções.",
+      link_pagamento: "",
+    },
+  },
+  {
+    collection: "curso",
+    slug: "metodo-autogoverno",
+    title: "Método Autogoverno",
+    subtitle: "Coloque sua vida em ordem e volte a avançar",
+    excerpt:
+      "Em 8 semanas, você aprende a organizar sua vida, governar suas decisões e construir uma base sólida para avançar na família, no trabalho, nas finanças, na fé e nos seus projetos.",
     cover_url: U("photo-1638537690617-ebc561143de0"),
     featured: true,
-    sort_order: 1,
-    body: `Autogoverno é a etapa central do método. Sem ele, qualquer conhecimento novo vira mais uma intenção que não se cumpre.
+    sort_order: 2,
+    body: `O curso não promete resolver cada área da sua vida. Ensina você a governar cada uma delas. Você descobre quem está no comando hoje, retoma uma área de cada vez e aprende a colocar os afetos e as prioridades na ordem certa.
 
-Neste curso, você vai entender de onde vêm as decisões que não se sustentam e construir, semana a semana, uma rotina de governo pessoal: pequenas práticas diárias que devolvem o comando da agenda, da atenção e das próprias reações.
+É para pessoas reais, com conta para pagar, família para cuidar e trabalho para sustentar. Nada de motivação de palco: método, prática e constância.
 
-## Como o curso funciona
+## Como funciona
 
-Cada semana tem uma aula gravada, um exercício prático e um encontro ao vivo de perguntas e respostas. O ritmo foi pensado para quem trabalha: cerca de três horas por semana.
+8 módulos gravados, apostila em PDF, exercícios práticos, plano de aplicação, comunidade e certificado. Bônus: uma masterclass gravada e materiais complementares (checklists, modelos e ferramentas).
 
-> A liberdade começa no momento em que você deixa de negociar consigo mesmo aquilo que já decidiu.`,
+> A vida que você não governa, governa você.`,
     data: {
-      etapa: "autogoverno",
+      etapa: "ordem",
       status_oferta: "aberto",
       formato: "online",
       duracao: "8 semanas",
-      carga: "24 horas",
-      proxima_turma: "Março de 2027",
-      investimento: "Sob consulta",
+      carga: "",
+      proxima_turma: "",
+      investimento: "A partir de R$ 997, em até 12x",
+      resumo_cartao:
+        "Coloque sua vida em ordem e volte a avançar. Retome o comando de uma área de cada vez.",
       para_quem: [
-        "Profissionais que sentem a agenda tomada pelo urgente",
-        "Líderes que querem ser exemplo de disciplina sem rigidez",
-        "Quem já tentou muitos métodos de produtividade e voltou ao ponto de partida",
+        "Quem sente que perdeu o controle da própria vida",
+        "Quem vive desorganizado, sobrecarregado e sem direção",
+        "Quem já tentou de tudo em pedaços e quer governar o todo",
       ],
       resultados: [
-        "Uma rotina de revisão diária de dez minutos",
-        "Critérios claros para dizer não",
-        "Um plano de atenção para proteger o trabalho profundo",
-        "Ferramentas para lidar com reações impulsivas",
+        "Uma rotina que funciona na vida real",
+        "Clareza para tomar decisões e dizer não sem culpa",
+        "Disciplina e constância para cuidar das finanças",
+        "Um plano para as principais áreas da vida",
       ],
+      // Títulos sugeridos pelo Daniel; ele confirma com as aulas (pedido na mensagem de 13/11).
       modulos: [
-        { titulo: "O que é governar a si mesmo", descricao: "A diferença entre controle, rigidez e autogoverno." },
-        { titulo: "Decisões que se sustentam", descricao: "Por que as boas decisões se desfazem e como protegê-las." },
-        { titulo: "A economia da atenção", descricao: "Mapear onde vai a atenção e redesenhar o dia." },
-        { titulo: "Emoções e reações", descricao: "O intervalo entre o estímulo e a resposta." },
-        { titulo: "Compromissos pequenos", descricao: "Construir confiança em si mesmo, um compromisso por vez." },
-        { titulo: "Rotina de revisão", descricao: "O ritual diário e semanal que mantém o rumo." },
-        { titulo: "Ambientes e limites", descricao: "Quando o ambiente ajuda e quando atrapalha." },
-        { titulo: "Plano de continuidade", descricao: "O que fazer depois da última aula." },
-      ],
+        "Quem governa a sua vida",
+        "Você entregou sem perceber",
+        "A primeira retomada",
+        "Uma rotina que cabe na vida real",
+        "Decisões e o poder do não",
+        "Emoções e reações",
+        "Dinheiro e casa em ordem",
+        "A ordem dos afetos e o seu plano",
+      ].map((titulo) => ({ titulo, descricao: "" })),
       faq: [
-        { pergunta: "Preciso ter feito outro curso antes?", resposta: "Não. Este é o curso de entrada do método." },
-        { pergunta: "As aulas ficam gravadas?", resposta: "Sim. O acesso às gravações vale por doze meses." },
-        { pergunta: "Há certificado?", resposta: "Sim, para quem concluir as oito semanas e os exercícios." },
+        {
+          pergunta: "Preciso ter feito outro curso antes?",
+          resposta: "Não. O Diagnóstico ajuda, mas não é obrigatório.",
+        },
+        { pergunta: "As aulas ficam gravadas?", resposta: "Sim. Você assiste no seu ritmo." },
+        { pergunta: "Há certificado?", resposta: "Sim, ao concluir o curso." },
       ],
+      interesse_titulo: "Quero participar",
+      interesse_texto:
+        "Deixe seu contato. Você recebe as datas, as condições e a resposta para qualquer dúvida antes de decidir.",
+      link_pagamento: "",
     },
   },
   {
     collection: "curso",
-    slug: "reconstrucao-pessoal",
-    title: "Reconstrução Pessoal",
-    subtitle: "Reorganizar a vida depois de uma ruptura",
+    slug: "assuma-o-controle",
+    title: "Assuma o Controle",
+    subtitle: "Pare de apenas planejar e comece a construir resultados concretos",
     excerpt:
-      "Para quem atravessou uma perda, uma demissão, um fim ou um fracasso e quer recomeçar sem fingir que nada aconteceu.",
-    cover_url: U("photo-1519143009590-e3800b9df468"),
-    sort_order: 2,
-    body: `Toda vida passa por rupturas. O que muda de uma pessoa para outra é o que ela faz com os escombros.
-
-Este curso conduz um inventário honesto da trajetória: o que ficou de pé, o que precisa ser refeito e o que precisa ser deixado para trás. Não é terapia, e não substitui acompanhamento clínico quando ele é necessário. É um trabalho de reorganização prática, com método e prazo.
-
-## O que você vai fazer
-
-Ao longo de seis semanas, você constrói o seu mapa de reconstrução: uma visão clara dos recursos disponíveis, das perdas assumidas e dos primeiros passos concretos.`,
-    data: {
-      etapa: "reconstrucao",
-      status_oferta: "espera",
-      formato: "online",
-      duracao: "6 semanas",
-      carga: "18 horas",
-      proxima_turma: "Maio de 2027",
-      investimento: "Sob consulta",
-      para_quem: [
-        "Quem passou por uma demissão, separação ou falência",
-        "Profissionais em transição de carreira",
-        "Quem sente que está recomeçando pela terceira vez",
-      ],
-      resultados: [
-        "Um inventário escrito da própria trajetória",
-        "O mapa de perdas e recursos",
-        "Um plano de noventa dias para o recomeço",
-      ],
-      modulos: [
-        { titulo: "O que a ruptura revela", descricao: "Ler a crise como informação, não só como dor." },
-        { titulo: "Inventário de trajetória", descricao: "Escrever a própria história com honestidade." },
-        { titulo: "Perdas e recursos", descricao: "O que se foi e o que continua disponível." },
-        { titulo: "Reconciliação", descricao: "Assumir escolhas sem se definir por elas." },
-        { titulo: "Primeiros alicerces", descricao: "Rotina mínima para dias difíceis." },
-        { titulo: "Plano de noventa dias", descricao: "Os primeiros passos, com datas." },
-      ],
-      faq: [
-        { pergunta: "O curso substitui terapia?", resposta: "Não. Ele pode caminhar junto com um acompanhamento clínico." },
-      ],
-    },
-  },
-  {
-    collection: "curso",
-    slug: "lideranca-com-proposito",
-    title: "Liderança com Propósito",
-    subtitle: "Autoridade que não depende do cargo",
-    excerpt:
-      "Para quem já lidera pessoas e quer formar equipes responsáveis, conduzir conversas difíceis e deixar sucessores.",
+      "Um programa de 3 meses para transformar organização em resultado na família, na profissão, nas finanças e nos seus projetos.",
     cover_url: U("photo-1604948501466-4e9c339b9c24"),
     sort_order: 3,
-    body: `Liderar é assumir responsabilidade pelo crescimento de outras pessoas. É uma tarefa que começa por dentro: ninguém conduz bem uma equipe quando ainda não aprendeu a conduzir a si mesmo.
+    body: `O Método Autogoverno coloca a vida em ordem. O Assuma o Controle faz a vida avançar. Um reconstrói a base; o outro constrói em cima dela.
 
-Neste curso, você trabalha as práticas centrais da liderança madura: conversas difíceis, delegação real, feedback que forma e a construção deliberada de sucessores.`,
+Você define a área prioritária, uma meta e um plano de 90 dias, e é acompanhado na execução, com correção de rota quando for preciso.
+
+## Como funciona
+
+12 módulos, um por semana. Dois encontros ao vivo: um individual com a equipe e um coletivo com o Daniel. Comunidade exclusiva, exercícios, plano de execução e hot seats.
+
+> Ninguém vai fazer por você.`,
     data: {
-      etapa: "lideranca",
-      status_oferta: "aberto",
-      formato: "hibrido",
-      duracao: "10 semanas",
-      carga: "30 horas",
-      proxima_turma: "Abril de 2027",
-      investimento: "Sob consulta",
-      para_quem: ["Gestores e coordenadores", "Empreendedores com equipe", "Líderes recém-promovidos"],
+      etapa: "progresso",
+      status_oferta: "espera",
+      formato: "ao-vivo",
+      duracao: "3 meses",
+      carga: "",
+      proxima_turma: "",
+      investimento: "A partir de R$ 2.997",
+      resumo_cartao:
+        "Pare de apenas planejar e comece a construir resultados concretos, com acompanhamento.",
+      para_quem: [
+        "Quem já organizou a vida e quer resultado",
+        "Quem quer crescer na carreira, nos negócios, na família e nas finanças",
+        "Quem planeja mais do que executa",
+      ],
       resultados: [
-        "Roteiro para conversas difíceis",
-        "Matriz de delegação da sua equipe",
-        "Plano de desenvolvimento de um sucessor",
+        "Clareza da área prioritária e meta definida",
+        "Plano de 90 dias",
+        "Rotina de execução e revisão com a equipe",
+        "Encontro estratégico com o Daniel",
+        "Bônus: livro Ninguém Vai Fazer Por Você, planner de execução e modelos de planejamento",
       ],
-      modulos: [
-        { titulo: "Autoridade e cargo", descricao: "De onde vem a autoridade que as pessoas reconhecem." },
-        { titulo: "Conversas difíceis", descricao: "Preparar, conduzir e concluir." },
-        { titulo: "Delegar responsabilidade", descricao: "Muito além de repassar tarefas." },
-        { titulo: "Feedback que forma", descricao: "Corrigir sem diminuir." },
-        { titulo: "Sucessão", descricao: "Formar quem vai ocupar o seu lugar." },
+      modulos: [],
+      faq: [
+        {
+          pergunta: "Preciso ter feito o Método Autogoverno?",
+          resposta: "É recomendado. O Assuma o Controle parte de uma vida com alguma ordem.",
+        },
+        {
+          pergunta: "Como são os encontros ao vivo?",
+          resposta: "Um individual com a equipe e um coletivo com o Daniel.",
+        },
+        { pergunta: "O livro está incluído?", resposta: "Sim, como bônus." },
       ],
-      faq: [],
+      interesse_titulo: "Entrar na lista da próxima turma",
+      interesse_texto: "Deixe seu contato para receber as datas e as condições da próxima turma.",
+      link_pagamento: "",
     },
   },
   {
     collection: "curso",
-    slug: "alta-performance-sustentavel",
-    title: "Alta Performance Sustentável",
-    subtitle: "Resultado consistente sem pagar com a saúde",
+    slug: "nada-pode-me-deter",
+    title: "Nada Pode Me Deter",
+    subtitle: "Cresça por muitos anos sem perder o controle da vida",
     excerpt:
-      "Prioridades trimestrais, indicadores simples e um ritmo de trabalho que não desmorona a vida fora dele.",
+      "Um programa avançado de 16 semanas para desenvolver a disciplina, a mentalidade e a constância de quem já cresce e quer romper os limites que travam o próximo nível.",
     cover_url: U("photo-1634707983128-0236c567a345"),
     sort_order: 4,
-    body: `Performance não é pressa nem exaustão. É a colheita das etapas anteriores do método: quem se reconstruiu, se governa e transformou hábitos passa a produzir com consistência.
+    body: `Nada pode deter uma pessoa reconstruída. Não porque ela não sofre, mas porque não é mais governada pela dor, pelo medo, pela culpa ou pelo passado.
 
-Este curso organiza essa colheita em um sistema simples de prioridades, indicadores e revisões, com atenção especial ao ritmo de descanso.`,
+O programa trabalha como crescer de forma consistente, superar bloqueios internos, liderar melhor, construir patrimônio, fortalecer a família e ampliar a influência, sem perder a vida no caminho.
+
+## Como funciona
+
+16 módulos gravados, uma masterclass ao vivo por mês com o Daniel, um encontro individual por mês com a equipe e comunidade premium.
+
+> Nada pode me deter.`,
     data: {
-      etapa: "performance",
-      status_oferta: "em-breve",
-      formato: "online",
-      duracao: "6 semanas",
-      carga: "16 horas",
-      proxima_turma: "Segundo semestre de 2027",
-      investimento: "Sob consulta",
-      para_quem: ["Executivos e empreendedores", "Profissionais liberais com agenda cheia"],
-      resultados: ["Painel pessoal de indicadores", "Plano trimestral de prioridades", "Protocolo de descanso"],
-      modulos: [
-        { titulo: "O que é performance", descricao: "Resultado, não movimento." },
-        { titulo: "Prioridades trimestrais", descricao: "Três frentes, noventa dias." },
-        { titulo: "Indicadores pessoais", descricao: "Medir o que importa, sem virar planilha." },
-        { titulo: "Ritmo e descanso", descricao: "Sustentar o esforço por anos." },
+      etapa: "excelencia",
+      status_oferta: "espera",
+      formato: "ao-vivo",
+      duracao: "16 semanas",
+      carga: "",
+      proxima_turma: "",
+      investimento: "R$ 9.997",
+      resumo_cartao: "Cresça por muitos anos sem perder o controle da vida. Programa avançado.",
+      para_quem: [
+        "Quem já organizou a vida e está crescendo",
+        "Quem quer acelerar os resultados",
+        "Quem esbarra em limites internos",
       ],
-      faq: [],
+      resultados: [
+        "Livro Nada Pode Me Deter",
+        "Workbook",
+        "Plano de crescimento de 3 anos",
+        "Ferramentas de acompanhamento e certificado",
+      ],
+      modulos: [],
+      faq: [
+        {
+          pergunta: "Preciso ter feito os cursos anteriores?",
+          resposta: "É recomendado. O programa é para quem já tem ordem e resultados.",
+        },
+        {
+          pergunta: "Como são os encontros ao vivo?",
+          resposta:
+            "Uma masterclass mensal com o Daniel e um encontro individual mensal com a equipe.",
+        },
+        { pergunta: "Há certificado?", resposta: "Sim." },
+      ],
+      interesse_titulo: "Aplicar para a próxima turma",
+      interesse_texto: "Deixe seu contato para receber as informações e a aplicação.",
+      link_pagamento: "",
     },
   },
 ];
@@ -179,105 +268,110 @@ export const MENTORIAS: ItemSemente[] = [
     collection: "mentoria",
     slug: "mentoria-individual",
     title: "Mentoria Individual",
-    subtitle: "Um plano pessoal, acompanhado de perto",
+    subtitle: "Um conselheiro estratégico para caminhar ao seu lado",
     excerpt:
-      "Seis meses de encontros quinzenais para decisões importantes, transições de carreira e reconstruções que pedem presença.",
+      "Para resolver os problemas específicos da sua vida com um plano estratégico personalizado.",
     cover_url: U("photo-1604881988758-f76ad2f7aac1"),
     featured: true,
     sort_order: 1,
-    body: `A mentoria individual é o formato mais próximo do método. Começa com um diagnóstico aprofundado da sua trajetória e se transforma em um plano de trabalho com metas, práticas e indicadores combinados por escrito.
+    body: `Não existe conteúdo fixo. Cada pessoa chega com os seus desafios: família, casamento, educação dos filhos, carreira, negócios, liderança, finanças, patrimônio, comunicação, espiritualidade, decisões difíceis, organização institucional.
 
-Entre os encontros, você recebe tarefas e pode enviar dúvidas por mensagem. Tudo com sigilo absoluto.`,
+## Como funciona
+
+Um encontro individual por mês, plano de ação depois de cada encontro, WhatsApp direto com o Daniel, revisão mensal dos resultados e análise dos seus gatilhos e casos específicos.`,
     data: {
-      etapa: "transformacao",
+      etapa: "legado",
+      etiqueta: "Estratégia",
       status_oferta: "aberto",
-      formato: "individual",
-      duracao: "6 meses",
-      encontros: "Quinzenais, 75 minutos",
-      vagas: "6 por semestre",
+      formato: "Individual, online",
+      duracao: "6 meses, renováveis por mais 6",
+      encontros: "Um por mês, de 90 a 120 minutos",
+      vagas: "",
       investimento: "Sob consulta",
+      resumo_cartao:
+        "Um conselheiro estratégico ao seu lado: encontro mensal, plano de ação e WhatsApp direto com o Daniel.",
       para_quem: [
-        "Profissionais em transição de carreira",
-        "Quem enfrenta uma decisão de alto impacto",
-        "Quem quer acompanhamento para sustentar mudanças",
+        "Empresários, profissionais liberais, médicos e advogados",
+        "Pastores, gestores e servidores de alto nível",
+        "Quem já passou pelos cursos e precisa de um plano feito para a própria vida",
       ],
-      etapas: [
-        { titulo: "Conversa inicial", descricao: "Trinta minutos, sem custo, para ver se faz sentido." },
-        { titulo: "Diagnóstico aprofundado", descricao: "Um encontro de duas horas sobre trajetória, recursos e bloqueios." },
-        { titulo: "Plano de trabalho", descricao: "Metas e práticas combinadas por escrito." },
-        { titulo: "Encontros e revisões", descricao: "Encontros quinzenais e revisão mensal do plano." },
-      ],
+      etapas: [],
       entregas: [
-        "12 encontros individuais",
-        "Diagnóstico aprofundado",
-        "Plano de trabalho por escrito",
-        "Canal direto por mensagem entre os encontros",
-        "Acesso ao curso Fundamentos do Autogoverno",
+        "Clareza sobre as decisões mais importantes",
+        "Um plano para a sua realidade",
+        "Acompanhamento na execução e correção de rota",
+        "Acesso a todos os cursos e livros e prioridade nos eventos presenciais",
       ],
-      faq: [
-        { pergunta: "Os encontros são online?", resposta: "Sim, por videochamada. Encontros presenciais em São Paulo podem ser combinados." },
-        { pergunta: "Posso interromper?", resposta: "Sim, com aviso de trinta dias." },
-      ],
-    },
-  },
-  {
-    collection: "mentoria",
-    slug: "mentoria-para-lideres",
-    title: "Mentoria para Líderes",
-    subtitle: "Para quem responde pelo crescimento de outras pessoas",
-    excerpt:
-      "Acompanhamento para executivos, gestores e empreendedores que precisam liderar com mais autoridade e menos desgaste.",
-    cover_url: U("photo-1681301865120-7c74657dc01a"),
-    sort_order: 2,
-    body: `Liderar é solitário. A mentoria para líderes oferece um espaço reservado para pensar decisões, preparar conversas difíceis e rever a própria forma de conduzir pessoas.
-
-O trabalho combina encontros individuais com a análise de situações reais da sua equipe.`,
-    data: {
-      etapa: "lideranca",
-      status_oferta: "espera",
-      formato: "individual",
-      duracao: "6 meses",
-      encontros: "Quinzenais, 90 minutos",
-      vagas: "4 por semestre",
-      investimento: "Sob consulta",
-      para_quem: ["Diretores e gerentes", "Fundadores de empresas em crescimento", "Líderes recém-promovidos"],
-      etapas: [
-        { titulo: "Conversa inicial", descricao: "Entender o contexto da liderança e da empresa." },
-        { titulo: "Mapa da liderança", descricao: "Como você lidera hoje, pelo seu olhar e pelo da equipe." },
-        { titulo: "Plano de desenvolvimento", descricao: "Três frentes de trabalho para o semestre." },
-        { titulo: "Acompanhamento", descricao: "Encontros com base em situações reais." },
-      ],
-      entregas: ["12 encontros individuais", "Mapa da liderança", "Roteiros para conversas difíceis"],
       faq: [],
     },
   },
   {
     collection: "mentoria",
-    slug: "circulo-de-autogoverno",
-    title: "Círculo de Autogoverno",
-    subtitle: "Mentoria em grupo reduzido",
+    slug: "mentoria-para-gestores",
+    title: "Mentoria para Gestores e Diretores",
+    subtitle: "Conduzir pessoas e instituições sem perder o governo de si",
     excerpt:
-      "Oito pessoas, quatro meses, encontros mensais. O compromisso do grupo ajuda a sustentar o que cada um decidiu.",
+      "Acompanhamento para diretores, coordenadores e gestores de escolas, empresas e instituições.",
+    cover_url: U("photo-1681301865120-7c74657dc01a"),
+    sort_order: 2,
+    body: `Quem lidera carrega as decisões da instituição e, muitas vezes, a própria vida fica para depois. A mentoria trabalha as duas coisas juntas: o governo de si e o governo da equipe.`,
+    data: {
+      etapa: "legado",
+      etiqueta: "Gestão",
+      status_oferta: "sob-consulta",
+      formato: "Individual ou com a equipe de gestão",
+      duracao: "Sob medida",
+      encontros: "",
+      vagas: "",
+      investimento: "Sob consulta",
+      resumo_cartao:
+        "Para diretores, coordenadores e gestores que precisam conduzir equipes e instituições com mais autoridade e menos desgaste.",
+      para_quem: [
+        "Diretores escolares e coordenadores pedagógicos",
+        "Gestores de empresas e de órgãos públicos",
+        "Equipes de gestão em fase de implantação ou crescimento",
+      ],
+      etapas: [],
+      entregas: [
+        "Plano de gestão e de rotina",
+        "Critérios para decisões difíceis",
+        "Acompanhamento da equipe de coordenação",
+        "Revisões periódicas",
+      ],
+      faq: [],
+    },
+  },
+  {
+    collection: "mentoria",
+    slug: "mastermind",
+    title: "Mastermind",
+    subtitle: "Cresça mais rápido cercado pelas pessoas certas",
+    excerpt: "Até aqui, você compra uma transformação. No Mastermind, você entra em um ambiente.",
     cover_url: U("photo-1758438919146-f3f59a6d2544"),
     sort_order: 3,
-    body: `O Círculo reúne até oito pessoas em torno das práticas do autogoverno. Cada encontro combina uma breve exposição, a revisão dos compromissos do mês e o trabalho sobre casos trazidos pelos participantes.
-
-O grupo é fechado do início ao fim, e tudo o que é dito ali permanece ali.`,
+    body: `Uma mesa permanente de crescimento. Todo mês, você se senta com pessoas que enfrentam problemas parecidos, têm o mesmo nível de responsabilidade e podem crescer juntas. O conteúdo nasce dos desafios do grupo; convidados entram quando fizer sentido.`,
     data: {
-      etapa: "autogoverno",
-      status_oferta: "em-breve",
-      formato: "grupo",
-      duracao: "4 meses",
-      encontros: "Mensais, 3 horas",
-      vagas: "8 por turma",
-      investimento: "Sob consulta",
-      para_quem: ["Quem já fez o curso Fundamentos do Autogoverno", "Quem se beneficia do compromisso com um grupo"],
-      etapas: [
-        { titulo: "Entrevista", descricao: "Conversa individual antes de entrar no grupo." },
-        { titulo: "Encontros mensais", descricao: "Quatro encontros presenciais ou online." },
-        { titulo: "Compromissos", descricao: "Cada participante assume e revisa compromissos mensais." },
+      etapa: "legado",
+      status_oferta: "aplicacao",
+      formato: "Grupo fechado, 15 a 20 participantes",
+      duracao: "12 meses",
+      encontros: "12 online e 4 presenciais",
+      vagas: "",
+      investimento: "Sob consulta, mediante aplicação",
+      resumo_cartao:
+        "Uma mesa permanente de crescimento com 15 a 20 pessoas de alto nível de responsabilidade.",
+      para_quem: [
+        "Empresários, líderes, pastores, médicos, advogados, investidores e executivos",
+        "Quem já tem resultados e não procura mais conhecimento",
+        "Quem pergunta o que vai construir que permaneça",
       ],
-      entregas: ["4 encontros em grupo", "1 encontro individual", "Material de apoio"],
+      etapas: [],
+      entregas: [
+        "Plano estratégico anual e revisão trimestral",
+        "Hot seats em todos os encontros",
+        "WhatsApp exclusivo e networking qualificado",
+        "Prioridade em novos projetos",
+      ],
       faq: [],
     },
   },
@@ -286,94 +380,107 @@ O grupo é fechado do início ao fim, e tudo o que é dito ali permanece ali.`,
 export const TREINAMENTOS: ItemSemente[] = [
   {
     collection: "treinamento",
-    slug: "lideranca-que-forma-pessoas",
-    title: "Liderança que Forma Pessoas",
-    subtitle: "Programa contínuo para lideranças",
+    slug: "jornada-de-desenvolvimento-humano",
+    title: "Jornada de Desenvolvimento Humano",
+    subtitle: "Pessoas mais inteiras, serviços melhores",
     excerpt:
-      "Seis meses de encontros com gestores e coordenadores para desenvolver autoridade, delegação e conversas difíceis.",
+      "Uma jornada de capacitação em encontros quinzenais para as equipes de gestão, administrativas e operacionais de prefeituras, escolas e empresas.",
     cover_url: U("photo-1532619675605-1ede6c2ed2b0"),
     featured: true,
     sort_order: 1,
-    body: `Um programa para empresas que querem formar lideranças capazes de desenvolver pessoas, e não apenas de cobrar resultados.
+    body: `Temas trabalhados: organização da rotina, comunicação, equilíbrio emocional, postura profissional e autorresponsabilidade, com atividades práticas, reflexões e acompanhamento contínuo.
 
-O programa combina encontros presenciais, mentorias em grupo e tarefas aplicadas no dia a dia da equipe, com indicadores acompanhados junto ao RH.`,
+Em 2026, a jornada foi realizada com os servidores da Secretaria de Esporte e Lazer da Prefeitura de Jundiaí, com apoio da Escola de Gestão Pública, alcançando as equipes dos 20 centros esportivos do município.
+
+> "Quando trabalhamos o desenvolvimento das pessoas, melhoramos também os serviços oferecidos à população." Daniel Basso, ao Jornal de Jundiaí
+
+## Na imprensa
+
+- Prefeitura de Jundiaí: [Capacitação reforça integração e desenvolvimento de servidores do Esporte](https://jundiai.sp.gov.br/noticias/2026/05/16/capacitacao-reforca-integracao-e-desenvolvimento-de-servidores-do-esporte/) (maio de 2026)
+- Jornal de Jundiaí: [Servidores do Esporte de Jundiaí participam de capacitação](https://sampi.net.br/jundiai/noticias/2979998/esporte/2026/05/servidores-do-esporte-de-jundiai-participam-de-capacitacao) (maio de 2026)
+
+## Versão com medição (opcional)
+
+Em 90 dias, com autoavaliação inicial e final, indicadores de desempenho, engajamento e satisfação, e relatório técnico comparativo para a gestão.`,
     data: {
-      etapa: "lideranca",
+      etapa: "ordem",
       formato: "programa",
-      duracao: "6 meses",
-      publico: "Gestores e coordenadores",
-      turma: "Até 25 pessoas",
-      modalidade: "Presencial, com encontros online",
-      objetivos: [
-        "Desenvolver autoridade que não dependa do cargo",
-        "Reduzir a centralização de decisões",
-        "Criar uma linguagem comum de liderança",
-      ],
-      programa: [
-        { titulo: "Abertura com a alta liderança", descricao: "Alinhamento de expectativas e indicadores." },
-        { titulo: "Autogoverno do líder", descricao: "Agenda, atenção e reações sob pressão." },
-        { titulo: "Conversas difíceis", descricao: "Prática com casos reais." },
-        { titulo: "Delegação e acompanhamento", descricao: "Da tarefa à responsabilidade." },
-        { titulo: "Formação de sucessores", descricao: "Plano individual por líder." },
-        { titulo: "Encerramento e relatório", descricao: "Resultados e próximos passos." },
-      ],
-      resultados: [
-        "Líderes com plano individual de desenvolvimento",
-        "Rituais de equipe revisados",
-        "Relatório de evolução para o RH",
-      ],
-      faq: [
-        { pergunta: "O programa pode ser adaptado?", resposta: "Sim. Conteúdo e duração são ajustados na etapa de proposta." },
-      ],
-    },
-  },
-  {
-    collection: "treinamento",
-    slug: "cultura-de-responsabilidade",
-    title: "Cultura de Responsabilidade",
-    subtitle: "Workshop para equipes",
-    excerpt:
-      "Um dia inteiro para equipes que precisam assumir compromissos, cumprir prazos e parar de terceirizar a culpa.",
-    cover_url: U("photo-1549045345-058277380fc3"),
-    sort_order: 2,
-    body: `Responsabilidade não se impõe por decreto. Ela se constrói quando cada pessoa entende o que é dela, se compromete com isso e encontra um ambiente que reconhece quem cumpre.
-
-O workshop trabalha esses três elementos com dinâmicas, estudos de caso e um plano de compromissos por equipe.`,
-    data: {
-      etapa: "autogoverno",
-      formato: "workshop",
-      duracao: "8 horas",
-      publico: "Equipes de qualquer área",
-      turma: "Até 40 pessoas",
-      modalidade: "Presencial",
-      objetivos: ["Clareza de papéis", "Compromissos explícitos", "Rituais de acompanhamento"],
-      programa: [
-        { titulo: "O que é meu", descricao: "Mapear responsabilidades individuais e da equipe." },
-        { titulo: "Compromissos", descricao: "Como fazer promessas que se cumprem." },
-        { titulo: "Rituais", descricao: "Acompanhar sem microgerenciar." },
-      ],
-      resultados: ["Plano de compromissos por equipe", "Ritual semanal definido"],
+      duracao: "12 encontros",
+      publico: "Equipes de gestão, administrativas e operacionais",
+      turma: "",
+      modalidade: "Presencial ou online",
+      investimento: "Sob consulta",
+      resumo_cartao:
+        "Encontros quinzenais para equipes de gestão, administrativas e operacionais: rotina, comunicação, equilíbrio emocional, postura profissional e autorresponsabilidade.",
+      objetivos: [],
+      programa: [],
+      resultados: [],
       faq: [],
     },
   },
   {
     collection: "treinamento",
-    slug: "o-lider-que-se-governa",
-    title: "O Líder que se Governa",
-    subtitle: "Palestra",
+    slug: "seu-problema-nao-e-tempo",
+    title: "Seu Problema Não É Tempo, É Prioridade",
+    subtitle: "Para equipes que vivem apagando incêndio",
     excerpt:
-      "Uma palestra de setenta minutos sobre autogoverno, autoridade e responsabilidade para convenções e encontros de liderança.",
+      "Um treinamento de um dia para que cada participante saia com a própria rotina reorganizada e critérios claros para decidir o que vem primeiro.",
+    cover_url: U("photo-1549045345-058277380fc3"),
+    sort_order: 2,
+    body: `Quase nunca é falta de tempo. É falta de prioridade, de critério para dizer não e de uma rotina que proteja o essencial. O treinamento parte da vida real de cada participante e termina com um plano pessoal para a semana seguinte.`,
+    data: {
+      etapa: "ordem",
+      formato: "treinamento",
+      duracao: "8 horas",
+      publico: "",
+      turma: "",
+      modalidade: "Presencial ou online",
+      investimento: "Sob consulta",
+      resumo_cartao:
+        "Um treinamento para equipes sobrecarregadas que vivem apagando incêndio e precisam parar de terceirizar a culpa.",
+      objetivos: [],
+      programa: [],
+      resultados: [
+        "Critérios para separar urgente de importante",
+        "Uma rotina de revisão diária",
+        "Ferramentas para dizer não sem culpa",
+        "Plano pessoal de cada participante",
+      ],
+      faq: [],
+    },
+  },
+  {
+    collection: "treinamento",
+    slug: "a-vida-que-voce-nao-governa",
+    title: "A Vida que Você Não Governa, Governa Você",
+    subtitle: "Palestra sobre autogoverno e responsabilidade",
+    excerpt:
+      "Uma palestra para abrir conversas, alinhar a linguagem da equipe e despertar responsabilidade.",
     cover_url: U("photo-1544531586-fde5298cdd40"),
     sort_order: 3,
-    body: `A palestra apresenta as ideias centrais do método em linguagem direta, com histórias reais e provocações práticas para o público levar para o dia seguinte.`,
+    body: `Você não perdeu o controle da sua vida. Você entregou, sem perceber. A palestra mostra como isso acontece, por que treinamento técnico não resolve e qual é o primeiro passo para retomar o comando.
+
+## Outros temas disponíveis
+
+- Florescimento humano
+- Superação
+- Gratidão
+- Seu problema não é tempo, é prioridade
+
+## Já realizada em
+
+Abertura do ano de 2025 da Unidade de Esporte e Lazer de Jundiaí e Jornada de Inteligência Esportiva de 2025, na UniAnchieta.`,
     data: {
-      etapa: "autogoverno",
+      etapa: "clareza",
       formato: "palestra",
-      duracao: "70 minutos",
-      publico: "Convenções, encontros de liderança e SIPATs",
-      turma: "Sem limite",
+      duracao: "60 a 90 minutos",
+      publico: "",
+      turma: "",
       modalidade: "Presencial ou online",
-      objetivos: ["Abrir a conversa sobre autogoverno", "Criar linguagem comum", "Provocar ação prática"],
+      investimento: "Sob consulta",
+      resumo_cartao:
+        "A palestra-base sobre autogoverno e responsabilidade, para encontros de servidores, professores e colaboradores.",
+      objetivos: [],
       programa: [],
       resultados: [],
       faq: [],
