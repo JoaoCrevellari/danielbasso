@@ -31,7 +31,7 @@ export function Rodape() {
         </div>
 
         {conheca.length > 0 && (
-          <div className="mt-8 flex flex-col items-center gap-3 border-t border-linha pt-6 md:mt-10 md:flex-row md:justify-center md:gap-5">
+          <div className="mt-8 flex flex-col items-center gap-3 border-t border-linha py-6 md:mt-10 md:flex-row md:justify-center md:gap-5">
             <p className="type-meta text-gelo/45">{config.conheca.titulo}</p>
             <ul className="flex flex-col items-center gap-2 md:flex-row md:gap-5">
               {conheca.map((c) => (
@@ -55,7 +55,12 @@ export function Rodape() {
           </div>
         )}
 
-        <div className="mt-8 flex flex-col items-center gap-4 border-t border-linha pt-6 text-xs text-gelo/45 md:mt-12">
+        <div
+          className={`flex flex-col items-center gap-4 border-t border-linha pt-6 text-xs text-gelo/45 ${
+            // Com o "Conheça também", o espaço fica igual em cima e embaixo da linha dele.
+            conheca.length ? "" : "mt-8 md:mt-12"
+          }`}
+        >
           <p className="leading-relaxed">
             © {ano} Daniel Basso.
             <br />

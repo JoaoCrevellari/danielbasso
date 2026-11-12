@@ -11,8 +11,11 @@ import { TextoExpansivel } from "@/components/site/TextoExpansivel";
 import { Titulo, semDestaque } from "@/components/site/Titulo";
 import { carregarPaginas } from "@/lib/conteudo";
 import { buildMeta, canonical } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
 const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
+/** Coluna do título que fica parada (abaixo do menu) enquanto o conteúdo ao lado rola. */
+const COLUNA_FIXA = "lg:sticky lg:top-[calc(var(--header-h)+2.5rem)]";
 
 export const Route = createFileRoute("/quem-sou")({
   staticData: { cabecalho: "escuro" },
@@ -66,11 +69,14 @@ function QuemSou() {
       {/* ── História ─────────────────────────────────────────────────────── */}
       <Secao>
         <div className="grade gap-y-6">
-          <div className="col-span-12 lg:col-span-4" data-revelar-grupo>
-            <p className="rotulo-secao mb-4">Trajetória</p>
-            <Titulo as="h2" className="type-h1 text-petroleo">
-              {p.historia.titulo}
-            </Titulo>
+          {/* No desktop, o título fica parado enquanto o texto rola ao lado. */}
+          <div className="col-span-12 lg:col-span-4">
+            <div className={COLUNA_FIXA} data-revelar-grupo>
+              <p className="rotulo-secao mb-4">Trajetória</p>
+              <Titulo as="h2" className="type-h1 text-petroleo">
+                {p.historia.titulo}
+              </Titulo>
+            </div>
           </div>
           <div className="col-span-12 lg:col-span-7 lg:col-start-6" data-revelar>
             <TextoExpansivel>
@@ -151,71 +157,74 @@ function QuemSou() {
 
       {/* ── Formação ─────────────────────────────────────────────────────── */}
       <Secao tom="branco" compacta>
-        <div className="grade items-center gap-y-5">
-          <div className="col-span-12 flex items-center gap-4 lg:col-span-3" data-revelar>
-            <span className="inline-flex size-11 items-center justify-center rounded-full bg-petroleo text-gelo">
-              <GraduationCap className="size-5" weight="light" />
-            </span>
-            <h2 className="type-h2 text-petroleo">{p.formacao.titulo}</h2>
+        <div className="grade gap-y-5">
+          {/* Título fixo no desktop: a lista e o currículo completo rolam ao lado. */}
+          <div className="col-span-12 lg:col-span-3">
+            <div className={cn("flex items-center gap-4", COLUNA_FIXA)} data-revelar>
+              <span className="inline-flex size-11 items-center justify-center rounded-full bg-petroleo text-gelo">
+                <GraduationCap className="size-5" weight="light" />
+              </span>
+              <h2 className="type-h2 text-petroleo">{p.formacao.titulo}</h2>
+            </div>
           </div>
-          <ul
-            className="col-span-12 grid gap-x-8 gap-y-2 text-[0.95rem] sm:grid-cols-2 md:gap-y-2.5 md:text-base lg:col-span-8 lg:col-start-5"
-            data-revelar-grupo
-          >
-            {p.formacao.itens.map((f) => (
-              <li key={f} className="flex gap-3 text-grafite">
-                <span aria-hidden className="mt-[0.7em] h-px w-3.5 shrink-0 bg-ouro" />
-                {f}
-              </li>
-            ))}
-          </ul>
-        </div>
-        {p.curriculo.grupos.length > 0 && (
-          <div className="grade mt-8">
-            <Expansivel
-              rotulo={p.curriculo.botao || "Ver currículo completo"}
-              rotuloAberto="Recolher currículo"
-              className="col-span-12 lg:col-span-8 lg:col-start-5"
+          <div className="col-span-12 lg:col-span-8 lg:col-start-5">
+            <ul
+              className="grid gap-x-8 gap-y-2 text-[0.95rem] sm:grid-cols-2 md:gap-y-2.5 md:text-base"
+              data-revelar-grupo
             >
-              <div className="grid gap-x-10 gap-y-8 border-t border-linha pt-8 md:grid-cols-2">
-                {p.curriculo.grupos.map((g) => (
-                  <section key={g.titulo}>
-                    <h3 className="type-meta text-ouro-texto">{g.titulo}</h3>
-                    <ul className="mt-3 flex flex-col gap-2.5">
-                      {g.itens
-                        .split("\n")
-                        .map((t) => t.trim())
-                        .filter(Boolean)
-                        .map((t) => (
-                          <li key={t} className="text-[0.95rem] leading-relaxed text-grafite">
-                            {t}
-                          </li>
-                        ))}
-                    </ul>
-                  </section>
-                ))}
-              </div>
-              {p.curriculo.links.length > 0 && (
-                <div className="mt-8 flex flex-wrap gap-3">
-                  {p.curriculo.links
-                    .filter((l) => l.link)
-                    .map((l) => (
-                      <a
-                        key={l.link}
-                        href={l.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-linha-forte px-5 text-[0.9rem] font-medium text-petroleo transition-colors hover:border-petroleo hover:bg-petroleo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ouro"
-                      >
-                        {l.rotulo}
-                        <ArrowUpRight aria-hidden className="size-4" />
-                      </a>
-                    ))}
+              {p.formacao.itens.map((f) => (
+                <li key={f} className="flex gap-3 text-grafite">
+                  <span aria-hidden className="mt-[0.7em] h-px w-3.5 shrink-0 bg-ouro" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            {p.curriculo.grupos.length > 0 && (
+              <Expansivel
+                rotulo={p.curriculo.botao || "Ver currículo completo"}
+                rotuloAberto="Recolher currículo"
+                className="mt-8"
+              >
+                <div className="grid gap-x-10 gap-y-8 border-t border-linha pt-8 md:grid-cols-2">
+                  {p.curriculo.grupos.map((g) => (
+                    <section key={g.titulo}>
+                      <h3 className="type-meta text-ouro-texto">{g.titulo}</h3>
+                      <ul className="mt-3 flex flex-col gap-2.5">
+                        {g.itens
+                          .split("\n")
+                          .map((t) => t.trim())
+                          .filter(Boolean)
+                          .map((t) => (
+                            <li key={t} className="text-[0.95rem] leading-relaxed text-grafite">
+                              {t}
+                            </li>
+                          ))}
+                      </ul>
+                    </section>
+                  ))}
                 </div>
-              )}
-            </Expansivel>
+                {p.curriculo.links.length > 0 && (
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    {p.curriculo.links
+                      .filter((l) => l.link)
+                      .map((l) => (
+                        <a
+                          key={l.link}
+                          href={l.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-linha-forte px-5 text-[0.9rem] font-medium text-petroleo transition-colors hover:border-petroleo hover:bg-petroleo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ouro"
+                        >
+                          {l.rotulo}
+                          <ArrowUpRight aria-hidden className="size-4" />
+                        </a>
+                      ))}
+                  </div>
+                )}
+              </Expansivel>
+            )}
           </div>
-        )}
+        </div>
       </Secao>
 
       {/* ── Na imprensa ──────────────────────────────────────────────────── */}
