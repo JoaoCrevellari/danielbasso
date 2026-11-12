@@ -4,9 +4,10 @@
 // É HTML puro, sem React: carrega rápido e não depende do banco nem do build do app.
 import { CONTATO_PADRAO } from "./lib/site";
 
-const ANO = new Date().getFullYear();
 
 export function renderEmBreve(): string {
+  // Na Cloudflare o relógio só anda dentro de uma requisição: fora dela, Date() dá 1970.
+  const ANO = new Date().getFullYear();
   const whatsapp = `https://wa.me/${CONTATO_PADRAO.whatsapp}?text=${encodeURIComponent(
     CONTATO_PADRAO.whatsappMensagem.replace("Vim pelo site", "Vi que o site está em construção"),
   )}`;
