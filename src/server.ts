@@ -74,6 +74,10 @@ export default {
         });
       }
     }
+    if (EM_BREVE) {
+      const bloqueio = await portaoDeValidacao(request, url);
+      if (bloqueio) return bloqueio;
+    }
     const renderizar = async () => {
       try {
         const handler = await getServerEntry();
@@ -92,6 +96,55 @@ export default {
     return FORA_DO_GOOGLE ? semIndexar(resposta) : resposta;
   },
 };
+
+// ── Site só para quem tem o link de validação (pedido de 2026-11-12) ────────────────
+// O Daniel começou uma campanha e o site ainda está em revisão. Sem o cookie de acesso,
+// qualquer endereço público mostra a página "Em breve" (src/em-breve.ts). Abrir
+// /validacao/v1 (ou /validacao/v1/<página>) grava o cookie por 60 dias e leva ao site.
+// Painel, login, APIs e arquivos estáticos passam sempre. Para trocar o link, mude
+// ACESSO_VERSAO (quem tinha o link antigo volta a ver o "Em breve").
+// No lançamento: EM_BREVE = false.
+const EM_BREVE = true;
+const ACESSO_VERSAO = "v1";
+const ACESSO_COOKIE = "db_validacao";
+const ACESSO_CAMINHO = /^\/validacao\/([a-z0-9-]+)(\/.*)?$/;
+const SEMPRE_LIVRE =
+  /^\/(admin|entrar|redefinir-senha|convite|api|_serverFn|_lp|assets|fontes|marca|exemplo)(\/|$)/;
+const ARQUIVO_ESTATICO = /\.(png|jpe?g|webp|avif|gif|svg|ico|css|js|mjs|map|woff2?|webmanifest|txt)$/i;
+
+async function portaoDeValidacao(request: Request, url: URL): Promise<Response | null> {
+  const entrada = ACESSO_CAMINHO.exec(url.pathname);
+  if (entrada) {
+    if (entrada[1] !== ACESSO_VERSAO) return paginaEmBreve();
+    const destino = new URL(entrada[2] || "/", url);
+    destino.search = url.search;
+    const seguro = url.protocol === "https:" ? "; Secure" : "";
+    return new Response(null, {
+      status: 302,
+      headers: {
+        location: destino.pathname + destino.search,
+        "set-cookie": `${ACESSO_COOKIE}=${ACESSO_VERSAO}; Path=/; Max-Age=${60 * 86400}; HttpOnly; SameSite=Lax${seguro}`,
+        "cache-control": "no-store",
+      },
+    });
+  }
+  if (SEMPRE_LIVRE.test(url.pathname) || ARQUIVO_ESTATICO.test(url.pathname)) return null;
+  const cookies = request.headers.get("cookie") ?? "";
+  if (cookies.split(/;\s*/).includes(`${ACESSO_COOKIE}=${ACESSO_VERSAO}`)) return null;
+  return paginaEmBreve();
+}
+
+async function paginaEmBreve(): Promise<Response> {
+  const { renderEmBreve } = await import("./em-breve");
+  return new Response(renderEmBreve(), {
+    status: 200,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store",
+      "x-robots-tag": "noindex, nofollow",
+    },
+  });
+}
 
 // ── Fora do Google enquanto o Daniel revisa (pedido de 2026-11-12) ───────────────────
 // Toda resposta do site leva "noindex": o Google não mostra as páginas e tira as que já
