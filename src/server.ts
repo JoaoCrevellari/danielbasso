@@ -88,9 +88,23 @@ export default {
       }
     };
     const chave = chaveDeCache(request, url);
-    return chave ? comCache(chave, renderizar, ctx) : renderizar();
+    const resposta = await (chave ? comCache(chave, renderizar, ctx) : renderizar());
+    return FORA_DO_GOOGLE ? semIndexar(resposta) : resposta;
   },
 };
+
+// ── Fora do Google enquanto o Daniel revisa (pedido de 2026-11-12) ───────────────────
+// Toda resposta do site leva "noindex": o Google não mostra as páginas e tira as que já
+// guardou na próxima visita. O robots.txt continua liberando (se bloqueasse, o Google
+// não leria este aviso) e fica sem a linha do sitemap. No lançamento: trocar para false
+// e devolver "Sitemap: https://danielbasso.com.br/sitemap.xml" ao public/robots.txt.
+const FORA_DO_GOOGLE = true;
+
+function semIndexar(resposta: Response): Response {
+  const copia = new Response(resposta.body, resposta);
+  copia.headers.set("x-robots-tag", "noindex, nofollow");
+  return copia;
+}
 
 // ── Cache das páginas públicas na borda da Cloudflare ───────────────────────────────
 // Cada página pública é montada no servidor com dados do banco (~0,5–0,9 s). Guardamos o

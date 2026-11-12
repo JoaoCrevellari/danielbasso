@@ -5,5 +5,3 @@ Disallow: /entrar
 Disallow: /redefinir-senha
 Disallow: /convite/
 Disallow: /api/
-
-Sitemap: https://danielbasso.com.br/sitemap.xml
