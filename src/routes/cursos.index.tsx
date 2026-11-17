@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Abertura } from "@/components/site/Abertura";
 import { CartaoOferta } from "@/components/site/CartaoOferta";
 import { ChamadaFinal } from "@/components/site/ChamadaFinal";
-import { EscadaEtapas } from "@/components/site/EscadaEtapas";
 import { Filtros } from "@/components/site/Filtros";
+import { SeletorNiveis } from "@/components/site/Niveis";
 import { Passos } from "@/components/site/Passos";
 import { CabecalhoSecao, Secao } from "@/components/site/Secao";
+import { Titulo } from "@/components/site/Titulo";
 import { ETAPAS } from "@/content/fields";
 import { carregarPagina, listarItens, txt } from "@/lib/conteudo";
 import { buildMeta, canonical } from "@/lib/seo";
@@ -67,12 +68,22 @@ function Cursos() {
         )}
       </Secao>
 
-      {pagina.escada.itens.length > 0 && (
-        <Secao tom="suave">
-          <CabecalhoSecao rotulo={pagina.escada.rotulo} titulo={pagina.escada.titulo} />
-          <div className="mt-conteudo">
-            <EscadaEtapas degraus={pagina.escada.itens} />
-          </div>
+      {pagina.niveis.itens.length > 0 && (
+        <Secao tom="suave" id="niveis">
+          <SeletorNiveis
+            niveis={pagina.niveis.itens}
+            cabecalho={
+              <div data-revelar-grupo>
+                <p className="rotulo-secao mb-4">{pagina.niveis.rotulo}</p>
+                <Titulo as="h2" className="type-h1 text-petroleo">
+                  {pagina.niveis.titulo}
+                </Titulo>
+                {pagina.niveis.texto && (
+                  <p className="mt-4 max-w-[40ch] text-cinza max-md:hidden">{pagina.niveis.texto}</p>
+                )}
+              </div>
+            }
+          />
         </Secao>
       )}
 

@@ -17,7 +17,7 @@ export const Route = createFileRoute("/livros/")({
     meta: buildMeta({
       title: "Livros",
       description:
-        "As Leis do Autogoverno, Ninguém Vai Fazer Por Você e Nada Pode Me Deter: os livros de Daniel Basso, lançamento em 2026.",
+        "As Leis do Autogoverno, Ninguém Vai Fazer Por Você, Nada Pode Me Deter e Ruptura: os livros de Daniel Basso, lançamento em 2026.",
       path: "/livros",
     }),
     links: canonical("/livros"),
@@ -33,7 +33,7 @@ function Livros() {
       <Secao>
         {livros.length === 0 && <p className="text-cinza">Os livros serão publicados em breve.</p>}
         {/* Estante: capas lado a lado, com leve inclinação que se corrige no hover */}
-        <ul className="trilho md:grid md:grid-cols-3 md:gap-8" data-revelar-grupo>
+        <ul className="trilho md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-4" data-revelar-grupo>
           {livros.map((l) => (
             <li key={l.id}>
               <Link
@@ -42,7 +42,7 @@ function Livros() {
                 className="group flex h-full flex-col"
               >
                 <div className="flex justify-center rounded-[2px] bg-gelo-2 py-8 transition-colors duration-500 group-hover:bg-petroleo-50 [perspective:1000px] md:py-10">
-                  <div className="w-[46%] max-w-[11rem] transition-transform duration-700 ease-[var(--ease-out)] [transform:rotateY(-12deg)] group-hover:[transform:rotateY(0deg)_translateY(-6px)]">
+                  <div className="w-[46%] max-w-[11rem] transition-transform lg:w-[62%] duration-700 ease-[var(--ease-out)] [transform:rotateY(-12deg)] group-hover:[transform:rotateY(0deg)_translateY(-6px)]">
                     <CapaLivro
                       titulo={l.title}
                       subtitulo={l.subtitle}

@@ -45,6 +45,28 @@ function Blog() {
     <>
       <Abertura rotulo="Blog" titulo={pagina.hero.titulo} subtitulo={pagina.hero.subtitulo} />
 
+      {posts.length === 0 ? (
+        // Sem nenhum texto publicado: aviso de "em breve" (pedido do Daniel em 17/11/2026),
+        // em vez de uma lista vazia com contador zerado.
+        <Secao>
+          <div className="mx-auto flex max-w-2xl flex-col items-center text-center" data-revelar-grupo>
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-ouro/50 px-4 py-1.5 type-meta text-ouro-texto">
+              <span aria-hidden className="relative flex size-2">
+                <span className="absolute inset-0 rounded-full bg-ouro motion-safe:animate-ping" />
+                <span className="relative size-2 rounded-full bg-ouro" />
+              </span>
+              Em breve
+            </span>
+            <h2 className="type-h1 mt-6 text-balance text-petroleo">
+              Os primeiros textos estão sendo escritos.
+            </h2>
+            <p className="mt-4 max-w-[50ch] text-[1.0625rem] leading-relaxed text-cinza">
+              Aqui vão ficar os ensaios do Daniel sobre autogoverno e vida prática. Enquanto eles não
+              chegam, o diagnóstico mostra por onde começar.
+            </p>
+          </div>
+        </Secao>
+      ) : (
       <Secao>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <p className="type-meta text-cinza max-md:hidden">
@@ -77,6 +99,7 @@ function Blog() {
           </div>
         )}
       </Secao>
+      )}
 
       {anteriores.length > 0 && (
         <Secao tom="branco">

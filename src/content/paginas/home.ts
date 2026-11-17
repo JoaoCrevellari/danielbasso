@@ -90,7 +90,7 @@ export const HOME_PADRAO = {
       },
       {
         titulo: "Livros",
-        texto: "As Leis do Autogoverno, Ninguém Vai Fazer Por Você e Nada Pode Me Deter.",
+        texto: "As Leis do Autogoverno, Ninguém Vai Fazer Por Você, Nada Pode Me Deter e Ruptura.",
         link: "/livros",
         imagem: "https://images.unsplash.com/photo-1642160428828-334bf07023ec",
       },

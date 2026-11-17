@@ -14,6 +14,13 @@ export const SITE = {
   locale: "pt_BR",
 } as const;
 
+/**
+ * Venda pelo site. Desligada a pedido do Daniel (17/11/2026): por enquanto o site só capta
+ * contato. Com ela em false, preço ("Investimento"), botão de pagamento, módulos provisórios
+ * e o valor do Diagnóstico Completo somem; os dados continuam no painel. Para vender, true.
+ */
+export const VENDA_ATIVA = false;
+
 export const CONTATO_PADRAO = {
   whatsapp: "5511972119531",
   whatsappMensagem: "Olá, Daniel. Vim pelo site e gostaria de conversar.",
@@ -21,7 +28,7 @@ export const CONTATO_PADRAO = {
   instagram: "https://instagram.com/danielbassooficial/",
   youtube: "https://youtube.com/@danielbassooficial01",
   tiktok: "https://www.tiktok.com/@danielbassooficial",
-  facebook: "",
+  facebook: "https://www.facebook.com/danielbassooficial",
   cidade: "Jundiaí e região, SP",
 };
 

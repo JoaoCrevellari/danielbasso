@@ -11,6 +11,7 @@ import { CarrosselDepoimentos } from "@/components/site/Depoimentos";
 import { Imagem } from "@/components/site/Imagem";
 import { FaixaInstituicoes } from "@/components/site/Instituicoes";
 import { LinkInterno } from "@/components/site/LinkInterno";
+import { NiveisResumo } from "@/components/site/Niveis";
 import { CabecalhoSecao, Secao } from "@/components/site/Secao";
 import { Titulo, semDestaque } from "@/components/site/Titulo";
 import { carregarPaginas, listarItens, obterItem, txt } from "@/lib/conteudo";
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/")({
   staticData: { cabecalho: "escuro" },
   loader: async () => {
     const [paginas, depoimentos, posts] = await Promise.all([
-      carregarPaginas(["home", "metodo", "treinamentos"]),
+      carregarPaginas(["home", "metodo", "treinamentos", "cursos"]),
       listarItens("depoimento", { destaque: true, limite: 9 }),
       listarItens("post", { limite: 3 }),
     ]);
@@ -44,7 +45,7 @@ const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
 const ICONES_PILARES = [BookOpenText, Footprints, HandHeart];
 
 function Home() {
-  const { home, metodo, treinamentos, depoimentos, posts, livro } = Route.useLoaderData();
+  const { home, metodo, treinamentos, cursos, depoimentos, posts, livro } = Route.useLoaderData();
   const [postPrincipal, ...outrosPosts] = posts;
 
   return (
@@ -147,15 +148,19 @@ function Home() {
           </ul>
         </div>
         {home.manifesto.credenciais.length > 0 && (
+          // Grade 3 × 2 com divisórias finas: os seis itens ficam alinhados, sem sobra solta numa segunda linha.
           <ul
-            className="mt-14 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 border-t border-linha pt-6 text-center text-[0.875rem] leading-relaxed text-cinza max-md:hidden"
+            className="mt-14 grid grid-cols-3 gap-px overflow-hidden border-y border-linha bg-linha max-md:hidden"
             aria-label="Credenciais"
-            data-revelar
+            data-revelar-grupo
           >
-            {home.manifesto.credenciais.map((c, n) => (
-              <li key={c} className="flex items-center gap-3">
-                {n > 0 && <span aria-hidden className="size-1 rounded-full bg-ouro/70" />}
-                {c}
+            {home.manifesto.credenciais.map((c) => (
+              <li
+                key={c}
+                className="flex items-start gap-3 bg-gelo px-5 py-4 text-[0.875rem] leading-snug text-cinza lg:px-6"
+              >
+                <span aria-hidden className="mt-[0.6em] h-px w-3.5 shrink-0 bg-ouro" />
+                <span className="text-balance">{c}</span>
               </li>
             ))}
           </ul>
@@ -226,6 +231,22 @@ function Home() {
           </div>
         </div>
       </Secao>
+
+      {/* ── Por onde começar: os níveis, em versão curta (detalhe em /cursos#niveis) ── */}
+      {cursos.niveis.itens.length > 0 && (
+        <Secao tom="suave">
+          <CabecalhoSecao
+            rotulo={cursos.niveis.rotulo}
+            titulo={cursos.niveis.titulo}
+            acao={
+              <Botao href="/cursos#niveis" variante="texto">
+                Ver cada nível
+              </Botao>
+            }
+          />
+          <NiveisResumo niveis={cursos.niveis.itens} />
+        </Secao>
+      )}
 
       {/* ── Formas de caminhar junto ───────────────────────────────────────── */}
       <Secao>

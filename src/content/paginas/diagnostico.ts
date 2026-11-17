@@ -107,7 +107,7 @@ export const DIAGNOSTICO_PADRAO = {
   },
   complemento: {
     texto:
-      "Quer o mapa inteiro? O Diagnóstico Completo avalia onze áreas da sua vida, com relatório, plano de prioridades e vídeo explicando o resultado. R$ 47.",
+      "Quer o mapa inteiro? O Diagnóstico Completo avalia onze áreas da sua vida, com relatório, plano de prioridades e vídeo explicando o resultado.", // sem o "R$ 47" enquanto VENDA_ATIVA = false (pedido de 17/11/2026)
     rotulo: "Conhecer o Diagnóstico Completo",
     link: "/cursos/diagnostico-completo",
     aviso:

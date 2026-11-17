@@ -10,15 +10,72 @@ export const CURSOS_PADRAO = {
     subtitulo:
       "Cada curso resolve um momento diferente da vida. Você não precisa começar pelo mais longo; precisa começar pelo certo. O diagnóstico mostra qual é o seu.",
   },
-  escada: {
+  // Níveis enviados pelo Daniel em 17/11/2026 (substituem a escada das etapas).
+  niveis: {
     rotulo: "Por onde começar",
-    titulo: "Uma etapa de cada vez, *do diagnóstico ao legado*",
+    titulo: "Cada momento da vida pede *um passo diferente*",
+    texto: "Escolha pelo que você vive hoje. Em Saiba mais, você deixa seu contato e recebe as informações.",
     itens: [
-      { etapa: "clareza", produto: "Diagnóstico Completo", link: "/cursos/diagnostico-completo" },
-      { etapa: "ordem", produto: "Método Autogoverno", link: "/cursos/metodo-autogoverno" },
-      { etapa: "progresso", produto: "Assuma o Controle", link: "/cursos/assuma-o-controle" },
-      { etapa: "excelencia", produto: "Nada Pode Me Deter", link: "/cursos/nada-pode-me-deter" },
-      { etapa: "legado", produto: "Mentoria e Mastermind", link: "/mentorias" },
+      {
+        etapa: "clareza",
+        produto: "Diagnóstico Completo",
+        para_quem: "Quem está confuso e sente que algo está errado, mesmo sem saber o quê.",
+        rotulo_falas: "Se você diz coisas como",
+        falas: "Estou perdido.\nEstou cansado.\nMinha vida não anda.\nEstou estagnado.",
+        compra: "Clareza",
+        entrega: "Condições de descobrir exatamente o que está impedindo a sua vida de avançar.",
+        link: "/cursos/diagnostico-completo",
+      },
+      {
+        etapa: "ordem",
+        produto: "Método Autogoverno",
+        para_quem: "Quem já descobriu o problema e agora é capaz de assumir as responsabilidades.",
+        rotulo_falas: "",
+        falas: "",
+        compra: "Organização pessoal",
+        entrega: "Devolvemos a sua capacidade de colocar a vida em ordem e voltar a avançar.",
+        link: "/cursos/metodo-autogoverno",
+      },
+      {
+        etapa: "progresso",
+        produto: "Assuma o Controle",
+        para_quem: "Quem já tem certa ordem na vida, mas continua sem os tão sonhados resultados.",
+        rotulo_falas: "Se você se pergunta",
+        falas: "Como transformar todo o meu potencial em progresso?",
+        compra: "Execução",
+        entrega: "Criamos as condições para você sair do planejamento e começar a construir resultados concretos.",
+        link: "/cursos/assuma-o-controle",
+      },
+      {
+        etapa: "excelencia",
+        produto: "Nada Pode Me Deter",
+        para_quem: "Quem já tem resultados, mas ainda esbarra em limites internos.",
+        rotulo_falas: "Se você se pergunta",
+        falas: "Como operar no meu máximo potencial?",
+        compra: "Alta performance humana",
+        entrega: "Ajudamos você a desenvolver uma mentalidade vencedora, com a disciplina e a resistência necessárias para atingir níveis extraordinários de realização.",
+        link: "/cursos/nada-pode-me-deter",
+      },
+      {
+        etapa: "legado",
+        produto: "Mentoria Individual",
+        para_quem: "Empresários, líderes, pastores, gestores e executivos.",
+        rotulo_falas: "Se você se pergunta",
+        falas: "Como acelerar os próximos 10 anos da minha vida?",
+        compra: "Estratégia a curto, médio e longo prazo",
+        entrega: "Clareza estratégica para as decisões que vão mudar a sua vida, a sua carreira e o seu legado.",
+        link: "/mentorias/mentoria-individual",
+      },
+      {
+        etapa: "legado",
+        produto: "Mastermind",
+        para_quem: "Quem já venceu os problemas pessoais e os profissionais.",
+        rotulo_falas: "E agora se pergunta",
+        falas: "O que vou construir que vai permanecer depois de mim?",
+        compra: "Legado",
+        entrega: "A capacidade de construir algo muito maior do que você.",
+        link: "/mentorias/mastermind",
+      },
     ],
   },
   como: {
@@ -222,7 +279,7 @@ export const LIVROS_PADRAO = {
   hero: {
     titulo: "Os livros do *Autogoverno*",
     subtitulo:
-      "Três livros, um mesmo caminho: entender por que a vida saiu dos trilhos, retomar o comando e permanecer firme. Lançamento em 2026.",
+      "Quatro livros, um mesmo caminho: entender por que a vida saiu dos trilhos, retomar o comando e permanecer firme. Lançamento em 2026.",
   },
 };
 
@@ -303,22 +360,28 @@ const grupoTitulo = (key: string, label: string): FieldGroup => ({
 export const CURSOS_CAMPOS: FieldGroup[] = [
   grupoAbertura(),
   {
-    key: "escada",
-    label: "Escada das etapas",
-    help: "Uma linha por etapa, na ordem do método, com o produto de cada uma.",
+    key: "niveis",
+    label: "Níveis (por onde começar)",
+    help: "Um nível por produto, na ordem. Aparece na página Cursos e, resumido, na Início.",
     fields: [
       ROTULO,
       { key: "titulo", label: "Título", type: "text" },
+      { key: "texto", label: "Texto", type: "textarea", rows: 2 },
       {
         key: "itens",
-        label: "Degraus",
+        label: "Níveis",
         type: "repeater",
-        itemLabel: "Degrau",
+        itemLabel: "Nível",
         summaryKey: "produto",
         fields: [
           { key: "etapa", label: "Etapa", type: "select", options: ETAPAS, half: true },
           { key: "produto", label: "Produto", type: "text", half: true },
-          { key: "link", label: "Link", type: "text" },
+          { key: "para_quem", label: "Para quem é", type: "textarea", rows: 2 },
+          { key: "rotulo_falas", label: "Rótulo das frases", type: "text", half: true, help: "Ex.: Se você se pergunta" },
+          { key: "falas", label: "Frases (uma por linha)", type: "textarea", rows: 3 },
+          { key: "compra", label: "O que você compra", type: "text", half: true },
+          { key: "link", label: "Link do Saiba mais", type: "text", half: true },
+          { key: "entrega", label: "O que você recebe", type: "textarea", rows: 2 },
         ],
       },
     ],

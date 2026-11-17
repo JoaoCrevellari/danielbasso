@@ -1,17 +1,19 @@
 import type { ItemSemente } from "./tipos";
 
-// Livros do Daniel (textos de 12/11/2026). Sem capa enviada, o site gera a capa tipográfica
-// com o título; editora, páginas e ISBN ficam vazios até ele mandar.
+// Livros do Daniel (textos de 12/11/2026; capas, contracapas e o Ruptura chegaram em 17/11/2026).
+// As capas são a frente das capas completas que ele mandou (public/livros). Páginas e ISBN
+// ficam vazios até ele mandar.
 export const LIVROS: ItemSemente[] = [
   {
     collection: "livro",
     slug: "as-leis-do-autogoverno",
+    cover_url: "/livros/capa-as-leis-do-autogoverno.webp",
     title: "As Leis do Autogoverno",
     subtitle: "Os princípios que dão forma a uma vida",
     excerpt:
       "O fundamento de todo o método: por que algumas vidas se ordenam e outras se desfazem, e o que cabe a você governar.",
     sort_order: 1,
-    body: `Governo é o princípio que dá unidade, direção e ordem a uma vida. Quando ele está fora de você, a vida toma a forma do que está fora: o medo, a culpa, a urgência dos outros.
+    body: `Governo é o princípio que dá unidade, direção e ordem a uma vida. Quando ele está fora de você, a vida toma a forma do que está fora: o medo, a culpa, a urgência dos outros. Quem não governa a si mesmo é governado pelas circunstâncias.
 
 Neste livro, Daniel Basso reúne a tradição clássica da formação humana, de Agostinho à filosofia concreta de Mário Ferreira dos Santos, e a traduz em leis práticas para quem tem casa, trabalho e família para governar.
 
@@ -25,7 +27,7 @@ Neste livro, Daniel Basso reúne a tradição clássica da formação humana, de
       situacao: "em-breve",
       cor: "petroleo",
       ano: "2026",
-      editora: "",
+      editora: "Edições Attos",
       paginas: null,
       isbn: "",
       etapa: "clareza",
@@ -40,15 +42,16 @@ Neste livro, Daniel Basso reúne a tradição clássica da formação humana, de
   {
     collection: "livro",
     slug: "ninguem-vai-fazer-por-voce",
+    cover_url: "/livros/capa-ninguem-vai-fazer-por-voce.webp",
     title: "Ninguém Vai Fazer Por Você",
     subtitle: "Assuma o Controle da Sua Vida Agora",
     excerpt:
       "O livro da retomada: como sair da reação, parar de terceirizar a própria vida e retomar o comando da agenda, do dinheiro e das decisões. Lançamento em 2026.",
     featured: true,
     sort_order: 2,
-    body: `Em algum momento, sem assinar nada, você passou o comando da sua vida para outra pessoa: o chefe, a urgência, o medo, a opinião dos outros. Este livro mostra como isso acontece e como retomar.
+    body: `Em algum momento, sem assinar nada, você passou o comando da sua vida para outra pessoa: o chefe, a urgência, o medo, a opinião dos outros. Você não perdeu o controle. Você entregou, sem perceber.
 
-Não começa com grandes discursos. Começa com uma área, uma decisão pequena, repetida e sustentada. Porque ninguém vai fazer isso por você.
+Autogoverno é a capacidade de responder por si: decidir, agir e corrigir sem esperar que alguém faça por você. Neste livro de entrada, Daniel Basso mostra, de forma direta e prática, como retomar o comando da agenda, do dinheiro e das decisões, uma área de cada vez. E por que esperar é o caminho mais caro.
 
 ## O que você vai encontrar
 
@@ -60,7 +63,7 @@ Não começa com grandes discursos. Começa com uma área, uma decisão pequena,
       situacao: "em-breve",
       cor: "terracota",
       ano: "2026",
-      editora: "",
+      editora: "Edições Attos",
       paginas: null,
       isbn: "",
       etapa: "ordem",
@@ -76,13 +79,19 @@ Não começa com grandes discursos. Começa com uma área, uma decisão pequena,
   {
     collection: "livro",
     slug: "nada-pode-me-deter",
+    cover_url: "/livros/capa-nada-pode-me-deter.webp",
     title: "Nada Pode Me Deter",
-    subtitle: "Firmeza para atravessar as crises sem ser governado por elas",
-    excerpt: "Para quem já se reconstruiu e quer permanecer firme diante das crises.",
+    subtitle: "Como perdi o que eu achava que era e reconstruí minha vida",
+    excerpt:
+      "Uma história real: como Daniel Basso perdeu o cargo, a renda e a própria identidade, e reconstruiu a vida por inteiro.",
     sort_order: 3,
-    body: `Reconstruir é o começo. Permanecer é outra coisa. Este livro é para quem já retomou o comando e agora precisa sustentar o crescimento por anos, sem ser governado pelo medo, pela culpa, pelo passado ou pelas circunstâncias.
+    body: `Filho de família simples, aluno de escola pública em Jundiaí, Daniel Basso começou a empreender cedo e só voltou aos estudos na vida adulta. Construiu escolas, formou professores, liderou instituições. E acreditava que era exatamente isso: o cargo, o papel, o título.
 
-Não é sobre arrogância nem sobre uma vida sem dor. É sobre maturidade, constância e coragem.
+Em setembro de 2024, perdeu posições que levou anos para construir e parte importante da renda da casa. Sem o cargo, descobriu que não sabia mais quem era. Casamento, filhos, amigos, trabalho: tudo esteve por um fio.
+
+Esta é a história de como ele voltou. Não mais ou menos, mas por inteiro. E de como a reconstrução da própria vida deu origem ao Método Autogoverno, que hoje ajuda pessoas, empresas e instituições a retomar o comando.
+
+**O que um homem faz, outro também faz.**
 
 ## O que você vai encontrar
 
@@ -94,7 +103,7 @@ Não é sobre arrogância nem sobre uma vida sem dor. É sobre maturidade, const
       situacao: "em-breve",
       cor: "salvia",
       ano: "2026",
-      editora: "",
+      editora: "Edições Attos",
       paginas: null,
       isbn: "",
       etapa: "excelencia",
@@ -103,7 +112,35 @@ Não é sobre arrogância nem sobre uma vida sem dor. É sobre maturidade, const
       sumario:
         "Crescer sem perder a família, a saúde e a paz\nDisciplina sem empolgação\nAtravessar crises\nUma pessoa reconstruída",
       abertura:
-        "Reconstruir é o começo. Permanecer é outra coisa. Este livro é para quem já retomou o comando e agora precisa sustentar o crescimento por anos.",
+        "Em setembro de 2024, perdeu posições que levou anos para construir e parte importante da renda da casa. Sem o cargo, descobriu que não sabia mais quem era.",
+      lojas: [],
+    },
+  },
+  {
+    collection: "livro",
+    slug: "ruptura",
+    cover_url: "/livros/capa-ruptura.webp",
+    title: "Ruptura",
+    subtitle: "Quebre o personagem. Reconstrua quem você é.",
+    excerpt:
+      "Uma travessia em dez etapas. Não é um livro para quem quer se sentir melhor. É para quem decidiu ser outro.",
+    sort_order: 4,
+    body: `Há um dia em que a vida deixa de sussurrar e começa a gritar. O que você fingia controlar escapa pelas mãos, o chão desaparece e o personagem que você criou para sobreviver já não consegue sustentar o peso.
+
+Neste livro, Daniel Basso conduz o leitor por uma travessia em dez etapas: aceitar a realidade como ela é, enterrar a persona, reencontrar o próprio lugar, lutar, forjar disciplina, construir uma vida que sustente o novo eu, escolher com quem caminhar, acertar as contas com o passado e vigiar a si mesmo. Não é um livro para quem quer se sentir melhor. É para quem decidiu ser outro.
+
+**O que se quebra também pode ser reconstruído.**`,
+    data: {
+      situacao: "em-breve",
+      cor: "terracota",
+      ano: "2026",
+      editora: "Edições Attos",
+      paginas: null,
+      isbn: "",
+      etapa: "clareza",
+      trecho: "A máscara que te salvou é a mesma que hoje te aprisiona.",
+      sumario: "",
+      abertura: "",
       lojas: [],
     },
   },

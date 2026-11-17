@@ -3,6 +3,7 @@ import { CaretRight, Check } from "@phosphor-icons/react";
 import { getCollection, opcaoLabel, type CollectionConfig } from "@/content/collections";
 import type { Field } from "@/content/fields";
 import { lista, repeticao, txt, type ItemConteudo } from "@/lib/conteudo";
+import { VENDA_ATIVA } from "@/lib/site";
 import { Botao } from "./Botao";
 import { CartaoOferta } from "./CartaoOferta";
 import { Faq, type ItemFaq } from "./Faq";
@@ -76,16 +77,19 @@ export function PaginaOferta({
         (x) => x.titulo,
       ),
     }))
-    .filter((r) => r.itens.length);
+    .filter((r) => r.itens.length)
+    // Sem venda, os módulos ainda provisórios saem. Fica só o que tem rótulo próprio,
+    // como as "Áreas avaliadas" do Diagnóstico Completo, que já são o conteúdo final.
+    .filter((r) => VENDA_ATIVA || r.f.key !== "modulos" || !!txt(item, "rotulo_modulos"));
   const faq = repeticao<ItemFaq>(item, "faq").filter((f) => f.pergunta);
-  const investimento = txt(item, "investimento");
+  const investimento = VENDA_ATIVA ? txt(item, "investimento") : "";
   const corporativo = item.collection === "treinamento";
   const rotuloInteresse = col.interesse ?? "Quero saber mais";
   const tituloInteresse = txt(item, "interesse_titulo") || rotuloInteresse;
   const textoInteresse =
     txt(item, "interesse_texto") ||
     "Deixe seu contato. Você recebe as datas, as condições e a resposta para qualquer dúvida antes de decidir.";
-  const pagamento = txt(item, "link_pagamento");
+  const pagamento = VENDA_ATIVA ? txt(item, "link_pagamento") : "";
   const rotuloModulos = txt(item, "rotulo_modulos");
   // Textos longos (com várias partes): a primeira parte fica à vista e o resto abre em
   // "Continuar lendo", para a seção caber numa tela também no desktop.
