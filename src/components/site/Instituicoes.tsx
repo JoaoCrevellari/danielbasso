@@ -86,12 +86,18 @@ export function CartoesInstituicoes({
           key={inst.nome}
           className="group flex flex-col rounded-[2px] border border-linha bg-papel p-6 transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-linha-forte md:p-7"
         >
-          <span className="type-numeral text-[1.6rem] leading-none text-ouro-texto">
-            {String(n + 1).padStart(2, "0")}
-          </span>
-          <Marca inst={inst} className="mt-4" />
+          {/* Número e logo (ou nome) na mesma linha, com altura fixa: todos os cartões alinham. */}
+          <div className="flex h-14 items-center gap-5">
+            <span className="type-numeral shrink-0 text-[1.6rem] leading-none text-ouro-texto">
+              {String(n + 1).padStart(2, "0")}
+            </span>
+            <span aria-hidden className="h-8 w-px shrink-0 bg-linha" />
+            <Marca inst={inst} className="min-w-0" />
+          </div>
           {inst.escopo && (
-            <p className="mt-3 text-[0.95rem] leading-relaxed text-cinza">{inst.escopo}</p>
+            <p className="mt-5 border-t border-linha pt-4 text-[0.95rem] leading-relaxed text-cinza">
+              {inst.escopo}
+            </p>
           )}
         </li>
       ))}
