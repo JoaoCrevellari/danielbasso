@@ -9,7 +9,11 @@ export const CONFIG_PADRAO = {
   conheca: {
     titulo: "Conheça também",
     itens: [
-      { nome: "Pr. Daniel Basso", link: "https://prdanielbasso.com.br", nota: "" },
+      {
+        nome: "Pr. Daniel Basso",
+        link: "https://prdanielbasso.com.br",
+        nota: "em desenvolvimento",
+      },
       {
         nome: "Instituto Via Educare",
         link: "https://viaeducare.com.br",
