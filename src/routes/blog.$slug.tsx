@@ -132,12 +132,12 @@ function Post() {
             <Compartilhar titulo={post.title} url={url} />
             <div className="flex items-center gap-4">
               <img
-                src="/exemplo/daniel-retrato.jpg"
+                src="/fotos/daniel-retrato.webp"
                 alt=""
                 width={56}
                 height={56}
                 loading="lazy"
-                className="size-14 rounded-full object-cover object-[50%_20%]"
+                className="size-14 rounded-full object-cover object-[38%_30%]"
               />
               <div>
                 <p className="font-serif text-lg text-petroleo">Daniel Basso</p>

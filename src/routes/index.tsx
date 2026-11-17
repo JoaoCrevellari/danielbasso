@@ -100,7 +100,7 @@ function Home() {
               larguraMax={900}
               sizes="(min-width: 768px) 33vw, 90vw"
               className="relative aspect-[16/10] rounded-[2px] anima-imagem md:aspect-[4/5]"
-              imgClassName="object-[50%_22%]"
+              imgClassName="object-[40%_30%] md:object-[50%_22%]"
             />
           </div>
         </div>
@@ -200,9 +200,9 @@ function Home() {
           <div className="col-span-12 md:col-span-5" data-revelar="imagem">
             <Imagem
               src={home.diagnostico.imagem}
-              alt="Daniel Basso em sua biblioteca"
+              alt="Daniel Basso em uma palestra"
               className="aspect-[16/10] rounded-[2px] md:aspect-[4/5] md:max-h-[min(30rem,calc(100dvh-var(--header-h)-7rem))] md:w-full"
-              imgClassName="object-[50%_22%]"
+              imgClassName="object-[50%_6%]"
               sizes="(min-width: 768px) 40vw, 100vw"
               larguraMax={1000}
             />

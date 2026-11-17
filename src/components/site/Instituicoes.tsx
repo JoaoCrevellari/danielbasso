@@ -13,8 +13,9 @@ function Marca({ inst, className }: { inst: Instituicao; className?: string }) {
       <Imagem
         src={inst.logo}
         alt={inst.nome}
-        className={cn("h-12 w-full max-w-[11rem] bg-transparent", className)}
-        imgClassName="object-contain object-left"
+        className={cn("h-12 w-full max-w-[11rem] bg-transparent md:h-14", className)}
+        // Em tons de cinza para as logos terem o mesmo peso; a cor volta no hover (desktop).
+        imgClassName="object-contain object-left grayscale opacity-80 transition-[filter,opacity] duration-300 group-hover:grayscale-0 group-hover:opacity-100"
         sizes="11rem"
         larguraMax={480}
       />
@@ -44,13 +45,17 @@ export function FaixaInstituicoes({ itens }: { itens: Instituicao[] }) {
           key={inst.nome}
           className="group flex min-h-[6.5rem] items-center border-r border-b border-linha px-4 py-5 transition-colors duration-300 hover:bg-papel md:min-h-[7.5rem] md:px-7"
         >
-          <span className="flex items-start gap-3">
-            <span
-              aria-hidden
-              className="mt-[0.7rem] h-px w-4 shrink-0 bg-ouro transition-[width] duration-300 group-hover:w-6"
-            />
-            <Marca inst={inst} className="text-[1.02rem] md:text-[1.2rem]" />
-          </span>
+          {inst.logo ? (
+            <Marca inst={inst} />
+          ) : (
+            <span className="flex items-start gap-3">
+              <span
+                aria-hidden
+                className="mt-[0.7rem] h-px w-4 shrink-0 bg-ouro transition-[width] duration-300 group-hover:w-6"
+              />
+              <Marca inst={inst} className="text-[1.02rem] md:text-[1.2rem]" />
+            </span>
+          )}
         </li>
       ))}
     </ul>
@@ -79,7 +84,7 @@ export function CartoesInstituicoes({
       {lista.map((inst, n) => (
         <li
           key={inst.nome}
-          className="flex flex-col rounded-[2px] border border-linha bg-papel p-6 transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-linha-forte md:p-7"
+          className="group flex flex-col rounded-[2px] border border-linha bg-papel p-6 transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-linha-forte md:p-7"
         >
           <span className="type-numeral text-[1.6rem] leading-none text-ouro-texto">
             {String(n + 1).padStart(2, "0")}
