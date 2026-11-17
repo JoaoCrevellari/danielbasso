@@ -84,7 +84,7 @@ export function CartoesInstituicoes({
       {lista.map((inst, n) => (
         <li
           key={inst.nome}
-          className="group flex flex-col rounded-[2px] border border-linha bg-papel p-6 transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-linha-forte md:p-7"
+          className="group flex flex-col rounded-[2px] border border-linha bg-papel p-6 transition-colors duration-300 hover:border-petroleo/50 md:p-7"
         >
           {/* Número e logo (ou nome) na mesma linha, com altura fixa: todos os cartões alinham. */}
           <div className="flex h-14 items-center gap-5">
