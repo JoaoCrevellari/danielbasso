@@ -66,7 +66,7 @@ function QuemSou() {
             />
             <Imagem
               src={p.hero.imagem}
-              alt="Daniel Basso e a esposa em retrato de estúdio"
+              alt="Daniel Basso"
               prioridade
               larguraMax={900}
               className="relative aspect-[16/11] rounded-[2px] anima-imagem md:aspect-[4/5]"
@@ -78,7 +78,7 @@ function QuemSou() {
       </section>
 
       {/* ── História ─────────────────────────────────────────────────────── */}
-      <Secao>
+      <Secao id="trajetoria">
         <div className="grade gap-y-6">
           {/* No desktop, o título fica parado enquanto o texto rola ao lado. */}
           <div className="col-span-12 lg:col-span-4">
@@ -87,6 +87,16 @@ function QuemSou() {
               <Titulo as="h2" className="type-h1 text-petroleo">
                 {p.historia.titulo}
               </Titulo>
+              {p.historia.imagem && (
+                <Imagem
+                  src={p.historia.imagem}
+                  alt={p.historia.legenda || "Daniel Basso"}
+                  className="mt-8 aspect-[4/5] w-full max-w-[22rem] rounded-[2px] max-lg:max-w-[18rem]"
+                  imgClassName="object-[50%_25%]"
+                  sizes="(min-width: 1024px) 22rem, 18rem"
+                  larguraMax={700}
+                />
+              )}
             </div>
           </div>
           <div className="col-span-12 lg:col-span-7 lg:col-start-6" data-revelar>

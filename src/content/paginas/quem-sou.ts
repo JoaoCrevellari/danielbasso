@@ -6,10 +6,12 @@ export const QUEM_SOU_PADRAO = {
     titulo: "Daniel Basso",
     subtitulo:
       "Professor, pesquisador, escritor e mentor. Eu ajudo pessoas a retomar o comando da própria vida. Não porque eu sempre tive o meu, mas porque perdi e precisei aprender a voltar.",
-    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-retrato-casal-pb-0jfxr3-w485.webp",
+    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-retrato-blazer-fachada-5d74s0-w1066.webp",
   },
   historia: {
     titulo: "Uma trajetória marcada por *recomeços*",
+    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-retrato-casal-pb-0jfxr3-w485.webp",
+    legenda: "Daniel Basso e a esposa em retrato de estúdio",
     texto: `Nasci em Jundiaí, em 1978, filho de família simples, aluno de escola pública. Comecei a empreender cedo e só voltei aos estudos na vida adulta. Desde então, nunca mais parei de estudar e de ensinar: sou graduado em Teologia, História e Filosofia, mestre pela Universidade Presbiteriana Mackenzie e professor no ensino superior, no Brasil e nos Estados Unidos, desde 2013.
 
 Implantei escolas, formei professores e gestores, ajudei a plantar igrejas, fui diretor escolar e pedagógico. Também empreendi longe da sala de aula: distribuição de revistas, telemarketing, frutas congeladas, terceirização de serviços bancários, lavanderia industrial. Eu era o pastor, o diretor, o professor. E achava que era isso que eu era.
@@ -183,6 +185,14 @@ export const QUEM_SOU_CAMPOS: FieldGroup[] = [
     label: "História",
     fields: [
       { key: "titulo", label: "Título", type: "text" },
+      {
+        key: "imagem",
+        label: "Foto ao lado da história (opcional)",
+        type: "image",
+        aspect: "4:5",
+        help: "No computador, fica embaixo do título e acompanha a leitura. No celular, aparece entre o título e o texto.",
+      },
+      { key: "legenda", label: "Descrição da foto", type: "text" },
       { key: "texto", label: "Texto", type: "markdown" },
       {
         key: "completo",
