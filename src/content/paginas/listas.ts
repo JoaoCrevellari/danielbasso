@@ -231,6 +231,11 @@ export const TREINAMENTOS_PADRAO = {
         logo: "",
       },
       {
+        nome: "Vinde School",
+        escopo: "Implantação da unidade e treinamento de todo o corpo docente",
+        logo: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/logo-vinde-school-khaud2-w575.webp",
+      },
+      {
         nome: "Kubrusly Basso Group USA",
         escopo: "Treinamento de gestores e equipes de campo",
         logo: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/logo-kubrusly-basso-mkqyb9-w499.webp",
