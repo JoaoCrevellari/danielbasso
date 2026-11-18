@@ -2,6 +2,7 @@
  * Seletor da biblioteca de mídia (modal): buscar, enviar e escolher uma imagem.
  */
 import { Check, Images, UploadSimple } from "@phosphor-icons/react";
+import { urlMiniatura } from "@/lib/imagens";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useRef, useState } from "react";
 
@@ -123,11 +124,14 @@ export function BibliotecaMidia({
                     )}
                   >
                     <img
-                      src={a.url}
+                      src={urlMiniatura(a.url, 480)}
                       alt=""
                       loading="lazy"
                       decoding="async"
-                      className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      // Logos e SVG aparecem inteiros; fotos preenchem o quadro.
+                      className={
+                        /logo|.svg$/i.test(a.nome) ? "size-full object-contain p-4" : "size-full object-cover"
+                      }
                     />
                     {marcado && (
                       <span className="absolute top-1.5 right-1.5 inline-flex size-6 items-center justify-center rounded-full bg-petroleo text-gelo">

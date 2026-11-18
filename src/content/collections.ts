@@ -275,7 +275,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
   treinamento: {
     key: "treinamento",
     singular: "Treinamento",
-    plural: "Treinamentos corporativos",
+    plural: "Treinamentos",
     genero: "o",
     path: "/treinamentos",
     descricao: "Palestras, treinamentos e programas para instituições e equipes. Aparecem na página Instituições do site.",

@@ -7,7 +7,7 @@ export const LIVROS: ItemSemente[] = [
   {
     collection: "livro",
     slug: "as-leis-do-autogoverno",
-    cover_url: "/livros/capa-as-leis-do-autogoverno.webp",
+    cover_url: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/capa-as-leis-do-autogoverno-b1xu1n-w1200.webp",
     title: "As Leis do Autogoverno",
     subtitle: "Os princípios que dão forma a uma vida",
     excerpt:
@@ -42,7 +42,7 @@ Neste livro, Daniel Basso reúne a tradição clássica da formação humana, de
   {
     collection: "livro",
     slug: "ninguem-vai-fazer-por-voce",
-    cover_url: "/livros/capa-ninguem-vai-fazer-por-voce.webp",
+    cover_url: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/capa-ninguem-vai-fazer-por-voce-q4t3bj-w1200.webp",
     title: "Ninguém Vai Fazer Por Você",
     subtitle: "Assuma o Controle da Sua Vida Agora",
     excerpt:
@@ -79,7 +79,7 @@ Autogoverno é a capacidade de responder por si: decidir, agir e corrigir sem es
   {
     collection: "livro",
     slug: "nada-pode-me-deter",
-    cover_url: "/livros/capa-nada-pode-me-deter.webp",
+    cover_url: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/capa-nada-pode-me-deter-ggtgn3-w1200.webp",
     title: "Nada Pode Me Deter",
     subtitle: "Como perdi o que eu achava que era e reconstruí minha vida",
     excerpt:
@@ -119,7 +119,7 @@ Esta é a história de como ele voltou. Não mais ou menos, mas por inteiro. E d
   {
     collection: "livro",
     slug: "ruptura",
-    cover_url: "/livros/capa-ruptura.webp",
+    cover_url: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/capa-ruptura-qgm5cp-w1200.webp",
     title: "Ruptura",
     subtitle: "Quebre o personagem. Reconstrua quem você é.",
     excerpt:

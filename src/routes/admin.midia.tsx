@@ -3,6 +3,7 @@
  * copiar URL, abrir e excluir. Imagens são otimizadas para WebP no navegador.
  */
 import { createFileRoute } from "@tanstack/react-router";
+import { urlMiniatura } from "@/lib/imagens";
 import {
   ArrowSquareOut,
   CheckCircle,
@@ -383,11 +384,14 @@ function MidiaPagina() {
                 >
                   {a.imagem ? (
                     <img
-                      src={a.url}
+                      src={urlMiniatura(a.url, 480)}
                       alt=""
                       loading="lazy"
                       decoding="async"
-                      className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      // Logos e SVG aparecem inteiros; fotos preenchem o quadro.
+                      className={
+                        /logo|.svg$/i.test(a.nome) ? "size-full object-contain p-4" : "size-full object-cover"
+                      }
                     />
                   ) : (
                     <FilePdf aria-hidden className="size-10 text-terracota-texto" />

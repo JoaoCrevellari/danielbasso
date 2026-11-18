@@ -132,7 +132,7 @@ function Post() {
             <Compartilhar titulo={post.title} url={url} />
             <div className="flex items-center gap-4">
               <img
-                src="/fotos/daniel-retrato.webp"
+                src="https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-retrato-e2why8-w1400.webp"
                 alt=""
                 width={56}
                 height={56}

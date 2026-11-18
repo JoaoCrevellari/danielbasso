@@ -212,18 +212,18 @@ export const TREINAMENTOS_PADRAO = {
         nome: "Prefeitura do Município de Jundiaí",
         escopo:
           "Jornada de capacitação de 12 encontros para a Secretaria de Esporte e Lazer; palestras de 2025",
-        logo: "/instituicoes/jundiai.webp",
+        logo: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/logo-prefeitura-de-jundiai-d7qi42-w599.webp",
       },
       {
         nome: "Prefeitura do Município de Vinhedo",
         escopo: "Trabalho com creches municipais e terceirizadas",
-        logo: "/instituicoes/vinhedo.webp",
+        logo: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/logo-prefeitura-de-vinhedo-gwq0b2-w433.webp",
       },
       {
         nome: "Colégio Cristão Attos",
         escopo:
           "Implantação de unidades, treinamento de professores, acompanhamento da coordenação e mentoria de diretores e gestores",
-        logo: "/instituicoes/colegio-attos.webp",
+        logo: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/logo-colegio-attos-moaiau-w277.webp",
       },
       {
         nome: "Attos Educacional",
@@ -233,7 +233,7 @@ export const TREINAMENTOS_PADRAO = {
       {
         nome: "Kubrusly Basso Group USA",
         escopo: "Treinamento de gestores e equipes de campo",
-        logo: "/instituicoes/kubrusly-basso.webp",
+        logo: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/logo-kubrusly-basso-mkqyb9-w499.webp",
       },
     ],
   },

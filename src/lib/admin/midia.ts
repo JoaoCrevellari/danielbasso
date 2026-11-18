@@ -10,6 +10,7 @@
  */
 import { supabase } from "@/integrations/supabase/client";
 import { LARGURAS_MIDIA, ehVariante, variantesDe } from "@/lib/imagens";
+import { PAGINAS, type PaginaConfig } from "@/content/paginas";
 import { slugificar } from "./formato";
 
 export const BUCKET = "media";
@@ -251,9 +252,20 @@ export type UsoMidia =
   | { tipo: "conteudo"; colecao: string; id: string; titulo: string }
   | { tipo: "pagina"; chave: string; titulo: string };
 
-/** Onde o arquivo aparece no site (itens de conteúdo e textos das páginas). */
+/**
+ * Onde o arquivo aparece no site: itens de conteúdo e textos das páginas salvos no banco
+ * (RPC) e também os textos padrão das páginas, que ficam no código (src/content/paginas)
+ * e valem enquanto a página não é editada no painel.
+ */
 export async function usoDaMidia(caminho: string): Promise<UsoMidia[]> {
   const { data, error } = await supabase.rpc("midia_em_uso", { p_caminho: caminho });
   if (error) throw new Error("Não foi possível conferir onde o arquivo é usado.");
-  return Array.isArray(data) ? (data as UsoMidia[]) : [];
+  const usos: UsoMidia[] = Array.isArray(data) ? (data as UsoMidia[]) : [];
+  for (const p of Object.values(PAGINAS) as PaginaConfig[]) {
+    const jaListada = usos.some((u) => u.tipo === "pagina" && u.chave === p.key);
+    if (!jaListada && JSON.stringify(p.padrao).includes(caminho)) {
+      usos.push({ tipo: "pagina", chave: p.key, titulo: p.titulo });
+    }
+  }
+  return usos;
 }

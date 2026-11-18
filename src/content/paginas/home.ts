@@ -11,7 +11,7 @@ export const HOME_PADRAO = {
       "Aos poucos, sem perceber, você deixou que o chefe, as urgências, o medo e a opinião dos outros passassem a decidir por você. Eu ajudo pessoas comuns a retomar o comando da própria vida, colocar tudo em ordem e voltar a avançar.",
     cta_primario: { rotulo: "Fazer o diagnóstico", link: "/diagnostico" },
     cta_secundario: { rotulo: "Conhecer o método", link: "/metodo" },
-    imagem: "/fotos/daniel-retrato.webp",
+    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-retrato-e2why8-w1400.webp",
   },
   manifesto: {
     rotulo: "Por que este trabalho",
@@ -61,7 +61,7 @@ export const HOME_PADRAO = {
       "Receba a indicação do próximo passo",
     ],
     cta: { rotulo: "Começar o diagnóstico", link: "/diagnostico" },
-    imagem: "/fotos/daniel-palestra.webp",
+    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-palestra-zxbyrs-w1080.webp",
   },
   caminhos: {
     rotulo: "Como trabalhar comigo",
