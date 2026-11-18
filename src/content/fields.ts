@@ -21,7 +21,12 @@ export type Field =
   | (Base & { type: "text"; placeholder?: string; max?: number })
   | (Base & { type: "textarea"; rows?: number; max?: number })
   | (Base & { type: "markdown" })
-  | (Base & { type: "image"; aspect?: string })
+  | (Base & {
+      type: "image";
+      aspect?: string;
+      /** Mostra a imagem inteira na prévia (logos), sem cortar como foto. */
+      inteira?: boolean;
+    })
   | (Base & { type: "url" })
   | (Base & { type: "number"; min?: number; max?: number })
   | (Base & { type: "select"; options: Option[] })

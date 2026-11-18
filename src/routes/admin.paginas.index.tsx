@@ -31,7 +31,7 @@ function ListaPaginas() {
     <>
       <TopoPagina
         titulo="Páginas"
-        descricao="Textos e imagens das páginas fixas do site. Enquanto uma página não for editada, o site mostra o texto de exemplo."
+        descricao="Textos e imagens das páginas fixas do site. Enquanto uma página não for editada aqui, o site mostra o texto original, já com a sua revisão."
       />
 
       {q.isError && (
@@ -70,7 +70,7 @@ function ListaPaginas() {
                         Editada {relativo(salva.updated_at)}
                       </span>
                     ) : (
-                      <Selo tom="ouro">Texto de exemplo</Selo>
+                      <Selo>Texto original</Selo>
                     )}
                   </span>
                   <ArrowRight

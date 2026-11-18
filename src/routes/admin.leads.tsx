@@ -95,6 +95,18 @@ export const Route = createFileRoute("/admin/leads")({
 });
 
 const POR_PAGINA = 100;
+
+/**
+ * Assunto do lead, igual em todas as telas. No diagnóstico vem da etapa foco (com o nome
+ * atual da etapa), porque o assunto gravado em leads antigos usa os nomes anteriores.
+ */
+function assuntoLead(l: Lead): string {
+  if (l.kind === "diagnostico") {
+    return l.data.foco ? `Foco: ${nomeEtapa(l.data.foco) ?? l.data.foco}` : "";
+  }
+  return l.subject ?? l.item?.title ?? l.message ?? "";
+}
+
 type PaginaLeads = { leads: Lead[]; total: number };
 
 function LeadsPagina() {
@@ -322,7 +334,7 @@ function LeadsPagina() {
                   <div className="mt-2 flex items-center justify-between gap-3 text-xs text-cinza">
                     <span className="truncate">
                       {rotuloTipo(l.kind)}
-                      {l.subject || l.item?.title ? `: ${l.subject ?? l.item?.title}` : ""}
+                      {assuntoLead(l) ? ` · ${assuntoLead(l)}` : ""}
                     </span>
                     <span className="shrink-0">{relativo(l.created_at)}</span>
                   </div>
@@ -380,11 +392,7 @@ function LeadsPagina() {
                       {rotuloTipo(l.kind)}
                     </td>
                     <td className="hidden max-w-0 truncate px-3 py-3 text-cinza lg:table-cell">
-                      {l.kind === "diagnostico"
-                        ? l.data.foco
-                          ? `Foco: ${nomeEtapa(l.data.foco) ?? l.data.foco}`
-                          : ""
-                        : (l.subject ?? l.item?.title ?? l.message ?? "")}
+                      {assuntoLead(l)}
                     </td>
                     <td className="px-3 py-3">
                       <Selo tom={TOM_STATUS[l.status]} ponto={l.status === "novo"}>
@@ -629,7 +637,7 @@ function DetalheLead({ lead, onFechar }: { lead: Lead; onFechar: () => void }) {
           </Linha>
           <Linha termo="Telefone">{lead.phone}</Linha>
           <Linha termo="Empresa">{lead.company}</Linha>
-          <Linha termo="Assunto">{lead.subject}</Linha>
+          <Linha termo="Assunto">{lead.kind === "diagnostico" ? assuntoLead(lead) : lead.subject}</Linha>
           <Linha termo="Interesse em">
             {lead.item && (
               <span>

@@ -126,7 +126,7 @@ export function TopoPagina({
           </h1>
           {descricao && <p className="mt-2 max-w-2xl text-[0.9375rem] text-cinza">{descricao}</p>}
         </div>
-        {acoes && <div className="flex flex-wrap items-center gap-2">{acoes}</div>}
+        {acoes && <div className="flex flex-wrap items-center gap-2 md:justify-end xl:shrink-0 xl:flex-nowrap">{acoes}</div>}
       </div>
     </header>
   );

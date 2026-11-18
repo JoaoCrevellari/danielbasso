@@ -329,7 +329,7 @@ export function GraficoDiario({
           )}
           <p className="sr-only" aria-live="polite">
             {atual
-              ? `${diaLongo(atual.day)}: ${numero(atual.visitors)} visitantes, ${numero(atual.pageviews)} páginas vistas.`
+              ? `${diaLongo(atual.day)}: ${numero(atual.visitors)} ${atual.visitors === 1 ? "visitante" : "visitantes"}, ${numero(atual.pageviews)} páginas vistas.`
               : ""}
           </p>
         </div>

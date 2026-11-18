@@ -8,7 +8,14 @@
  * Nova coleção = uma entrada aqui (e, se tiver página pública, as rotas). O painel
  * passa a listá-la e editá-la sozinho.
  */
+import { VENDA_ATIVA } from "@/lib/site";
+
 import { ETAPAS, type Field, type Option } from "./fields";
+
+/** Enquanto as vendas não começam, o site não mostra preço nem pagamento: o painel avisa. */
+const AVISO_SEM_VENDA = VENDA_ATIVA
+  ? undefined
+  : "Fica guardado, mas não aparece no site por enquanto: as vendas ainda não começaram.";
 
 export type BaseColumn = "subtitle" | "excerpt" | "body" | "cover_url";
 
@@ -152,12 +159,15 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
         type: "text",
         placeholder: "Sob consulta",
         half: true,
+        help: AVISO_SEM_VENDA,
       },
       {
         key: "link_pagamento",
         label: "Link de pagamento",
         type: "url",
-        help: "Quando preenchido, o botão principal leva direto ao pagamento (Hotmart, Kiwify, Eduzz…) no lugar da lista de interesse.",
+        help: VENDA_ATIVA
+          ? "Quando preenchido, o botão principal leva direto ao pagamento (Hotmart, Kiwify, Eduzz…) no lugar da lista de interesse."
+          : "Fica guardado, mas não aparece no site por enquanto: as vendas ainda não começaram. Quando começarem, o botão principal leva direto a este link.",
       },
       { key: "para_quem", label: "Para quem é", type: "list", itemLabel: "Perfil" },
       { key: "resultados", label: "O que você leva", type: "list", itemLabel: "Resultado" },
@@ -172,6 +182,9 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
         key: "modulos",
         label: "Módulos",
         type: "repeater",
+        help: VENDA_ATIVA
+          ? undefined
+          : "Enquanto as vendas não começam, os módulos só aparecem no site se o título da seção acima estiver preenchido.",
         itemLabel: "Módulo",
         summaryKey: "titulo",
         fields: [
@@ -240,6 +253,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
         type: "text",
         placeholder: "Sob consulta",
         half: true,
+        help: AVISO_SEM_VENDA,
       },
       { key: "para_quem", label: "Para quem é", type: "list", itemLabel: "Perfil" },
       {
@@ -264,7 +278,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
     plural: "Treinamentos corporativos",
     genero: "o",
     path: "/treinamentos",
-    descricao: "Palestras, treinamentos e programas para instituições e equipes.",
+    descricao: "Palestras, treinamentos e programas para instituições e equipes. Aparecem na página Instituições do site.",
     titleLabel: "Nome do treinamento",
     columns: {
       subtitle: { label: "Frase de apoio" },
@@ -316,6 +330,7 @@ export const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
         type: "text",
         placeholder: "Sob consulta",
         half: true,
+        help: AVISO_SEM_VENDA,
       },
       { key: "objetivos", label: "Objetivos", type: "list", itemLabel: "Objetivo" },
       {

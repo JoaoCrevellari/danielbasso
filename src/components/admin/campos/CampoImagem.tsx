@@ -26,12 +26,15 @@ export function CampoImagem({
   valor,
   onChange,
   aspecto,
+  inteira,
   erro,
 }: {
   id: string;
   valor: string;
   onChange: (v: string) => void;
   aspecto?: string;
+  /** Logos: a prévia mostra a imagem inteira, sem cortar. */
+  inteira?: boolean;
   erro?: string;
 }) {
   const [enviando, setEnviando] = useState(false);
@@ -106,7 +109,7 @@ export function CampoImagem({
           <img
             src={valor}
             alt="Prévia da imagem escolhida"
-            className="size-full object-cover"
+            className={cn("size-full", inteira ? "object-contain p-4" : "object-cover")}
             onError={() => setQuebrada(true)}
           />
         ) : (

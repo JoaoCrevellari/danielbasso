@@ -144,7 +144,8 @@ function DiagnosticoPagina() {
                     destaque={
                       ETAPAS.map((e) => ({ k: e.value, v: d.medias[e.value] }))
                         .filter((x) => typeof x.v === "number")
-                        .sort((a, b) => (a.v as number) - (b.v as number))[0]?.k ?? null
+                        // A etapa foco é a de MAIOR média (mesma regra do site, em /diagnostico).
+                        .sort((a, b) => (b.v as number) - (a.v as number))[0]?.k ?? null
                     }
                     itens={ETAPAS.map((e) => ({
                       chave: e.value,

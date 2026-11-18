@@ -192,26 +192,26 @@ function Editor({
     const ok = await confirmar({
       titulo: `Restaurar "${g.label}"?`,
       descricao:
-        "Os campos desta seção voltam para o texto de exemplo. A mudança só vai para o site depois de salvar.",
+        "Os campos desta seção voltam para o texto original do site. A mudança só vai para o site depois de salvar.",
       confirmar: "Restaurar",
     });
     if (!ok) return;
     setValores((v) => ({ ...v, [g.key]: clonar((pagina.padrao as Values)[g.key]) }));
-    toast.info("Texto de exemplo restaurado. Salve para publicar.");
+    toast.info("Texto original restaurado. Salve para publicar.");
   }
 
   async function restaurarTudo() {
     const ok = await confirmar({
       titulo: "Restaurar a página inteira?",
       descricao:
-        "Todas as seções voltam para o texto de exemplo. A mudança só vai para o site depois de salvar.",
+        "Todas as seções voltam para o texto original do site. A mudança só vai para o site depois de salvar.",
       confirmar: "Restaurar tudo",
       perigo: true,
     });
     if (!ok) return;
     setValores(clonar(pagina.padrao) as Values);
     setErros({});
-    toast.info("Página restaurada para o texto de exemplo. Salve para publicar.");
+    toast.info("Página restaurada para o texto original. Salve para publicar.");
   }
 
   const alternar = (k: string) =>
@@ -260,7 +260,7 @@ function Editor({
                 ? "Alterações não salvas"
                 : salvoEm
                   ? `Salvo ${relativo(salvoEm) === "agora" ? "agora" : `às ${hora(salvoEm)}`}`
-                  : "Usando texto de exemplo"}
+                  : "Usando o texto original"}
           </span>
           {pagina.path && (
             <a
@@ -407,7 +407,7 @@ function Editor({
                           onClick={() => restaurarGrupo(g)}
                         >
                           <ArrowCounterClockwise aria-hidden className="size-4" />
-                          Restaurar texto de exemplo desta seção
+                          Restaurar o texto original desta seção
                         </button>
                       </div>
                     </div>

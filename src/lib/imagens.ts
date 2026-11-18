@@ -42,3 +42,15 @@ export function srcSetMidia(url: string, larguraMax: number) {
     srcSet: [...menores.map((v) => `${v.caminho} ${v.largura}w`), `${url} ${original}w`].join(", "),
   };
 }
+
+/**
+ * Endereço leve para miniaturas do painel: a menor versão gerada no envio (fotos da Mídia)
+ * ou o Unsplash já reduzido. Sem isso, a lista baixava a foto original (até 6000 px).
+ */
+export function urlMiniatura(url: string, largura = 160) {
+  if (url.includes("images.unsplash.com")) {
+    return `${url.split("?")[0]}?w=${largura}&q=60&auto=format&fit=crop`;
+  }
+  const menor = variantesDe(url)[0];
+  return menor ? menor.caminho : url;
+}

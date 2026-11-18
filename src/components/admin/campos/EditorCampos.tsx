@@ -251,6 +251,7 @@ function Campo({
             valor={texto(valor)}
             onChange={onChange}
             aspecto={f.aspect}
+            inteira={f.inteira}
             erro={erro}
           />
         </Moldura>

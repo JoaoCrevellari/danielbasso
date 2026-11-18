@@ -62,7 +62,7 @@ export const CONFIG_CAMPOS: FieldGroup[] = [
   {
     key: "conheca",
     label: "Conheça também (rodapé)",
-    help: "Links para os outros projetos do Daniel. Pedido do Daniel em 12/11/2026. Lista vazia = a linha some.",
+    help: "Links para os seus outros projetos. Com a lista vazia, a linha some do rodapé.",
     fields: [
       { key: "titulo", label: "Título", type: "text" },
       {

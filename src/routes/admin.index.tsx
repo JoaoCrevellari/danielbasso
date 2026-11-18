@@ -37,6 +37,7 @@ import {
   porcentagem,
   relativo,
 } from "@/lib/admin/formato";
+import { nomeEtapa } from "@/content/fields";
 import { rotuloDispositivo, rotuloStatus, rotuloTipo } from "@/lib/admin/rotulos";
 
 export const Route = createFileRoute("/admin/")({
@@ -198,7 +199,9 @@ function VisaoGeral() {
                     rotulo: <span className="font-mono text-[0.8125rem]">{p.label}</span>,
                     titulo: p.label,
                     valor: p.value,
-                    detalhe: p.visitors ? `${numero(p.visitors)} visitantes` : undefined,
+                    detalhe: p.visitors
+                      ? `${numero(p.visitors)} ${p.visitors === 1 ? "visitante" : "visitantes"}`
+                      : undefined,
                   }))}
                 />
               )}
@@ -320,7 +323,13 @@ function VisaoGeral() {
                             <p className="truncate text-sm font-medium text-grafite">{l.name}</p>
                             <p className="truncate text-xs text-cinza">
                               {rotuloTipo(l.kind)}
-                              {l.subject ? `: ${l.subject}` : l.company ? `, ${l.company}` : ""}
+                              {l.kind === "diagnostico" && l.data?.foco
+                                ? ` · Foco: ${nomeEtapa(l.data.foco) ?? l.data.foco}`
+                                : l.subject
+                                  ? ` · ${l.subject}`
+                                  : l.company
+                                    ? ` · ${l.company}`
+                                    : ""}
                             </p>
                           </div>
                           {l.status === "novo" && (

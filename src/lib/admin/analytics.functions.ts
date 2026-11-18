@@ -36,6 +36,8 @@ export type LeadResumo = {
   subject: string | null;
   status: string;
   created_at: string;
+  /** Respostas do formulário; no diagnóstico traz a etapa foco. */
+  data: { foco?: string } | null;
 };
 
 export type VisaoGeral = {
@@ -114,7 +116,7 @@ export const visaoGeralFn = createServerFn({ method: "GET" })
       }),
       context.supabase
         .from("leads")
-        .select("id, kind, name, email, company, subject, status, created_at")
+        .select("id, kind, name, email, company, subject, status, created_at, data")
         .order("created_at", { ascending: false })
         .limit(5),
     ]);
@@ -127,6 +129,6 @@ export const visaoGeralFn = createServerFn({ method: "GET" })
       anterior: normalizar(anterior.data),
       de: de.toISOString(),
       ate: agora.toISOString(),
-      leadsRecentes: recentes.data ?? [],
+      leadsRecentes: (recentes.data ?? []) as LeadResumo[],
     };
   });

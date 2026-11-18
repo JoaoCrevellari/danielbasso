@@ -415,7 +415,14 @@ export const TREINAMENTOS_CAMPOS: FieldGroup[] = [
         fields: [
           { key: "nome", label: "Nome", type: "text", required: true },
           { key: "escopo", label: "Escopo do trabalho", type: "textarea", rows: 2 },
-          { key: "logo", label: "Logo (opcional)", type: "image" },
+          {
+            key: "logo",
+            label: "Logo (opcional)",
+            type: "image",
+            aspect: "3:1",
+            inteira: true,
+            help: "De preferência PNG ou SVG com fundo transparente. No site, a logo aparece em tons de cinza e ganha cor quando o mouse passa por cima.",
+          },
         ],
       },
     ],

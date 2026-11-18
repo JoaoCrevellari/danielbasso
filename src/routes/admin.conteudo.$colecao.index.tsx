@@ -3,6 +3,7 @@
  * duplicar e excluir.
  */
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { urlMiniatura } from "@/lib/imagens";
 import {
   ArrowDown,
   ArrowSquareOut,
@@ -336,7 +337,7 @@ function Lista({ col }: { col: CollectionConfig }) {
                       <span className="relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-[2px] bg-gelo-2 text-petroleo/40">
                         {item.cover_url ? (
                           <img
-                            src={item.cover_url}
+                            src={urlMiniatura(item.cover_url)}
                             alt=""
                             loading="lazy"
                             className="size-full object-cover"
