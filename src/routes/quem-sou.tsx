@@ -55,7 +55,7 @@ function QuemSou() {
           <div className="md:col-span-4 md:col-start-9">
             <Imagem
               src={p.hero.imagem}
-              alt="Daniel Basso em retrato de estúdio"
+              alt="Daniel Basso e a esposa em retrato de estúdio"
               prioridade
               larguraMax={900}
               className="aspect-[16/11] rounded-t-[2px] anima-imagem md:aspect-[4/5] md:max-h-[calc(100dvh-var(--header-h)-3rem)]"
@@ -134,6 +134,16 @@ function QuemSou() {
               </span>
               <h3 className="type-h3 mt-3 text-petroleo">{m.titulo}</h3>
               <p className="mt-2 text-[0.95rem] leading-relaxed text-cinza">{m.texto}</p>
+              {m.imagem && (
+                <Imagem
+                  src={m.imagem}
+                  alt={m.legenda || `${m.titulo} (${m.ano})`}
+                  className="mt-4 aspect-[4/3] rounded-[2px]"
+                  imgClassName="object-[50%_20%]"
+                  sizes="(min-width: 768px) 18vw, 75vw"
+                  larguraMax={600}
+                />
+              )}
             </li>
           ))}
         </ol>
