@@ -47,8 +47,6 @@ Sou pastor, e isso faz parte de quem eu sou. Mas o Método Autogoverno é um mé
         titulo: "Cidadão Vinhedense",
         texto:
           "Título concedido pela Câmara Municipal de Vinhedo. Início como professor tutor na Grace School of Theology, nos Estados Unidos.",
-        imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-titulo-de-cidadao-vinhedense-zgx99d-w1117.webp",
-        legenda: "Daniel Basso com a esposa e a neta na entrega do Título de Cidadão Vinhedense, na Câmara Municipal de Vinhedo",
       },
       {
         ano: "2024",
@@ -60,8 +58,6 @@ Sou pastor, e isso faz parte de quem eu sou. Mas o Método Autogoverno é um mé
         titulo: "Mestre e capacitação pública",
         texto:
           "Mestrado pela Universidade Presbiteriana Mackenzie e jornada de capacitação dos servidores do Esporte da Prefeitura de Jundiaí.",
-        imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/turma-capacitacao-jundiai-9368gz-w1280.webp",
-        legenda: "Turma da jornada de capacitação dos servidores do Esporte de Jundiaí com Daniel Basso",
       },
     ],
   },
@@ -218,13 +214,6 @@ export const QUEM_SOU_CAMPOS: FieldGroup[] = [
           { key: "ano", label: "Ano", type: "text", half: true },
           { key: "titulo", label: "Título", type: "text", half: true },
           { key: "texto", label: "Texto", type: "textarea", rows: 2 },
-          { key: "imagem", label: "Foto (opcional)", type: "image", aspect: "4:3" },
-          {
-            key: "legenda",
-            label: "Descrição da foto",
-            type: "text",
-            help: "Quem aparece e onde. É lida por quem usa leitor de tela.",
-          },
         ],
       },
     ],

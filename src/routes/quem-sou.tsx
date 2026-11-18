@@ -155,16 +155,6 @@ function QuemSou() {
               </span>
               <h3 className="type-h3 mt-3 text-petroleo">{m.titulo}</h3>
               <p className="mt-2 text-[0.95rem] leading-relaxed text-cinza">{m.texto}</p>
-              {m.imagem && (
-                <Imagem
-                  src={m.imagem}
-                  alt={m.legenda || `${m.titulo} (${m.ano})`}
-                  className="mt-4 aspect-[4/3] rounded-[2px]"
-                  imgClassName="object-[50%_20%]"
-                  sizes="(min-width: 768px) 18vw, 75vw"
-                  larguraMax={600}
-                />
-              )}
             </li>
           ))}
         </ol>
