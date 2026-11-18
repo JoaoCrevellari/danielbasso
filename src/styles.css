@@ -553,3 +553,36 @@
     animation-name: surgir;
   }
 }
+
+/* Logos das instituições em telas de toque (sem hover): a cor passa de uma logo para a
+   outra, em sequência. Cada logo fica colorida por ~2 s; --i é a posição e --total, quantas
+   há (Instituicoes.tsx). Com "Reduzir movimento", ficam todas coloridas, paradas. */
+@keyframes logo-ciclo {
+  0%,
+  100% {
+    filter: grayscale(1);
+    opacity: 0.8;
+  }
+  4%,
+  14% {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+  18% {
+    filter: grayscale(1);
+    opacity: 0.8;
+  }
+}
+@media (hover: none) {
+  .logo-ciclo {
+    animation: logo-ciclo calc(var(--total, 6) * 2.4s) ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 2.4s);
+  }
+}
+@media (hover: none) and (prefers-reduced-motion: reduce) {
+  .logo-ciclo {
+    animation: none;
+    filter: none;
+    opacity: 1;
+  }
+}

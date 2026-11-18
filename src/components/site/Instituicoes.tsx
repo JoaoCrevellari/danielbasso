@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "@phosphor-icons/react";
+import type { CSSProperties } from "react";
 
 import { cn } from "@/lib/utils";
 import { Imagem } from "./Imagem";
@@ -6,16 +7,37 @@ import { Imagem } from "./Imagem";
 export type Instituicao = { nome: string; escopo?: string; logo?: string };
 export type Materia = { veiculo?: string; data?: string; titulo: string; link?: string };
 
+/** Posição de cada logo na sequência do destaque (só as instituições com logo contam). */
+function ordemDasLogos(lista: Instituicao[]) {
+  const comLogo = lista.filter((i) => i.logo);
+  return (inst: Instituicao) =>
+    inst.logo ? { i: comLogo.indexOf(inst), total: comLogo.length } : undefined;
+}
+
 /** Nome ou logo, no mesmo lugar: sem logo, o nome aparece escrito em serifa. */
-function Marca({ inst, className }: { inst: Instituicao; className?: string }) {
+function Marca({
+  inst,
+  className,
+  ordem,
+}: {
+  inst: Instituicao;
+  className?: string;
+  /** Posição e total, para o destaque que passa de logo em logo nas telas de toque. */
+  ordem?: { i: number; total: number };
+}) {
   if (inst.logo) {
     return (
       <Imagem
+        style={
+          ordem
+            ? ({ "--i": ordem.i, "--total": ordem.total } as CSSProperties)
+            : undefined
+        }
         src={inst.logo}
         alt={inst.nome}
         className={cn("h-12 w-full max-w-[11rem] bg-transparent md:h-14", className)}
         // Em tons de cinza para as logos terem o mesmo peso; a cor volta no hover (desktop).
-        imgClassName="object-contain object-left grayscale opacity-80 transition-[filter,opacity] duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+        imgClassName="logo-ciclo object-contain object-left grayscale opacity-80 transition-[filter,opacity] duration-300 group-hover:grayscale-0 group-hover:opacity-100"
         sizes="11rem"
         larguraMax={480}
       />
@@ -35,6 +57,7 @@ function Marca({ inst, className }: { inst: Instituicao; className?: string }) {
 export function FaixaInstituicoes({ itens }: { itens: Instituicao[] }) {
   const lista = itens.filter((i) => i.nome);
   if (!lista.length) return null;
+  const ordem = ordemDasLogos(lista);
   return (
     <ul
       className={cn(
@@ -51,7 +74,7 @@ export function FaixaInstituicoes({ itens }: { itens: Instituicao[] }) {
           className="group flex min-h-[6.5rem] items-center border-r border-b border-linha px-4 py-5 transition-colors duration-300 hover:bg-papel md:min-h-[7.5rem] md:px-7"
         >
           {inst.logo ? (
-            <Marca inst={inst} />
+            <Marca inst={inst} ordem={ordem(inst)} />
           ) : (
             <span className="flex items-start gap-3">
               <span
@@ -78,6 +101,7 @@ export function CartoesInstituicoes({
 }) {
   const lista = itens.filter((i) => i.nome);
   if (!lista.length) return null;
+  const ordem = ordemDasLogos(lista);
   return (
     <ul
       className={cn(
@@ -97,7 +121,7 @@ export function CartoesInstituicoes({
               {String(n + 1).padStart(2, "0")}
             </span>
             <span aria-hidden className="h-8 w-px shrink-0 bg-linha" />
-            <Marca inst={inst} className="min-w-0" />
+            <Marca inst={inst} className="min-w-0" ordem={ordem(inst)} />
           </div>
           {inst.escopo && (
             <p className="mt-5 border-t border-linha pt-4 text-[0.95rem] leading-relaxed text-cinza">
