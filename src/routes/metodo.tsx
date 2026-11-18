@@ -112,7 +112,7 @@ function Metodo() {
             <li key={titulo}>
               <LinkInterno
                 to={link}
-                className="group flex h-full gap-4 rounded-[2px] border border-linha bg-gelo p-5 transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-linha-forte hover:shadow-[0_24px_48px_-32px_rgb(0_31_46/0.45)] md:flex-col md:gap-0 md:p-7"
+                className="group flex h-full gap-4 rounded-[2px] border border-linha bg-gelo p-5 transition-[border-color,box-shadow] duration-300 hover:border-petroleo/50 hover:shadow-[0_24px_48px_-32px_rgb(0_31_46/0.45)] md:flex-col md:gap-0 md:p-7"
               >
                 <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-petroleo text-gelo">
                   <Icone className="size-5" weight="light" />

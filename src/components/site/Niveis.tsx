@@ -184,20 +184,20 @@ export function NiveisResumo({ niveis }: { niveis: Nivel[] }) {
   const lista = niveis.filter((n) => n.produto);
   if (!lista.length) return null;
   return (
-    <ol className="trilho mt-conteudo md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-6" data-revelar-grupo>
+    <ol className="trilho mt-conteudo md:grid md:grid-cols-3 md:gap-4" data-revelar-grupo>
       {lista.map((n, k) => (
         <li key={n.produto + k}>
           <LinkInterno
             to={n.link}
-            className="group flex h-full flex-col rounded-[2px] border border-linha bg-papel p-5 transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-linha-forte hover:shadow-[0_18px_36px_-28px_rgb(0_31_46/0.5)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ouro"
+            className="group flex h-full flex-col rounded-[2px] border border-linha bg-papel p-5 transition-[border-color,box-shadow] duration-300 hover:border-petroleo/50 hover:shadow-[0_18px_36px_-28px_rgb(0_31_46/0.5)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ouro"
           >
             <span className="type-meta text-cinza">{`Nível ${k + 1}`}</span>
-            <span className="mt-2 font-serif text-[1.15rem] leading-snug text-petroleo">
+            <span className="mt-2 truncate font-serif text-[1.15rem] leading-snug text-petroleo md:text-[1.25rem]" title={n.produto}>
               {n.produto}
             </span>
             <span className="mt-auto pt-5 type-eyebrow text-cinza">Você compra</span>
-            <span className="mt-1 flex items-end justify-between gap-3 font-serif text-[1.05rem] leading-snug text-ouro-texto">
-              {n.compra}
+            <span className="mt-1 flex min-h-[2.75em] items-end justify-between gap-3 font-serif text-[1.05rem] leading-snug text-ouro-texto">
+              <span className="line-clamp-2">{n.compra}</span>
               <ArrowRight
                 aria-hidden
                 className="mb-1 size-4 shrink-0 text-petroleo transition-transform duration-300 group-hover:translate-x-1"

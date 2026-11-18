@@ -73,6 +73,7 @@ export function CabecalhoSecao({
   acao,
   centro,
   textoAoLado,
+  umaLinha,
   className,
 }: {
   rotulo?: string;
@@ -82,6 +83,8 @@ export function CabecalhoSecao({
   centro?: boolean;
   /** No desktop, o texto de apoio vai para a direita, alinhado à base do título (seção mais baixa). */
   textoAoLado?: boolean;
+  /** No desktop, o título fica numa linha só (sem a largura máxima em ch). */
+  umaLinha?: boolean;
   className?: string;
 }) {
   if (textoAoLado && texto && !acao) {
@@ -118,6 +121,7 @@ export function CabecalhoSecao({
           className={cn(
             "type-h1 text-petroleo [.superficie-escura_&]:text-gelo",
             centro && "mx-auto",
+            umaLinha && "lg:max-w-none lg:text-nowrap",
           )}
         >
           {titulo}

@@ -37,7 +37,12 @@ export function FaixaInstituicoes({ itens }: { itens: Instituicao[] }) {
   if (!lista.length) return null;
   return (
     <ul
-      className="grid grid-cols-2 border-t border-l border-linha md:grid-cols-3"
+      className={cn(
+        "grid grid-cols-2 border-t border-l border-linha md:grid-cols-3",
+        // Com 4 ou 5 instituições, uma linha só no desktop (sem célula vazia no fim da grade).
+        lista.length === 4 && "lg:grid-cols-4",
+        lista.length === 5 && "lg:grid-cols-5",
+      )}
       data-revelar-grupo
     >
       {lista.map((inst) => (

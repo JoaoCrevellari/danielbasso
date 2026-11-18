@@ -238,6 +238,7 @@ function Home() {
           <CabecalhoSecao
             rotulo={cursos.niveis.rotulo}
             titulo={cursos.niveis.titulo}
+            umaLinha
             acao={
               <Botao href="/cursos#niveis" variante="texto">
                 Ver cada nível

@@ -43,7 +43,7 @@ export function CartaoOferta({
     <LinkInterno
       to={`${col.path}/${item.slug}`}
       className={cn(
-        "group flex h-full flex-col overflow-hidden rounded-[2px] border border-linha bg-papel transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-linha-forte hover:shadow-[0_24px_48px_-32px_rgb(0_31_46/0.45)]",
+        "group flex h-full flex-col overflow-hidden rounded-[2px] border border-linha bg-papel transition-[border-color,box-shadow] duration-300 hover:border-petroleo/50 hover:shadow-[0_24px_48px_-32px_rgb(0_31_46/0.45)]",
         horizontal && "md:flex-row",
         className,
       )}

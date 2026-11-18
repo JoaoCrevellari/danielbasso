@@ -203,7 +203,7 @@ function Livro() {
             {relacionados.map((r) => (
               <li key={r.id}>
                 <Link to="/livros/$slug" params={{ slug: r.slug }} className="group block">
-                  <div className="mx-auto w-[70%] transition-transform duration-500 ease-[var(--ease-out)] group-hover:-translate-y-1.5">
+                  <div className="mx-auto w-[70%]">
                     <CapaLivro
                       titulo={r.title}
                       imagem={r.cover_url}
