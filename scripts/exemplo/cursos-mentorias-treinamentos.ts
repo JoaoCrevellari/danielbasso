@@ -385,7 +385,7 @@ export const TREINAMENTOS: ItemSemente[] = [
     subtitle: "Pessoas mais inteiras, serviços melhores",
     excerpt:
       "Uma jornada de capacitação em encontros quinzenais para as equipes de gestão, administrativas e operacionais de prefeituras, escolas e empresas.",
-    cover_url: U("photo-1532619675605-1ede6c2ed2b0"),
+    cover_url: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/turma-capacitacao-jundiai-9368gz-w1280.webp",
     featured: true,
     sort_order: 1,
     body: `Temas trabalhados: organização da rotina, comunicação, equilíbrio emocional, postura profissional e autorresponsabilidade, com atividades práticas, reflexões e acompanhamento contínuo.
@@ -425,7 +425,7 @@ Em 90 dias, com autoavaliação inicial e final, indicadores de desempenho, enga
     subtitle: "Para equipes que vivem apagando incêndio",
     excerpt:
       "Um treinamento de um dia para que cada participante saia com a própria rotina reorganizada e critérios claros para decidir o que vem primeiro.",
-    cover_url: U("photo-1549045345-058277380fc3"),
+    cover_url: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/capacitacao-jundiai-sala-de-aula-2f81w9-w1280.webp",
     sort_order: 2,
     body: `Quase nunca é falta de tempo. É falta de prioridade, de critério para dizer não e de uma rotina que proteja o essencial. O treinamento parte da vida real de cada participante e termina com um plano pessoal para a semana seguinte.`,
     data: {
@@ -456,7 +456,7 @@ Em 90 dias, com autoavaliação inicial e final, indicadores de desempenho, enga
     subtitle: "Palestra sobre autogoverno e responsabilidade",
     excerpt:
       "Uma palestra para abrir conversas, alinhar a linguagem da equipe e despertar responsabilidade.",
-    cover_url: U("photo-1544531586-fde5298cdd40"),
+    cover_url: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/palestra-jundiai-esporte-sorrindo-7i4bfa-w1280.webp",
     sort_order: 3,
     body: `Você não perdeu o controle da sua vida. Você entregou, sem perceber. A palestra mostra como isso acontece, por que treinamento técnico não resolve e qual é o primeiro passo para retomar o comando.
 

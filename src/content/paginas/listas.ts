@@ -152,7 +152,7 @@ export const TREINAMENTOS_PADRAO = {
     titulo: "Pessoas que se governam formam *equipes que respondem*",
     subtitulo:
       "Palestras, treinamentos e jornadas de capacitação para prefeituras, escolas, igrejas e empresas. O servidor que adia, falta ou vive esgotado raramente tem um problema técnico: quase sempre perdeu o governo da própria vida. O desenvolvimento humano alcança essa camada.",
-    imagem: "https://images.unsplash.com/photo-1571624436279-b272aff752b5",
+    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/palestra-jundiai-do-ordinario-ao-extraordinario-wvcfat-w1280.webp",
   },
   formatos: {
     rotulo: "Formatos",

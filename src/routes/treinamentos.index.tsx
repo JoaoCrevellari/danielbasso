@@ -44,7 +44,7 @@ function Treinamentos() {
         titulo={pagina.hero.titulo}
         subtitulo={pagina.hero.subtitulo}
         imagem={pagina.hero.imagem}
-        altImagem="Sala de reunião preparada para um treinamento"
+        altImagem="Daniel Basso na palestra Do Ordinário ao Extraordinário, na 4ª Jornada de Inteligência Esportiva da UniAnchieta, em Jundiaí"
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <Botao href="#proposta">Solicitar proposta</Botao>

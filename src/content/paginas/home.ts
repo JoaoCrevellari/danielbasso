@@ -86,7 +86,7 @@ export const HOME_PADRAO = {
         titulo: "Instituições",
         texto: "Palestras, treinamentos e programas para prefeituras, escolas e empresas.",
         link: "/treinamentos",
-        imagem: "https://images.unsplash.com/photo-1544531586-fde5298cdd40",
+        imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/palestra-jundiai-esporte-palco-0ussze-w1280.webp",
       },
       {
         titulo: "Livros",
