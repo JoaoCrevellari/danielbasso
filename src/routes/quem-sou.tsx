@@ -41,9 +41,15 @@ function QuemSou() {
   return (
     <>
       {/* ── Abertura: nome e retrato ─────────────────────────────────────── */}
+      {/* Mesmo desenho da abertura da Início: texto e retrato centralizados, retrato inteiro
+          dentro da tela, com a moldura dourada deslocada. */}
       <section className="superficie-escura grao relative overflow-hidden pt-cabecalho">
-        <div className="container-site grid items-end gap-8 pt-8 md:grid-cols-12 md:gap-10 md:pt-12">
-          <div className="pb-2 md:col-span-7 md:pb-20">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_70%_at_85%_40%,rgb(10_79_112/0.55),transparent_70%)]"
+        />
+        <div className="container-site relative grid items-center gap-8 pt-6 pb-12 md:min-h-[calc(100dvh-var(--header-h))] md:grid-cols-12 md:gap-10 md:py-12">
+          <div className="md:col-span-7">
             <p className="rotulo-secao mb-5 anima-subir">Quem sou</p>
             <h1 className="type-display text-gelo anima-subir" style={i(1)}>
               {p.hero.titulo}
@@ -52,13 +58,18 @@ function QuemSou() {
               {p.hero.subtitulo}
             </p>
           </div>
-          <div className="md:col-span-4 md:col-start-9">
+          <div className="relative md:col-span-4 md:col-start-9">
+            <div
+              aria-hidden
+              className="absolute inset-0 translate-x-3 translate-y-3 rounded-[2px] border border-ouro/40 anima-surgir md:translate-x-5 md:translate-y-5"
+              style={i(4)}
+            />
             <Imagem
               src={p.hero.imagem}
               alt="Daniel Basso e a esposa em retrato de estúdio"
               prioridade
               larguraMax={900}
-              className="aspect-[16/11] rounded-t-[2px] anima-imagem md:aspect-[4/5] md:max-h-[calc(100dvh-var(--header-h)-3rem)]"
+              className="relative aspect-[16/11] rounded-[2px] anima-imagem md:aspect-[4/5]"
               imgClassName="object-[50%_35%] md:object-[50%_25%]"
               sizes="(min-width: 768px) 33vw, 100vw"
             />
