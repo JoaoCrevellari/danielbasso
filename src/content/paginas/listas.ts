@@ -233,7 +233,7 @@ export const TREINAMENTOS_PADRAO = {
       {
         nome: "Valley Christian School",
         escopo: "Implantação da unidade e treinamento de todo o corpo docente",
-        logo: "/instituicoes/valley-christian-school.webp",
+        logo: "",
       },
       {
         nome: "Kubrusly Basso Group USA",
