@@ -55,11 +55,11 @@ function QuemSou() {
           <div className="md:col-span-4 md:col-start-9">
             <Imagem
               src={p.hero.imagem}
-              alt="Daniel Basso"
+              alt="Daniel Basso em retrato de estúdio"
               prioridade
               larguraMax={900}
               className="aspect-[16/11] rounded-t-[2px] anima-imagem md:aspect-[4/5] md:max-h-[calc(100dvh-var(--header-h)-3rem)]"
-              imgClassName="object-[50%_18%]"
+              imgClassName="object-[50%_35%] md:object-[50%_25%]"
               sizes="(min-width: 768px) 33vw, 100vw"
             />
           </div>

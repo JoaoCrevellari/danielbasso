@@ -11,7 +11,7 @@ export const HOME_PADRAO = {
       "Aos poucos, sem perceber, você deixou que o chefe, as urgências, o medo e a opinião dos outros passassem a decidir por você. Eu ajudo pessoas comuns a retomar o comando da própria vida, colocar tudo em ordem e voltar a avançar.",
     cta_primario: { rotulo: "Fazer o diagnóstico", link: "/diagnostico" },
     cta_secundario: { rotulo: "Conhecer o método", link: "/metodo" },
-    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-retrato-gola-alta-ytitg9-w485.webp",
+    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-retrato-oculos-sueter-epslpu-w485.webp",
   },
   manifesto: {
     rotulo: "Por que este trabalho",

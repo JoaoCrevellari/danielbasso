@@ -6,7 +6,7 @@ export const QUEM_SOU_PADRAO = {
     titulo: "Daniel Basso",
     subtitulo:
       "Professor, pesquisador, escritor e mentor. Eu ajudo pessoas a retomar o comando da própria vida. Não porque eu sempre tive o meu, mas porque perdi e precisei aprender a voltar.",
-    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-biblioteca-e88m5j-w832.webp",
+    imagem: "https://volnctioztyylqsyiham.supabase.co/storage/v1/object/public/media/2026/11/daniel-basso-retrato-casal-pb-0jfxr3-w485.webp",
   },
   historia: {
     titulo: "Uma trajetória marcada por *recomeços*",
