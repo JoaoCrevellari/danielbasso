@@ -100,7 +100,7 @@ function Home() {
               larguraMax={900}
               sizes="(min-width: 768px) 33vw, 90vw"
               className="relative aspect-[16/10] rounded-[2px] anima-imagem md:aspect-[4/5]"
-              imgClassName="object-[50%_12%] md:object-[50%_22%]"
+              imgClassName="object-[50%_22%] md:object-[50%_30%]"
             />
           </div>
         </div>
